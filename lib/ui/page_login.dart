@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ui_collections/services/auth_service.dart';
 import 'package:flutter_ui_collections/ui/page_onboarding.dart';
 import 'package:flutter_ui_collections/ui/page_register.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
@@ -10,20 +11,90 @@ import 'page_forgotpass.dart';
 import 'page_home.dart';
 import 'page_signup.dart';
 
+AuthService appAuth = new AuthService();
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
+  var formEmail;
+  var formPassword;
+  var loginUrl = Constants.urlLogin;
+  var _isEmailValid = false;
+  var _isPasswordValid = false;
+
   FocusNode _emailFocusNode = new FocusNode();
-  FocusNode _passFocusNode = new FocusNode();
-  String _email, _password;
+  FocusNode _passwordFocusNode = new FocusNode();
+
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Screen size;
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    emailController.dispose();
+    passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    emailController.addListener(validEmail);
+    passwordController.addListener(validPassword);
+  }
+
+  login() async {
+    try {
+      bool _result = await appAuth.login(
+          this.emailController.text, this.passwordController.text);
+
+      if (_result) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      }
+    } catch (e) {
+      print(e);
+      return e;
+    }
+  }
+
+  validEmail() {
+    String value = emailController.text;
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value)) {
+      setState(() {
+        _isEmailValid = false;
+      });
+    } else {
+      setState(() {
+        _isEmailValid = true;
+      });
+    }
+  }
+
+  validPassword() {
+    if (passwordController.text.length >= 3) {
+      setState(() {
+        _isPasswordValid = true;
+      });
+    } else {
+      setState(() {
+        _isPasswordValid = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +103,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         backgroundColor: backgroundColor,
         resizeToAvoidBottomInset: true,
-        body:
-        AnnotatedRegion(
+        body: AnnotatedRegion(
           value: SystemUiOverlayStyle(
               statusBarColor: backgroundColor,
               statusBarBrightness: Brightness.light,
@@ -80,10 +150,10 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             TextSpan(
               style: TextStyle(color: Colors.deepOrange),
-              text: 'Create your account.',
+              text: 'Register Now!',
               recognizer: TapGestureRecognizer()
                 ..onTap = () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignUpPage())),
+                    MaterialPageRoute(builder: (context) => OnBoardingPage())),
             )
           ],
           style: TextStyle(
@@ -101,35 +171,61 @@ class _LoginPageState extends State<LoginPage> {
             fontFamily: 'Exo2', fontSize: 36, fontWeight: FontWeight.bold));
   }
 
-  BoxField _emailWidget() {
-    return BoxField(
-        controller: _emailController,
-        focusNode: _emailFocusNode,
-        hintText: "Enter email",
-        lableText: "Email",
-        obscureText: false,
-        onSaved: (String val) {
-          _email = val;
-        },
-        onFieldSubmitted: (String value) {
-          FocusScope.of(context).requestFocus(_passFocusNode);
-        },
-        icon: Icons.email,
-        iconColor: colorCurve);
+  TextFormField _emailWidget() {
+    String validateEmail(String value) {
+      Pattern pattern =
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regex = new RegExp(pattern);
+      if (value.length > 0 && !regex.hasMatch(value))
+        return 'Enter Valid Email';
+      else
+        return null;
+    }
+
+    return TextFormField(
+      validator: validateEmail,
+      autovalidate: true,
+      textInputAction: TextInputAction.next,
+      focusNode: null,
+      keyboardType: TextInputType.emailAddress,
+      onEditingComplete: () =>
+          FocusScope.of(context).requestFocus(_passwordFocusNode),
+      controller: emailController,
+      obscureText: false,
+//      style: style,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          hintText: "Email",
+          border:
+              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+    );
   }
 
-  BoxField _passwordWidget() {
-    return BoxField(
-        controller: _passwordController,
-        focusNode: _passFocusNode,
-        hintText: "Enter Password",
-        lableText: "Password",
-        obscureText: true,
-        icon: Icons.lock_outline,
-        onSaved: (String val) {
-          _password = val;
-        },
-        iconColor: colorCurve);
+//
+  TextFormField _passwordWidget() {
+    String validatePassword(String value) {
+      if (value.length > 0 && value.length < 3)
+        return 'Password must be more than 2 charaters';
+      else
+        return null;
+    }
+
+    return TextFormField(
+      validator: validatePassword,
+      autovalidate: true,
+      textInputAction: TextInputAction.next,
+      focusNode: _passwordFocusNode,
+      keyboardType: TextInputType.visiblePassword,
+      onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
+      controller: passwordController,
+      obscureText: true,
+//      style: style,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          hintText: "Password",
+          border:
+              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+    );
   }
 
   Container _loginButtonWidget() {
@@ -149,9 +245,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         color: colorCurve,
         onPressed: () {
-          // Going to DashBoard
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
+          login();
         },
       ),
     );
@@ -175,8 +269,8 @@ class _LoginPageState extends State<LoginPage> {
         color: colorCurve,
         onPressed: () {
           // Going to DashBoard
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => OnBoardingPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => OnBoardingPage()));
         },
       ),
     );

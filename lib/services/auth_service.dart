@@ -27,23 +27,22 @@ class AuthService {
               responseType: ResponseType.plain // or ResponseType.JSON
               ));
 
-      if (response.statusCode == 200)
-      {
-        UserDetails.userPermissions =  (json.decode(response.data)['permissions']);
+      if (response.statusCode == 200) {
+        UserDetails.userPermissions =
+            (json.decode(response.data)['permissions']);
         return true;
       }
 
       return false;
     } on DioError catch (e) {
-       Fluttertoast.showToast(
+      Fluttertoast.showToast(
           msg: json.decode(e.response.data)['msg'],
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,
           backgroundColor: colorErrorMessage,
           textColor: Colors.white,
-          fontSize: 16.0
-      );
+          fontSize: 16.0);
 //     await showDialog(
 //          context: context,
 //          builder: (_) => new AlertDialog(
