@@ -3,6 +3,9 @@ import 'dart:ui';
 
 class Constants{
 
+  //URLs
+  static String urlBase = 'http://192.168.1.108:8000/api/';
+  static String urlApplicationUpload = urlBase + 'applications';
 //colors
   static const Color clr_purple = const Color(0xFF9C27B0);
   static const Color clr_blue = const Color(0xFF548CFF);

@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix1;
 import 'package:flutter_ui_collections/utils/utils.dart' as prefix0;
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
@@ -44,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage>
   var _isSurnameValid = false;
   var _isEmailValid = false;
   var _isPhoneNumberValid = false;
-  var uploadUrl = "http://192.168.1.104:8000/api/applications";
+  var uploadUrl = Constants.urlApplicationUpload;
   AnimationController _animationController;
 
   static const String africanCorporateCleaningUrl =
@@ -58,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage>
   TextEditingController surnameController = new TextEditingController();
   TextEditingController emailController = new TextEditingController();
   TextEditingController phoneNumberController = new TextEditingController();
-  TextStyle style = TextStyle(fontFamily: 'Exo2', fontSize: 20.0);
+  TextStyle style = TextStyle(fontFamily: 'Exo2', fontSize: 18.0);
   List<File> _cvImages = [];
   File _selfieImage;
   File _idDocumentImage;
@@ -421,7 +422,7 @@ class _RegisterPageState extends State<RegisterPage>
     }
 
     final heading = DefaultTextStyle(
-      style: TextStyle(fontSize: 26, color: Colors.black),
+      style: TextStyle(fontSize: 22, color: Colors.black),
       child: Text('1) Fill In Your Details'),
     );
 
@@ -518,50 +519,65 @@ class _RegisterPageState extends State<RegisterPage>
                   builder: (BuildContext context) {
                     // return object of type Dialog
                     return AlertDialog(
-                      title: new Text(
-                          "Step #1 nearly done! \n\nLet\'s get your photo taken! Head and shoulders only please! Use your camera or gallery."),
-                      actions: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            // usually buttons at the bottom of the dialog
-                            RaisedButton.icon(
-                              icon: Icon(Icons.camera_alt),
-                              textColor: Colors.white,
-                              label: Text("Camera"),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                getImageSelfie(ImageSource.camera);
-                              },
+                        title: new Text(
+                            "Step #1 nearly done! \n\nLet\'s get your photo taken! Head and shoulders only please! Use your camera or gallery."),
+                        actions: [
+                          Center(
+                            child: Column(
+                              children: <Widget>[
+                                Center(
+                                  child: Row(
+                                    children: <Widget>[
+                                      RaisedButton.icon(
+                                        icon: Icon(Icons.camera_alt),
+                                        textColor: Colors.white,
+                                        label: Text("Camera"),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30.0)),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          getImageSelfie(ImageSource.camera);
+                                        },
+                                      ),
+                                      SizedBox(width: 30),
+                                      new RaisedButton.icon(
+                                        icon: Icon(Icons.photo_album),
+                                        textColor: Colors.white,
+                                        label: new Text("Gallery"),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30.0)),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          getImageSelfie(ImageSource.gallery);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Center(
+                                  child: Row(
+                                    children: <Widget>[
+                                      new RaisedButton.icon(
+                                        icon: Icon(Icons.cancel),
+                                        textColor: Colors.white,
+                                        color: Colors.red,
+                                        label: new Text("Cancel"),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30.0)),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
-                            new RaisedButton.icon(
-                              icon: Icon(Icons.photo_album),
-                              textColor: Colors.white,
-                              label: new Text("Gallery"),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                getImageSelfie(ImageSource.gallery);
-                              },
-                            ),
-                            new RaisedButton.icon(
-                              icon: Icon(Icons.cancel),
-                              textColor: Colors.white,
-                              color: Colors.red,
-                              label: new Text("Cancel"),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
+                          ),
+                        ]);
                   },
                 );
               }
@@ -608,23 +624,17 @@ class _RegisterPageState extends State<RegisterPage>
                                 children: <Widget>[
                                   SizedBox(height: 0.0),
                                   heading,
-                                  SizedBox(height: 20.0),
+                                  SizedBox(height: 10.0),
                                   nameField,
-                                  SizedBox(height: 20.0),
+                                  SizedBox(height: 10.0),
                                   surnameField,
-                                  SizedBox(height: 20.0),
+                                  SizedBox(height: 10.0),
                                   emailField,
-                                  SizedBox(
-                                    height: 10.0,
-                                  ),
+                                  SizedBox(height: 10.0),
                                   phoneNumberField,
-                                  SizedBox(
-                                    height: 10.0,
-                                  ),
+                                  SizedBox(height: 10.0),
                                   selfieButton,
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
+                                  SizedBox(height: 15.0),
                                   Center(
                                     child: _selfieImage != null
                                         ? SizedBox(
@@ -685,7 +695,7 @@ class _RegisterPageState extends State<RegisterPage>
                         });
                       },
                       //getImage,
-                      tooltip: 'Pick Image',
+                      tooltip: 'Proceed to next step',
                       icon: Icon(Icons.arrow_forward),
                       label: Text('Step #2'),
                     ),
@@ -707,7 +717,7 @@ class _RegisterPageState extends State<RegisterPage>
     final idBookButton = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff01A0C7),
+      color: themeColour,
       child: MaterialButton(
         disabledColor: Colors.grey,
         minWidth: MediaQuery.of(context).size.width,
@@ -722,47 +732,55 @@ class _RegisterPageState extends State<RegisterPage>
                 title: new Text(
                     "Step #2 nearly done! \n\nLet\'s get your ID uploaded! Use your camera or gallery to select your ID."),
                 actions: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      // usually buttons at the bottom of the dialog
-                      RaisedButton.icon(
-                        icon: Icon(Icons.camera_alt),
-                        textColor: Colors.white,
-                        color: Colors.blue,
-                        label: Text("Camera"),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          getImageIdDocument(ImageSource.camera);
-                        },
+                  Center(
+                      child: Column(children: <Widget>[
+                    Center(
+                      child: Row(
+                        children: <Widget>[
+                          RaisedButton.icon(
+                            icon: Icon(Icons.camera_alt),
+                            textColor: Colors.white,
+                            label: Text("Camera"),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              getImageIdDocument(ImageSource.camera);
+                            },
+                          ),
+                          SizedBox(width: 30),
+                          new RaisedButton.icon(
+                            icon: Icon(Icons.photo_album),
+                            textColor: Colors.white,
+                            label: new Text("Gallery"),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              getImageIdDocument(ImageSource.gallery);
+                            },
+                          ),
+                        ],
                       ),
-                      new RaisedButton.icon(
-                        icon: Icon(Icons.photo_album),
-                        textColor: Colors.white,
-                        color: Colors.blue,
-                        label: new Text("Gallery"),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          getImageIdDocument(ImageSource.gallery);
-                        },
+                    ),
+                    Center(
+                      child: Row(
+                        children: <Widget>[
+                          new RaisedButton.icon(
+                            icon: Icon(Icons.cancel),
+                            textColor: Colors.white,
+                            color: Colors.red,
+                            label: new Text("Cancel"),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
                       ),
-                      new RaisedButton.icon(
-                        icon: Icon(Icons.cancel),
-                        textColor: Colors.white,
-                        color: Colors.red,
-                        label: new Text("Cancel"),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
+                    )
+                  ]))
                 ],
               );
             },
@@ -771,7 +789,9 @@ class _RegisterPageState extends State<RegisterPage>
         child: Text("Upload ID",
             textAlign: TextAlign.center,
             style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
+                backgroundColor: themeColour,
+                color: Colors.white,
+                fontWeight: FontWeight.bold)),
       ),
     );
 
@@ -853,7 +873,7 @@ class _RegisterPageState extends State<RegisterPage>
                         });
                       },
                       //getImage,
-                      tooltip: 'Pick Image',
+                      tooltip: 'Proceed to next step',
                       icon: Icon(Icons.arrow_forward),
                       label: Text('Step #3'),
                     ),
@@ -901,7 +921,7 @@ class _RegisterPageState extends State<RegisterPage>
                                   dotColor: Colors.black,
                                   animationCurve: Curves.linear,
                                   dotSize: 6.0,
-                                  dotIncreasedColor: Colors.amber,
+                                  dotIncreasedColor: Colors.blue,
                                   dotBgColor: Colors.transparent,
                                   dotVerticalPadding: 10.0,
                                   dotPosition: DotPosition.bottomCenter,
@@ -950,50 +970,58 @@ class _RegisterPageState extends State<RegisterPage>
                           title: new Text(
                               "Registration Nearly done! \n\nLet\'s get your CV Uploaded! Max of 4 photos"),
                           actions: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                // usually buttons at the bottom of the dialog
-                                RaisedButton.icon(
-                                  icon: Icon(Icons.camera_alt),
-                                  textColor: Colors.white,
-                                  color: Colors.blue,
-                                  label: Text("Camera"),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    getImageCV(ImageSource.camera);
-                                  },
+                            Center(
+                                child: Column(children: <Widget>[
+                              Center(
+                                child: Row(
+                                  children: <Widget>[
+                                    RaisedButton.icon(
+                                      icon: Icon(Icons.camera_alt),
+                                      textColor: Colors.white,
+                                      label: Text("Camera"),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0)),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        getImageCV(ImageSource.camera);
+                                      },
+                                    ),
+                                    SizedBox(width: 30),
+                                    new RaisedButton.icon(
+                                      icon: Icon(Icons.photo_album),
+                                      textColor: Colors.white,
+                                      label: new Text("Gallery"),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0)),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        getImageCV(ImageSource.gallery);
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                new RaisedButton.icon(
-                                  icon: Icon(Icons.photo_album),
-                                  textColor: Colors.white,
-                                  color: Colors.blue,
-                                  label: new Text("Gallery"),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    getImageCV(ImageSource.gallery);
-                                  },
+                              ),
+                              Center(
+                                child: Row(
+                                  children: <Widget>[
+                                    new RaisedButton.icon(
+                                      icon: Icon(Icons.cancel),
+                                      textColor: Colors.white,
+                                      color: Colors.red,
+                                      label: new Text("Cancel"),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0)),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
                                 ),
-                                new RaisedButton.icon(
-                                  icon: Icon(Icons.cancel),
-                                  textColor: Colors.white,
-                                  color: Colors.red,
-                                  label: new Text("Cancel"),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            ),
+                              )
+                            ]))
                           ],
                         );
                       },
@@ -1003,6 +1031,7 @@ class _RegisterPageState extends State<RegisterPage>
                   tooltip: 'Pick Image',
                   icon: Icon(Icons.add_a_photo),
                   label: Text('Image'),
+                  backgroundColor: themeColour,
                 )
               : Text(''),
           _cvImages.length > 0
@@ -1025,32 +1054,44 @@ class _RegisterPageState extends State<RegisterPage>
                               'Are you sure you would like to upload your Application?'),
                           actions: <Widget>[
                             Column(
+                              crossAxisAlignment:
+                                  prefix1.CrossAxisAlignment.end,
+//                              mainAxisAlignment: prefix1.MainAxisAlignment.end,
                               children: <Widget>[
-                                RaisedButton.icon(
-                                  icon: Icon(Icons.cancel),
-                                  textColor: Colors.white,
-                                  color: Colors.red,
-                                  label: Text("No! Make Changes"),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
+                                Row(
+                                  children: <Widget>[
+                                    RaisedButton.icon(
+                                      icon: Icon(Icons.cancel),
+                                      textColor: Colors.white,
+                                      color: Colors.red,
+                                      label: Text("No! Make Changes"),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0)),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                new RaisedButton.icon(
-                                  icon: Icon(Icons.file_upload),
-                                  textColor: Colors.white,
-                                  color: Colors.green,
-                                  label: new Text("Yes! Upload Application"),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    uploadDocuments(this.context);
-                                  },
-                                ),
+                                Row(
+                                  children: <Widget>[
+                                    new RaisedButton.icon(
+                                      icon: Icon(Icons.file_upload),
+                                      textColor: Colors.white,
+                                      color: Colors.green,
+                                      label:
+                                          new Text("Yes! Upload Application"),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0)),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        uploadDocuments(this.context);
+                                      },
+                                    ),
+                                  ],
+                                )
                               ],
                             )
                             // usually buttons at the bottom of the dialog
