@@ -1,8 +1,15 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ui_collections/model/Site.dart';
 import 'package:flutter_ui_collections/model/models.dart';
+import 'package:flutter_ui_collections/services/user_service.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
+import 'package:flutter_ui_collections/utils/utils.dart' as prefix0;
 import 'package:flutter_ui_collections/widgets/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CreateNewJobPage extends StatefulWidget {
   @override
@@ -13,9 +20,19 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   Screen size;
   int _selectedIndex = 1;
 
-  List<Property> premiumList =  List();
-  List<Property> featuredList =  List();
-  var citiesList = ["Ahmedabad", "Mumbai", "Delhi ", "Chennai","Goa","Kolkata","Indore","Jaipur"];
+  List<Property> premiumList = List();
+  List<Property> featuredList = List();
+  List<Site> siteList = List();
+  var citiesList = [
+    "Ahmedabad",
+    "Mumbai",
+    "Delhi ",
+    "Chennai",
+    "Goa",
+    "Kolkata",
+    "Indore",
+    "Jaipur"
+  ];
 
   @override
   void initState() {
@@ -23,19 +40,56 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
     super.initState();
 
     premiumList
-    ..add(Property(propertyName:"Omkar Lotus", propertyLocation:"Ahmedabad ", image:"feature_1.jpg", propertyPrice:"26.5 Cr"))
-    ..add(Property(propertyName:"Sandesh Heights", propertyLocation:"Baroda ", image:"feature_2.jpg", propertyPrice:"11.5 Cr"))
-    ..add(Property(propertyName:"Sangath Heights", propertyLocation:"Pune ", image:"feature_3.jpg", propertyPrice:"19.0 Cr"))
-    ..add(Property(propertyName:"Adani HighRise", propertyLocation:"Mumbai ", image:"hall_1.jpg", propertyPrice:"22.5 Cr"))
-    ..add(Property(propertyName:"N.G Tower", propertyLocation:"Gandhinagar ", image:"hall_2.jpeg", propertyPrice:"7.5 Cr"))
-    ..add(Property(propertyName:"Vishwas CityRise", propertyLocation:"Pune ", image:"hall_1.jpg", propertyPrice:"17.5 Cr"))
-    ..add(Property(propertyName:"Gift City", propertyLocation:"Ahmedabad ", image:"hall_2.jpeg", propertyPrice:"13.5 Cr"))
-    ..add(Property(propertyName:"Velone City", propertyLocation:"Mumbai ", image:"feature_1.jpg", propertyPrice:"11.5 Cr"))
-    ..add(Property(propertyName:"PabelBay", propertyLocation:"Ahmedabad ", image:"hall_1.jpg", propertyPrice:"33.1 Cr"))
-    ..add(Property(propertyName:"Sapath Hexa Tower", propertyLocation:"Ahmedabad", image:"feature_3.jpg", propertyPrice:"15.6 Cr"));
-
-
-
+      ..add(Property(
+          propertyName: "Omkar Lotus",
+          propertyLocation: "Ahmedabad ",
+          image: "feature_1.jpg",
+          propertyPrice: "26.5 Cr"))
+      ..add(Property(
+          propertyName: "Sandesh Heights",
+          propertyLocation: "Baroda ",
+          image: "feature_2.jpg",
+          propertyPrice: "11.5 Cr"))
+      ..add(Property(
+          propertyName: "Sangath Heights",
+          propertyLocation: "Pune ",
+          image: "feature_3.jpg",
+          propertyPrice: "19.0 Cr"))
+      ..add(Property(
+          propertyName: "Adani HighRise",
+          propertyLocation: "Mumbai ",
+          image: "hall_1.jpg",
+          propertyPrice: "22.5 Cr"))
+      ..add(Property(
+          propertyName: "N.G Tower",
+          propertyLocation: "Gandhinagar ",
+          image: "hall_2.jpeg",
+          propertyPrice: "7.5 Cr"))
+      ..add(Property(
+          propertyName: "Vishwas CityRise",
+          propertyLocation: "Pune ",
+          image: "hall_1.jpg",
+          propertyPrice: "17.5 Cr"))
+      ..add(Property(
+          propertyName: "Gift City",
+          propertyLocation: "Ahmedabad ",
+          image: "hall_2.jpeg",
+          propertyPrice: "13.5 Cr"))
+      ..add(Property(
+          propertyName: "Velone City",
+          propertyLocation: "Mumbai ",
+          image: "feature_1.jpg",
+          propertyPrice: "11.5 Cr"))
+      ..add(Property(
+          propertyName: "PabelBay",
+          propertyLocation: "Ahmedabad ",
+          image: "hall_1.jpg",
+          propertyPrice: "33.1 Cr"))
+      ..add(Property(
+          propertyName: "Sapath Hexa Tower",
+          propertyLocation: "Ahmedabad",
+          image: "feature_3.jpg",
+          propertyPrice: "15.6 Cr"));
   }
 
   @override
@@ -63,6 +117,44 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   }
 
   Widget upperPart() {
+    getSites() async {
+      try {
+        Response response;
+
+        Dio dio = new Dio();
+        response = await dio.get(Constants.urlGetAreaManagerSites,
+            options: Options(
+                method: 'GET',
+                headers: {'Authorization': 'Bearer ' + UserDetails.token},
+                responseType: ResponseType.plain // or ResponseType.JSON
+                ));
+
+        if (response.statusCode == 200) {
+          var sites = json.decode(response.data)['data']['sites'];
+
+          for (var x in sites) {
+            var site = Site.fromJson(x);
+            setState(() {
+              this.siteList.add(site);
+            });
+          }
+        }
+
+        return false;
+      } on DioError catch (e) {
+
+        Fluttertoast.showToast(
+            msg: json.decode(e.response.data)['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return false;
+      }
+    }
+
     return Stack(
       children: <Widget>[
         ClipPath(
@@ -78,6 +170,27 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
         ),
         Column(
           children: <Widget>[
+            Container(
+              padding: EdgeInsets.symmetric(
+                  vertical: size.getWidthPx(20),
+                  horizontal: size.getWidthPx(16)),
+              width: size.getWidthPx(200),
+              child: RaisedButton(
+                elevation: 8.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(30.0)),
+                padding: EdgeInsets.all(size.getWidthPx(12)),
+                child: Text(
+                  "LOGIN",
+                  style: TextStyle(
+                      fontFamily: 'Exo2', color: Colors.white, fontSize: 20.0),
+                ),
+                color: colorCurve,
+                onPressed: () {
+                  getSites();
+                },
+              ),
+            ),
             Container(
               padding: EdgeInsets.only(top: size.getWidthPx(36)),
               child: Column(
@@ -108,7 +221,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
               children: <Widget>[
                 for (int i = 0; i < premiumList.length; i++)
                   propertyCard(premiumList.reversed.toList()[i])
-
               ],
             )
           ],
@@ -145,7 +257,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                   fontSize: 16.0),
               HorizontalList(
                 children: <Widget>[
-                  for(int i=0;i<citiesList.length;i++)
+                  for (int i = 0; i < citiesList.length; i++)
                     buildChoiceChip(i, citiesList[i])
                 ],
               ),
@@ -171,7 +283,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
       padding: EdgeInsets.only(left: leftPadding),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(text??"",
+        child: Text(text ?? "",
             textAlign: TextAlign.left,
             style: TextStyle(
                 fontFamily: 'Exo2',

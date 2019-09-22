@@ -30,6 +30,7 @@ class AuthService {
       if (response.statusCode == 200) {
         UserDetails.userPermissions =
             (json.decode(response.data)['permissions']);
+        UserDetails.token = (json.decode(response.data)['token']);
         return true;
       }
 

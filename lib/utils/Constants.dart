@@ -7,6 +7,7 @@ class Constants{
   static String urlBase = 'http://192.168.1.108:8000/api/';
   static String urlLogin = urlBase + 'login';
   static String urlApplicationUpload = urlBase + 'applications';
+  static String urlGetAreaManagerSites = urlBase + 'area_managers/getSitesApi';
 //colors
   static const Color clr_purple = const Color(0xFF9C27B0);
   static const Color clr_blue = const Color(0xFF548CFF);
