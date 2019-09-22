@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ui_collections/ui/page_create_new_job.dart';
 import 'package:flutter_ui_collections/widgets/bottom_navigationBar.dart';
 
 import '../main.dart';
@@ -39,7 +40,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           body: bodyView(currentTab),
-          bottomNavigationBar: BottomNavBar(changeCurrentTab: _changeCurrentTab)),
+          bottomNavigationBar:
+              BottomNavBar(changeCurrentTab: _changeCurrentTab)),
     );
   }
 
@@ -53,7 +55,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         break;
       case 1:
         //Search Page
-        tabView = [PageComingSoon()];
+        tabView = [CreateNewJobPage()];
         break;
       case 2:
         //Profile Page

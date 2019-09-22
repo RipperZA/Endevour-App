@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ui_collections/ui/page_login.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 
@@ -87,7 +88,12 @@ class _SettingPageState extends State<SettingPage> {
           child: TileRow(
             label: "Log out",
             disableDivider: false,
-            onTap: () {},
+            onTap: () {
+
+              //todo add delete JWT token logic here etc
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => LoginPage()));
+            },
           ),
         )
       ],

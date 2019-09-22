@@ -37,6 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future navigateFromSplash () async {
+    //Todo Remove this later
     LocalStorage.sharedInstance.deleteAll();
 
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));

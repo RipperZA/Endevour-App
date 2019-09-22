@@ -45,8 +45,8 @@ class _BottomNavBarState extends State<BottomNavBar>
         ),
         BottomNavigationBarItem(
           backgroundColor: Colors.grey.shade50,
-          icon: Icon(Icons.search),
-          title: Text('Search', style: TextStyle(fontFamily: 'Exo2')),
+          icon: Icon(Icons.work),
+          title: Text('New Job', style: TextStyle(fontFamily: 'Exo2')),
         ),
         BottomNavigationBarItem(
           backgroundColor: Colors.grey.shade50,
