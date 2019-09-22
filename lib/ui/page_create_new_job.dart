@@ -34,11 +34,50 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
     "Jaipur"
   ];
 
+  getSites() async {
+    try {
+      Response response;
+
+      Dio dio = new Dio();
+      response = await dio.get(Constants.urlGetAreaManagerSites,
+          options: Options(
+              method: 'GET',
+              headers: {'Authorization': 'Bearer ' + UserDetails.token},
+              responseType: ResponseType.plain // or ResponseType.JSON
+          ));
+
+      if (response.statusCode == 200) {
+        var sites = json.decode(response.data)['data']['sites'];
+
+        for (var x in sites) {
+          var site = Site.fromJson(x);
+          setState(() {
+            this.siteList.add(site);
+          });
+        }
+      }
+
+      return false;
+    } on DioError catch (e) {
+
+      Fluttertoast.showToast(
+          msg: json.decode(e.response.data)['error'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+    this.getSites();
     premiumList
       ..add(Property(
           propertyName: "Omkar Lotus",
@@ -117,43 +156,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   }
 
   Widget upperPart() {
-    getSites() async {
-      try {
-        Response response;
-
-        Dio dio = new Dio();
-        response = await dio.get(Constants.urlGetAreaManagerSites,
-            options: Options(
-                method: 'GET',
-                headers: {'Authorization': 'Bearer ' + UserDetails.token},
-                responseType: ResponseType.plain // or ResponseType.JSON
-                ));
-
-        if (response.statusCode == 200) {
-          var sites = json.decode(response.data)['data']['sites'];
-
-          for (var x in sites) {
-            var site = Site.fromJson(x);
-            setState(() {
-              this.siteList.add(site);
-            });
-          }
-        }
-
-        return false;
-      } on DioError catch (e) {
-
-        Fluttertoast.showToast(
-            msg: json.decode(e.response.data)['error'],
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorErrorMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        return false;
-      }
-    }
 
     return Stack(
       children: <Widget>[
@@ -181,13 +183,17 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                     borderRadius: new BorderRadius.circular(30.0)),
                 padding: EdgeInsets.all(size.getWidthPx(12)),
                 child: Text(
-                  "LOGIN",
+                  "Print Sites",
                   style: TextStyle(
                       fontFamily: 'Exo2', color: Colors.white, fontSize: 20.0),
                 ),
                 color: colorCurve,
                 onPressed: () {
-                  getSites();
+                  print(this.siteList.map((f)
+                  {
+                    return f.uuid;
+                  }).toList());
+
                 },
               ),
             ),
