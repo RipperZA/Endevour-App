@@ -19,5 +19,6 @@ Color textSecondaryDarkColor = Colors.blue;
 Color hintTextColor = Colors.white30;
 Color bucketDialogueUserColor = Colors.red;
 Color disabledTextColour = Colors.black54;
+Color disabledButtonColour = Colors.grey;
 Color placeHolderColor = Colors.black26;
 Color dividerColor = Colors.black26;

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -10,6 +11,13 @@ import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/utils/utils.dart' as prefix0;
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_ui_collections/utils/data.dart';
 
 class CreateNewJobPage extends StatefulWidget {
   @override
@@ -19,6 +27,30 @@ class CreateNewJobPage extends StatefulWidget {
 class _CreateNewJobPageState extends State<CreateNewJobPage> {
   Screen size;
   int _selectedIndex = 1;
+  Completer<GoogleMapController> _controller = Completer();
+  static const LatLng _center = const LatLng(45.521563, -122.677433);
+  static TextStyle style = TextStyle(fontFamily: 'Exo2', fontSize: 18.0);
+  static UnderlineInputBorder _underlineInputBorder =
+      UnderlineInputBorder(borderSide: BorderSide(color: Colors.black));
+
+//  final _formKey = GlobalKey<FormState>();
+
+  var data;
+  bool autoValidate = true;
+  bool readOnly = false;
+  bool showSegmentedControl = true;
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  final GlobalKey<FormFieldState> _specifyTextFieldKey =
+      GlobalKey<FormFieldState>();
+
+  ValueChanged _clientSite = (val) {
+    print(val);
+    print(44444);
+  };
+
+  ValueChanged _onChanged = (val) {
+    print(2222);
+  };
 
   List<Property> premiumList = List();
   List<Property> featuredList = List();
@@ -44,7 +76,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.plain // or ResponseType.JSON
-          ));
+              ));
 
       if (response.statusCode == 200) {
         var sites = json.decode(response.data)['data']['sites'];
@@ -59,7 +91,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
       return false;
     } on DioError catch (e) {
-
       Fluttertoast.showToast(
           msg: json.decode(e.response.data)['error'],
           toastLength: Toast.LENGTH_LONG,
@@ -70,6 +101,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
           fontSize: 16.0);
       return false;
     }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
   }
 
   @override
@@ -131,7 +166,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
           propertyPrice: "15.6 Cr"));
   }
 
-  @override
   Widget build(BuildContext context) {
     size = Screen(MediaQuery.of(context).size);
 
@@ -147,7 +181,188 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
         child: Container(
           child: SingleChildScrollView(
             child: Column(
-              children: <Widget>[upperPart()],
+              children: <Widget>[
+                upperPart(),
+                FormBuilder(
+                  // context,
+                  key: _fbKey,
+                  autovalidate: true,
+                  initialValue: {
+                    'movie_rating': 5,
+                  },
+                  // readOnly: true,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: <Widget>[
+                        FormBuilderTypeAhead(
+                          decoration: InputDecoration(
+//                            enabledBorder: _underlineInputBorder,
+//                            focusedBorder: _underlineInputBorder,
+//                            labelStyle: style,
+                            labelText: "Client Site",
+                          ),
+                          attribute: 'client_site',
+                          onChanged: _clientSite,
+                          itemBuilder: (context, site) {
+                            return ListTile(
+                              title: Text(site.name),
+                            );
+                          },
+//                          initialValue: siteList[0].name,
+                          selectionToTextTransformer: (Site site) => site.name,
+                          suggestionsCallback: (query) {
+                            if (query.length != 0) {
+                              var lowercaseQuery = query.toLowerCase();
+                              return siteList.where((site) {
+                                return site.name
+                                    .toLowerCase()
+                                    .contains(lowercaseQuery);
+                              }).toList(growable: false)
+                                ..sort((a, b) => a.name
+                                    .toLowerCase()
+                                    .indexOf(lowercaseQuery)
+                                    .compareTo(b.name
+                                        .toLowerCase()
+                                        .indexOf(lowercaseQuery)));
+                            } else {
+                              return siteList;
+                            }
+                          },
+                        ),
+                        FormBuilderDateTimePicker(
+                          attribute: "date",
+                          onChanged: _onChanged,
+                          inputType: InputType.time,
+                          // format: DateFormat("yyyy-MM-dd hh:mm"),
+                          // initialValue: DateTime.now(),
+                          decoration: InputDecoration(labelText: "Start Time"),
+                          // readonly: true,
+                        ),
+                        FormBuilderDateTimePicker(
+                          attribute: "date",
+                          onChanged: _onChanged,
+                          inputType: InputType.time,
+                          // format: DateFormat("yyyy-MM-dd hh:mm"),
+                          // initialValue: DateTime.now(),
+                          decoration: InputDecoration(labelText: "End Time"),
+                          // readonly: true,
+                        ),
+                        FormBuilderDateRangePicker(
+                          attribute: "date_range",
+                          firstDate: DateTime(1970),
+                          lastDate: DateTime(2020),
+                          format: DateFormat("yyyy-MM-dd"),
+                          onChanged: _onChanged,
+                          decoration: InputDecoration(labelText: "Date Range"),
+                          // readonly: true,
+                        ),
+//                        FormBuilderCustomField(
+//                          attribute: "client_site_select_only",
+//                          validators: [
+//                            FormBuilderValidators.required(),
+//                          ],
+//                          formField: FormField(
+//                            // key: _fieldKey,
+//                            enabled: true,
+//                            builder: (FormFieldState<dynamic> field) {
+//                              return InputDecorator(
+//                                decoration: InputDecoration(
+//                                  labelText: "Select Site",
+//                                  contentPadding:
+//                                      EdgeInsets.only(top: 10.0, bottom: 0.0),
+//                                  border: InputBorder.none,
+//                                  errorText: field.errorText,
+//                                ),
+//                                child: DropdownButton(
+//                                  isExpanded: true,
+//                                  items: siteList.map((option) {
+//                                    return DropdownMenuItem(
+//                                      child: Text(option.name),
+//                                      value: option,
+//                                    );
+//                                  }).toList(),
+//                                  value: field.value,
+//                                  onChanged: (value) {
+//                                    field.didChange(value);
+//                                  },
+//                                ),
+//                              );
+//                            },
+//                          ),
+//                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: size.getWidthPx(20),
+                          horizontal: size.getWidthPx(16)),
+                      width: size.getWidthPx(200),
+                      child: RaisedButton(
+                        elevation: 8.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
+                        padding: EdgeInsets.all(size.getWidthPx(12)),
+                        child: Text(
+                          "LOGIN",
+                          style: TextStyle(
+                              fontFamily: 'Exo2',
+                              color: Colors.white,
+                              fontSize: 20.0),
+                        ),
+                        color: colorCurve,
+                        disabledColor: disabledButtonColour,
+                        onPressed: () {
+//              login();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: MaterialButton(
+                        color: Theme.of(context).accentColor,
+                        child: Text(
+                          "Submit",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          if (_fbKey.currentState.saveAndValidate()) {
+                            print(_fbKey.currentState.value);
+                          } else {
+                            print(_fbKey.currentState.value);
+                            print("validation failed");
+                          }
+                          print(_fbKey.currentState.value['contact_person']
+                              .runtimeType);
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: MaterialButton(
+                        color: Theme.of(context).accentColor,
+                        child: Text(
+                          "Reset",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          _fbKey.currentState.reset();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -163,7 +378,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
         ClipPath(
           clipper: UpperClipper(),
           child: Container(
-            height: size.getWidthPx(240),
+            height: size.getWidthPx(100),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [colorCurve, colorCurveSecondary],
@@ -173,89 +388,40 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
         ),
         Column(
           children: <Widget>[
-            DropdownButton<String>(
-              value: dropdownValue,
-              icon: Icon(Icons.arrow_downward),
-              iconSize: 24,
-              elevation: 16,
-              style: TextStyle(
-                  color: Colors.deepPurple
-              ),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              onChanged: (String newValue) {
-                setState(() {
-                  dropdownValue = newValue;
-                });
-              },
-              items: <String>['One', 'Two', 'Free', 'Four']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              })
-                  .toList(),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(
-                  vertical: size.getWidthPx(20),
-                  horizontal: size.getWidthPx(16)),
-              width: size.getWidthPx(200),
-              child: RaisedButton(
-                elevation: 8.0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0)),
-                padding: EdgeInsets.all(size.getWidthPx(12)),
-                child: Text(
-                  "Print Sites",
-                  style: TextStyle(
-                      fontFamily: 'Exo2', color: Colors.white, fontSize: 20.0),
+//            Container(
+//              padding: EdgeInsets.symmetric(
+//                  vertical: size.getWidthPx(20),
+//                  horizontal: size.getWidthPx(16)),
+//              width: size.getWidthPx(200),
+//              child: RaisedButton(
+//                elevation: 8.0,
+//                shape: RoundedRectangleBorder(
+//                    borderRadius: new BorderRadius.circular(30.0)),
+//                padding: EdgeInsets.all(size.getWidthPx(12)),
+//                child: Text(
+//                  "Print Sites",
+//                  style: TextStyle(
+//                      fontFamily: 'Exo2', color: Colors.white, fontSize: 20.0),
+//                ),
+//                color: colorCurve,
+//                onPressed: () {
+//                  print(this.siteList.map((f) {
+//                    return f.name;
+//                  }).toList());
+//                },
+//              ),
+//            ),
+            Center(
+              child: Container(
+                padding: EdgeInsets.only(top: size.getWidthPx(36)),
+                child: Column(
+                  children: <Widget>[
+                    titleWidget(),
+                    SizedBox(height: size.getWidthPx(10)),
+                  ],
                 ),
-                color: colorCurve,
-                onPressed: () {
-                  print(this.siteList.map((f)
-                  {
-                    return f.uuid;
-                  }).toList());
-
-                },
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(top: size.getWidthPx(36)),
-              child: Column(
-                children: <Widget>[
-                  titleWidget(),
-                  SizedBox(height: size.getWidthPx(10)),
-                  upperBoxCard(),
-                ],
-              ),
-            ),
-            leftAlignText(
-                text: "Premium properties",
-                leftPadding: size.getWidthPx(16),
-                textColor: textPrimaryColor,
-                fontSize: 16.0),
-            HorizontalList(
-              children: <Widget>[
-                for (int i = 0; i < premiumList.length; i++)
-                  propertyCard(premiumList[i])
-              ],
-            ),
-            leftAlignText(
-                text: "Featured properties",
-                leftPadding: size.getWidthPx(16),
-                textColor: textPrimaryColor,
-                fontSize: 16.0),
-            HorizontalList(
-              children: <Widget>[
-                for (int i = 0; i < premiumList.length; i++)
-                  propertyCard(premiumList.reversed.toList()[i])
-              ],
-            )
           ],
         ),
       ],
