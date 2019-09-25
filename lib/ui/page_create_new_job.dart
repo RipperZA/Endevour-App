@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ui_collections/model/Rate.dart';
 import 'package:flutter_ui_collections/model/Site.dart';
 import 'package:flutter_ui_collections/model/models.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
@@ -59,9 +60,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
     print(2222);
   };
 
-  List<Property> premiumList = List();
-  List<Property> featuredList = List();
   List<Site> siteList = List();
+  List<Rate> rateList = List();
   var citiesList = [
     "Ahmedabad",
     "Mumbai",
@@ -110,6 +110,47 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
     }
   }
 
+  getRates() async {
+    try {
+      Response response;
+
+      Dio dio = new Dio();
+      response = await dio.get(Constants.urlGetRates,
+          options: Options(
+              method: 'GET',
+              headers: {'Authorization': 'Bearer ' + UserDetails.token},
+              responseType: ResponseType.plain // or ResponseType.JSON
+          ));
+
+      if (response.statusCode == 200) {
+        var rates = json.decode(response.data)['data']['rates'];
+
+        for (var x in rates) {
+
+          var rate = Rate.fromJson(x);
+          print(rate.ratePerHour);
+
+          setState(() {
+            this.rateList.add(rate);
+          });
+        }
+      }
+
+      return false;
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: json.decode(e.response.data)['error'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return false;
+    }
+  }
+
+
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
   }
@@ -120,57 +161,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
     super.initState();
 
     this.getSites();
-    premiumList
-      ..add(Property(
-          propertyName: "Omkar Lotus",
-          propertyLocation: "Ahmedabad ",
-          image: "feature_1.jpg",
-          propertyPrice: "26.5 Cr"))
-      ..add(Property(
-          propertyName: "Sandesh Heights",
-          propertyLocation: "Baroda ",
-          image: "feature_2.jpg",
-          propertyPrice: "11.5 Cr"))
-      ..add(Property(
-          propertyName: "Sangath Heights",
-          propertyLocation: "Pune ",
-          image: "feature_3.jpg",
-          propertyPrice: "19.0 Cr"))
-      ..add(Property(
-          propertyName: "Adani HighRise",
-          propertyLocation: "Mumbai ",
-          image: "hall_1.jpg",
-          propertyPrice: "22.5 Cr"))
-      ..add(Property(
-          propertyName: "N.G Tower",
-          propertyLocation: "Gandhinagar ",
-          image: "hall_2.jpeg",
-          propertyPrice: "7.5 Cr"))
-      ..add(Property(
-          propertyName: "Vishwas CityRise",
-          propertyLocation: "Pune ",
-          image: "hall_1.jpg",
-          propertyPrice: "17.5 Cr"))
-      ..add(Property(
-          propertyName: "Gift City",
-          propertyLocation: "Ahmedabad ",
-          image: "hall_2.jpeg",
-          propertyPrice: "13.5 Cr"))
-      ..add(Property(
-          propertyName: "Velone City",
-          propertyLocation: "Mumbai ",
-          image: "feature_1.jpg",
-          propertyPrice: "11.5 Cr"))
-      ..add(Property(
-          propertyName: "PabelBay",
-          propertyLocation: "Ahmedabad ",
-          image: "hall_1.jpg",
-          propertyPrice: "33.1 Cr"))
-      ..add(Property(
-          propertyName: "Sapath Hexa Tower",
-          propertyLocation: "Ahmedabad",
-          image: "feature_3.jpg",
-          propertyPrice: "15.6 Cr"));
+    this.getRates();
   }
 
   Widget build(BuildContext context) {
@@ -247,6 +238,42 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               }
                             },
                           ),
+                          FormBuilderCustomField(
+                            attribute: "rate",
+                            validators: [
+                              FormBuilderValidators.required(),
+                            ],
+                            formField: FormField(
+                              // key: _fieldKey,
+                              enabled: true,
+//                              initialValue: rateList.first.uuid,
+                              builder: (FormFieldState<dynamic> field) {
+                                return InputDecorator(
+                                  decoration: InputDecoration(
+                                    labelText: "Select Rate",
+                                    contentPadding:
+                                    EdgeInsets.only(top: 10.0, bottom: 0.0),
+                                    border: InputBorder.none,
+                                    errorText: field.errorText,
+                                  ),
+                                  child: DropdownButton(
+                                    isExpanded: true,
+                                    items: rateList.map((option) {
+                                      return DropdownMenuItem(
+                                        child: Text(option.name+ '- R' + option.ratePerHour.toString()),
+                                        value: option.uuid,
+                                      );
+                                    }).toList(),
+                                    value: field.value,
+                                    onChanged: (value) {
+                                      field.didChange(value);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+
                           FormBuilderDateTimePicker(
                             attribute: "date",
                             onChanged: _onChanged,
@@ -276,40 +303,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                 InputDecoration(labelText: "Date Range"),
                             // readonly: true,
                           ),
-//                        FormBuilderCustomField(
-//                          attribute: "client_site_select_only",
-//                          validators: [
-//                            FormBuilderValidators.required(),
-//                          ],
-//                          formField: FormField(
-//                            // key: _fieldKey,
-//                            enabled: true,
-//                            builder: (FormFieldState<dynamic> field) {
-//                              return InputDecorator(
-//                                decoration: InputDecoration(
-//                                  labelText: "Select Site",
-//                                  contentPadding:
-//                                      EdgeInsets.only(top: 10.0, bottom: 0.0),
-//                                  border: InputBorder.none,
-//                                  errorText: field.errorText,
-//                                ),
-//                                child: DropdownButton(
-//                                  isExpanded: true,
-//                                  items: siteList.map((option) {
-//                                    return DropdownMenuItem(
-//                                      child: Text(option.name),
-//                                      value: option,
-//                                    );
-//                                  }).toList(),
-//                                  value: field.value,
-//                                  onChanged: (value) {
-//                                    field.didChange(value);
-//                                  },
-//                                ),
-//                              );
-//                            },
-//                          ),
-//                        ),
                         ],
                       ),
                     ),
@@ -362,6 +355,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                         color: themeColour,
                         disabledColor: disabledButtonColour,
                         onPressed: () {
+                          print(this.rateList.first.ratePerHour);
+
                           if (_fbKey.currentState.saveAndValidate()) {
                             print(_fbKey.currentState.value);
                           } else {
