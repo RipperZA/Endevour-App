@@ -22,3 +22,5 @@ Color disabledTextColour = Colors.black54;
 Color disabledButtonColour = Colors.grey;
 Color placeHolderColor = Colors.black26;
 Color dividerColor = Colors.black26;
+
+Color imagePrimaryLightColor = Colors.white;

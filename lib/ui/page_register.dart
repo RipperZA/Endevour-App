@@ -591,6 +591,7 @@ class _RegisterPageState extends State<RegisterPage>
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: themeColour,
         title: Text("Registration"),
       ),
       body: AnnotatedRegion(

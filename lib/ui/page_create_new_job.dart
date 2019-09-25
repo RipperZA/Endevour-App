@@ -28,7 +28,13 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   Screen size;
   int _selectedIndex = 1;
   Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
+  static const LatLng _center = const LatLng(-25.798297,28.2760503);
+  final Set<Marker> _markers = {
+    Marker(
+      markerId: MarkerId('Hatfield Christian School'),
+      position: LatLng(-25.798297, 28.2760503),
+    ),
+  };
   static TextStyle style = TextStyle(fontFamily: 'Exo2', fontSize: 18.0);
   static UnderlineInputBorder _underlineInputBorder =
       UnderlineInputBorder(borderSide: BorderSide(color: Colors.black));
@@ -39,6 +45,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   bool autoValidate = true;
   bool readOnly = false;
   bool showSegmentedControl = true;
+  bool showSiteOnMaps = false;
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final GlobalKey<FormFieldState> _specifyTextFieldKey =
       GlobalKey<FormFieldState>();
@@ -171,92 +178,104 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: AnnotatedRegion(
-        value: SystemUiOverlayStyle(
-            statusBarColor: backgroundColor,
-            statusBarBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark,
-            systemNavigationBarIconBrightness: Brightness.dark,
-            systemNavigationBarColor: backgroundColor),
-        child: Container(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                upperPart(),
-                FormBuilder(
-                  // context,
-                  key: _fbKey,
-                  autovalidate: true,
-                  initialValue: {
-                    'movie_rating': 5,
-                  },
-                  // readOnly: true,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: <Widget>[
-                        FormBuilderTypeAhead(
-                          decoration: InputDecoration(
+      body: Stack(children: <Widget>[
+        AnnotatedRegion(
+          value: SystemUiOverlayStyle(
+              statusBarColor: backgroundColor,
+              statusBarBrightness: Brightness.dark,
+              statusBarIconBrightness: Brightness.dark,
+              systemNavigationBarIconBrightness: Brightness.dark,
+              systemNavigationBarColor: backgroundColor),
+          child: Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  upperPart(),
+                  FormBuilder(
+                    // context,
+                    key: _fbKey,
+                    autovalidate: true,
+                    initialValue: {
+                      'movie_rating': 5,
+                    },
+                    // readOnly: true,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: <Widget>[
+                          FormBuilderTypeAhead(
+                            decoration: InputDecoration(
 //                            enabledBorder: _underlineInputBorder,
 //                            focusedBorder: _underlineInputBorder,
 //                            labelStyle: style,
-                            labelText: "Client Site",
-                          ),
-                          attribute: 'client_site',
-                          onChanged: _clientSite,
-                          itemBuilder: (context, site) {
-                            return ListTile(
-                              title: Text(site.name),
-                            );
-                          },
+                              labelText: "Client Site",
+                            ),
+                            attribute: 'client_site',
+                            onChanged: (test) => {
+                              setState(() {
+//                                showSiteOnMaps = !showSiteOnMaps;
+                              })
+                            },
+//                            ,onChanged: (test)=>
+//                            {
+//                              print(2222222)
+//                            },
+                            itemBuilder: (context, site) {
+                              return ListTile(
+                                title: Text(site.name),
+                              );
+                            },
 //                          initialValue: siteList[0].name,
-                          selectionToTextTransformer: (Site site) => site.name,
-                          suggestionsCallback: (query) {
-                            if (query.length != 0) {
-                              var lowercaseQuery = query.toLowerCase();
-                              return siteList.where((site) {
-                                return site.name
-                                    .toLowerCase()
-                                    .contains(lowercaseQuery);
-                              }).toList(growable: false)
-                                ..sort((a, b) => a.name
-                                    .toLowerCase()
-                                    .indexOf(lowercaseQuery)
-                                    .compareTo(b.name
-                                        .toLowerCase()
-                                        .indexOf(lowercaseQuery)));
-                            } else {
-                              return siteList;
-                            }
-                          },
-                        ),
-                        FormBuilderDateTimePicker(
-                          attribute: "date",
-                          onChanged: _onChanged,
-                          inputType: InputType.time,
-                          // format: DateFormat("yyyy-MM-dd hh:mm"),
-                          // initialValue: DateTime.now(),
-                          decoration: InputDecoration(labelText: "Start Time"),
-                          // readonly: true,
-                        ),
-                        FormBuilderDateTimePicker(
-                          attribute: "date",
-                          onChanged: _onChanged,
-                          inputType: InputType.time,
-                          // format: DateFormat("yyyy-MM-dd hh:mm"),
-                          // initialValue: DateTime.now(),
-                          decoration: InputDecoration(labelText: "End Time"),
-                          // readonly: true,
-                        ),
-                        FormBuilderDateRangePicker(
-                          attribute: "date_range",
-                          firstDate: DateTime(1970),
-                          lastDate: DateTime(2020),
-                          format: DateFormat("yyyy-MM-dd"),
-                          onChanged: _onChanged,
-                          decoration: InputDecoration(labelText: "Date Range"),
-                          // readonly: true,
-                        ),
+                            selectionToTextTransformer: (Site site) =>
+                                site.name,
+                            suggestionsCallback: (query) {
+                              if (query.length != 0) {
+                                var lowercaseQuery = query.toLowerCase();
+                                return siteList.where((site) {
+                                  return site.name
+                                      .toLowerCase()
+                                      .contains(lowercaseQuery);
+                                }).toList(growable: false)
+                                  ..sort((a, b) => a.name
+                                      .toLowerCase()
+                                      .indexOf(lowercaseQuery)
+                                      .compareTo(b.name
+                                          .toLowerCase()
+                                          .indexOf(lowercaseQuery)));
+                              } else {
+                                return siteList;
+                              }
+                            },
+                          ),
+                          FormBuilderDateTimePicker(
+                            attribute: "date",
+                            onChanged: _onChanged,
+                            inputType: InputType.time,
+                            // format: DateFormat("yyyy-MM-dd hh:mm"),
+                            // initialValue: DateTime.now(),
+                            decoration:
+                                InputDecoration(labelText: "Start Time"),
+                            // readonly: true,
+                          ),
+                          FormBuilderDateTimePicker(
+                            attribute: "date",
+                            onChanged: _onChanged,
+                            inputType: InputType.time,
+                            // format: DateFormat("yyyy-MM-dd hh:mm"),
+                            // initialValue: DateTime.now(),
+                            decoration: InputDecoration(labelText: "End Time"),
+                            // readonly: true,
+                          ),
+                          FormBuilderDateRangePicker(
+                            attribute: "date_range",
+                            firstDate: DateTime(1970),
+                            lastDate: DateTime(2020),
+                            format: DateFormat("yyyy-MM-dd"),
+                            onChanged: _onChanged,
+                            decoration:
+                                InputDecoration(labelText: "Date Range"),
+                            // readonly: true,
+                          ),
 //                        FormBuilderCustomField(
 //                          attribute: "client_site_select_only",
 //                          validators: [
@@ -291,48 +310,57 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 //                            },
 //                          ),
 //                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: size.getWidthPx(20),
-                          horizontal: size.getWidthPx(16)),
-                      width: size.getWidthPx(200),
-                      child: RaisedButton(
-                        elevation: 8.0,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      RaisedButton.icon(
+                        elevation: 4.0,
                         shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0)),
-                        padding: EdgeInsets.all(size.getWidthPx(12)),
-                        child: Text(
-                          "LOGIN",
-                          style: TextStyle(
-                              fontFamily: 'Exo2',
-                              color: Colors.white,
-                              fontSize: 20.0),
+                        icon: Icon(
+                          Icons.map,
+                          color: imagePrimaryLightColor,
                         ),
-                        color: colorCurve,
+                        color: themeColour,
+                        label: new Text(
+                          "Verify Site On Maps",
+                          style: TextStyle(
+                            fontFamily: 'Exo2',
+                            color: textPrimaryLightColor,
+                          ),
+                        ),
                         disabledColor: disabledButtonColour,
                         onPressed: () {
+                          setState(() {
+                            showSiteOnMaps = !showSiteOnMaps;
+                          });
 //              login();
                         },
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: MaterialButton(
-                        color: Theme.of(context).accentColor,
-                        child: Text(
+                      SizedBox(
+                        width: 20,
+                      ),
+                      RaisedButton.icon(
+                        elevation: 4.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
+                        label: new Text(
                           "Submit",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            fontFamily: 'Exo2',
+                            color: textPrimaryLightColor,
+                          ),
                         ),
+                        icon: Icon(
+                          Icons.add,
+                          color: imagePrimaryLightColor,
+                        ),
+                        color: themeColour,
+                        disabledColor: disabledButtonColour,
                         onPressed: () {
                           if (_fbKey.currentState.saveAndValidate()) {
                             print(_fbKey.currentState.value);
@@ -344,29 +372,30 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               .runtimeType);
                         },
                       ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
-                      child: MaterialButton(
-                        color: Theme.of(context).accentColor,
-                        child: Text(
-                          "Reset",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          _fbKey.currentState.reset();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: showSiteOnMaps
+                        ? Container(
+                            height: size.getWidthPx(400),
+                            child: GoogleMap(
+                              markers: _markers,
+                              onMapCreated: _onMapCreated,
+                              initialCameraPosition: CameraPosition(
+                                target: _center,
+                                zoom: 16.0,
+                              ),
+                            ),
+                          )
+                        : null,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
+      ]),
     );
   }
 

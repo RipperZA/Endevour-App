@@ -38,7 +38,21 @@ class CollectionApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Theme.of(context).primaryColor,
+//          primaryColor: Theme.of(context).primaryColor,
+//          primaryColor: themeColour,
+//          accentColor: themeColour,
+//            hintColor: themeColour,
+//        disabledColor: themeColour,
+//          inputDecorationTheme : InputDecorationTheme(
+//            labelStyle: TextStyle(fontSize: 26, color: Colors.green),
+//            enabledBorder: new UnderlineInputBorder(
+//              borderSide: BorderSide(color: Colors.black),),
+
+//            focusedBorder: new UnderlineInputBorder(
+//              borderSide: BorderSide(color: Colors.black),),
+//          )
+
+
         ),
         home: SplashScreen()
     );
