@@ -52,6 +52,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   bool showSegmentedControl = true;
   bool showSiteOnMaps = false;
   bool _saving = false;
+  var uploadUrl = Constants.urlNewJobUpload;
 
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final GlobalKey<FormFieldState> _specifyTextFieldKey =
@@ -192,11 +193,81 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   Widget build(BuildContext context) {
     size = Screen(MediaQuery.of(context).size);
 
-    String validateClientName(String value) {
-      if (value.length > 0 && value.length < 3)
-        return 'Name must be more than 2 charaters';
-      else
-        return null;
+    //                                _saving = true;
+
+    uploadNewJob(BuildContext context) async {
+      {
+        try {
+          Response response;
+          var formValues = _fbKey.currentState.value;
+//          print(json.encode(formValues));
+
+          FormData formData = new FormData(); // just like JS
+          formData.addAll(formValues);
+
+          Dio dio = new Dio();
+          response = await dio.post(uploadUrl,
+              data: formData,
+              options: Options(
+                  method: 'POST',
+                  headers: {
+                    'Authorization': 'Bearer ' + UserDetails.token,
+                    'Accept': 'application/json'
+                    //NB Important to retrieve validation errors from Server
+                  },
+                  responseType: ResponseType.json // or ResponseType.JSON
+                  ));
+
+          Fluttertoast.showToast(
+              msg: response.data['success'],
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.TOP,
+              timeInSecForIos: 1,
+              backgroundColor: colorSuccessMessage,
+              textColor: Colors.white,
+              fontSize: 16.0);
+//
+//          await showDialog(
+//            barrierDismissible: false,
+//            context: context,
+//            builder: (BuildContext context) {
+//              // return object of type Dialog
+//              return AlertDialog(
+//                title: new Text("Success!"),
+//                content: new Text(json.decode(response.data)['success']),
+//                actions: <Widget>[
+//                  // usually buttons at the bottom of the dialog
+//                  new FlatButton(
+//                    child: new Text("Close"),
+//                    onPressed: () {
+//                      Navigator.pop(context);
+//                    },
+//                  ),
+//                ],
+//              );
+//            },
+//          ).then((onValue) {
+//            Navigator.pop(context);
+//          }, onError: (err) {
+//            Navigator.pop(context);
+//          });
+
+          setState(() {
+            _saving = false;
+          });
+        } on DioError catch (e) {
+          print((e.response));
+
+          Fluttertoast.showToast(
+              msg: json.decode(e.response.toString())['message'],
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.TOP,
+              timeInSecForIos: 1,
+              backgroundColor: colorErrorMessage,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
+      }
     }
 
     return Scaffold(
@@ -315,13 +386,13 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                 labelStyle: style,
                                 labelText: "No. Of Workers",
                               ),
-                              attribute: "stepper",
+                              attribute: "number_workers",
                               initialValue: 1,
                               max: 10,
                               step: 1,
                             ),
                             FormBuilderDateTimePicker(
-                              attribute: "date",
+                              attribute: "start_time",
                               onChanged: _onChanged,
                               inputType: InputType.time,
                               validators: [
@@ -334,7 +405,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               // readonly: true,
                             ),
                             FormBuilderDateTimePicker(
-                              attribute: "date",
+                              attribute: "end_time",
                               onChanged: _onChanged,
                               inputType: InputType.time,
                               validators: [
@@ -411,19 +482,18 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                           color: themeColour,
                           disabledColor: disabledButtonColour,
                           onPressed: () {
-                            print(this.rateList.first.ratePerHour);
-
                             if (_fbKey.currentState.saveAndValidate()) {
                               setState(() {
+                                _fbKey.currentState.value['client_site'] =
+                                    _currentSite.uuid;
+                                print(_fbKey.currentState.value);
                                 _saving = true;
+                                uploadNewJob(context);
                               });
-                              print(_fbKey.currentState.value);
                             } else {
                               print(_fbKey.currentState.value);
                               print("validation failed");
                             }
-                            print(_fbKey.currentState.value['contact_person']
-                                .runtimeType);
                           },
                         ),
                       ],

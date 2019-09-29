@@ -9,6 +9,7 @@ class Constants{
   static String urlApplicationUpload = urlBase + 'applications';
   static String urlGetAreaManagerSites = urlBase + 'area_managers/getSitesApi';
   static String urlGetRates = urlBase + 'rates/getRatesApi';
+  static String urlNewJobUpload = urlBase + 'work';
 //colors
   static const Color clr_purple = const Color(0xFF9C27B0);
   static const Color clr_blue = const Color(0xFF548CFF);

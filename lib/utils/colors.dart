@@ -6,6 +6,7 @@ Color themeColour = Colors.deepPurple;
 Color colorCurve = Colors.deepPurple;
 //Color colorCurve = Color.fromRGBO(97, 10, 165, 0.8);
 Color colorErrorMessage = Colors.red;
+Color colorSuccessMessage = Colors.green;
 Color colorCurveSecondary = Color.fromRGBO(97, 10, 155, 0.6);
 Color backgroundColor =Colors.grey.shade200;
 Color textPrimaryColor =Colors.black87;
