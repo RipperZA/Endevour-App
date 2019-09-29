@@ -8,6 +8,7 @@ import 'package:flutter_ui_collections/model/Rate.dart';
 import 'package:flutter_ui_collections/model/Site.dart';
 import 'package:flutter_ui_collections/model/models.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
+import 'package:flutter_ui_collections/ui/page_home.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/utils/utils.dart' as prefix0;
 import 'package:flutter_ui_collections/widgets/widgets.dart';
@@ -193,8 +194,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   Widget build(BuildContext context) {
     size = Screen(MediaQuery.of(context).size);
 
-    //                                _saving = true;
-
     uploadNewJob(BuildContext context) async {
       {
         try {
@@ -254,6 +253,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
           setState(() {
             _saving = false;
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
           });
         } on DioError catch (e) {
           print((e.response));
