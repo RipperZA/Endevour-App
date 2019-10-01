@@ -53,14 +53,11 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     OneSignal.shared.init("28fe38a2-d375-4d9f-9b9b-c14eafabfa02");
 
-
-
     emailController.addListener(validEmail);
     passwordController.addListener(validPassword);
   }
 
   login() async {
-
     try {
       bool _result = await appAuth.login(
           this.emailController.text, this.passwordController.text);
