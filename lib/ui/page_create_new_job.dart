@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_ui_collections/utils/data.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class CreateNewJobPage extends StatefulWidget {
   @override
@@ -189,6 +190,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
     this.getSites();
     this.getRates();
+
+//    OneSignal.shared.init("28fe38a2-d375-4d9f-9b9b-c14eafabfa02");
   }
 
   Widget build(BuildContext context) {
