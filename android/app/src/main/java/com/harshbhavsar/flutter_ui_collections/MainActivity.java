@@ -1,4 +1,4 @@
-package com.harshbhavsar.flutter_ui_collections;
+package za.co.endevour.www;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
