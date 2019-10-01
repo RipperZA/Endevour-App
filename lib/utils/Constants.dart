@@ -4,7 +4,8 @@ import 'dart:ui';
 class Constants{
 
   //URLs
-  static String urlBase = 'http://192.168.1.108:8000/api/';
+//  static String urlBase = 'http://192.168.1.108:8000/api/';
+  static String urlBase = 'http://10.2.2.106:8000/api/';
   static String urlLogin = urlBase + 'login';
   static String urlApplicationUpload = urlBase + 'applications';
   static String urlGetAreaManagerSites = urlBase + 'area_managers/getSitesApi';
@@ -24,6 +25,6 @@ class Constants{
   static const String PHOTOSURL = "https://api.unsplash.com/";
   static const String PHOTOS = "photos";
 
-  //URL For list of photos
+  //Google Maps API Key
   static const String accessKey = "f96abcd230664d7cab7ed900470db93878d44b15d672603e8c6817a267a96c78";
 }

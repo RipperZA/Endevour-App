@@ -253,11 +253,17 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
           setState(() {
             _saving = false;
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
+//            Navigator.pushReplacement(
+//                context, MaterialPageRoute(builder: (context) => HomePage()));
           });
         } on DioError catch (e) {
           print((e.response));
+
+          setState(() {
+            _saving = false;
+//            Navigator.pushReplacement(
+//                context, MaterialPageRoute(builder: (context) => HomePage()));
+          });
 
           Fluttertoast.showToast(
               msg: json.decode(e.response.toString())['message'],

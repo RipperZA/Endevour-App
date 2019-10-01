@@ -10,6 +10,7 @@ import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'page_forgotpass.dart';
 import 'page_home.dart';
 import 'page_signup.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 AuthService appAuth = new AuthService();
 
@@ -24,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   var loginUrl = Constants.urlLogin;
   var _isEmailValid = false;
   var _isPasswordValid = false;
+  bool _loggingIn = false;
 
   FocusNode _emailFocusNode = new FocusNode();
   FocusNode _passwordFocusNode = new FocusNode();
@@ -62,7 +64,13 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomePage()));
       }
+      setState(() {
+        _loggingIn = false;
+      });
     } catch (e) {
+      setState(() {
+        _loggingIn = false;
+      });
       print(e);
       return e;
     }
@@ -103,43 +111,48 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         backgroundColor: backgroundColor,
         resizeToAvoidBottomInset: true,
-        body: AnnotatedRegion(
-          value: SystemUiOverlayStyle(
-              statusBarColor: backgroundColor,
-              statusBarBrightness: Brightness.light,
-              statusBarIconBrightness: Brightness.dark,
-              systemNavigationBarIconBrightness: Brightness.light,
-              systemNavigationBarColor: backgroundColor),
-          child: Container(
-            color: Colors.white,
-            child: SafeArea(
-              top: true,
-              bottom: false,
-              child: Stack(fit: StackFit.expand, children: <Widget>[
-                ClipPath(
-                    clipper: BottomShapeClipper(),
-                    child: Container(
-                      color: colorCurve,
-                    )),
-                SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: size.getWidthPx(20),
-                        vertical: size.getWidthPx(20)),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          _loginGradientText(),
-                          SizedBox(height: size.getWidthPx(10)),
-                          _textAccount(),
-                          SizedBox(height: size.getWidthPx(30)),
-                          loginFields()
-                        ]),
-                  ),
-                )
-              ]),
+        body: ModalProgressHUD(
+          child: Stack(children: <Widget>[
+            AnnotatedRegion(
+              value: SystemUiOverlayStyle(
+                  statusBarColor: backgroundColor,
+                  statusBarBrightness: Brightness.light,
+                  statusBarIconBrightness: Brightness.dark,
+                  systemNavigationBarIconBrightness: Brightness.light,
+                  systemNavigationBarColor: backgroundColor),
+              child: Container(
+                color: Colors.white,
+                child: SafeArea(
+                  top: true,
+                  bottom: false,
+                  child: Stack(fit: StackFit.expand, children: <Widget>[
+                    ClipPath(
+                        clipper: BottomShapeClipper(),
+                        child: Container(
+                          color: colorCurve,
+                        )),
+                    SingleChildScrollView(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: size.getWidthPx(20),
+                            vertical: size.getWidthPx(20)),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              _loginGradientText(),
+                              SizedBox(height: size.getWidthPx(10)),
+                              _textAccount(),
+                              SizedBox(height: size.getWidthPx(30)),
+                              loginFields()
+                            ]),
+                      ),
+                    )
+                  ]),
+                ),
+              ),
             ),
-          ),
+          ]),
+          inAsyncCall: _loggingIn,
         ));
   }
 
@@ -245,6 +258,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
         color: colorCurve,
         onPressed: () {
+          setState(() {
+            _loggingIn = true;
+          });
           login();
         },
       ),

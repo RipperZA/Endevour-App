@@ -130,8 +130,9 @@ class _ProfilePageState extends State<ProfilePage> {
           child: CircleAvatar(
             maxRadius: size.getWidthPx(48),
             foregroundColor: colorCurve,
-            backgroundImage: NetworkImage(
-                'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4'),
+            child: Image.asset("assets/icons/icn_coming_soon.png"),
+//            backgroundImage: NetworkImage(
+//                'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4'),
           ),
         ),
       ),
@@ -161,7 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Column nameWidget() {
     return Column(
       children: <Widget>[
-        Text("Harsh Bhavsar",
+        Text("Alex Spyridis",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
