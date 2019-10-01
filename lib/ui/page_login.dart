@@ -11,7 +11,6 @@ import 'page_forgotpass.dart';
 import 'page_home.dart';
 import 'page_signup.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 AuthService appAuth = new AuthService();
 
@@ -51,22 +50,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    OneSignal.shared.init("28fe38a2-d375-4d9f-9b9b-c14eafabfa02");
-
-
 
     emailController.addListener(validEmail);
     passwordController.addListener(validPassword);
   }
 
   login() async {
-    var status = await OneSignal.shared.getPermissionSubscriptionState();
-
-
-    var playerId = status.subscriptionStatus.userId;
-    var token = status.subscriptionStatus.pushToken;
-    print(playerId);
-    print(token);
 
     try {
       bool _result = await appAuth.login(

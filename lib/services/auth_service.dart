@@ -6,6 +6,7 @@ import 'package:flutter_ui_collections/utils/Constants.dart';
 import 'package:flutter_ui_collections/utils/colors.dart';
 import 'user_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class AuthService {
   var loginUrl = Constants.urlBase + "login";
@@ -24,20 +25,22 @@ class AuthService {
           data: formData,
           options: Options(
               method: 'POST',
-              responseType: ResponseType.plain // or ResponseType.JSON
+              responseType: ResponseType.json // or ResponseType.JSON
               ));
 
       if (response.statusCode == 200) {
-        UserDetails.userPermissions =
-            (json.decode(response.data)['permissions']);
-        UserDetails.token = (json.decode(response.data)['token']);
+        UserDetails.userPermissions = response.data['permissions'];
+        UserDetails.token = response.data['token'];
+
+        this.updateUserPushIdAndToken();
+
         return true;
       }
 
       return false;
     } on DioError catch (e) {
       Fluttertoast.showToast(
-          msg: json.decode(e.response.data)['msg'],
+          msg: e.response.data['msg'],
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,
@@ -59,6 +62,50 @@ class AuthService {
 //                  ),
 //                ],
 //              ));
+
+      return false;
+    }
+  }
+
+  Future<bool> updateUserPushIdAndToken() async {
+    try {
+      var status = await OneSignal.shared.getPermissionSubscriptionState();
+      var playerId = status.subscriptionStatus.userId;
+      var playerToken = status.subscriptionStatus.pushToken;
+
+      print(playerId);
+      print(playerToken);
+
+      Response response;
+      FormData formData = new FormData(); // just like JS
+      formData.add("push_id", playerId);
+      formData.add("push_token", playerToken);
+
+      Dio dio = new Dio();
+      response = await dio.post(Constants.urlPushIdAndToken,
+          data: formData,
+          options: Options(
+              method: 'POST',
+              headers: {'Authorization': 'Bearer ' + UserDetails.token},
+              responseType: ResponseType.json // or ResponseType.JSON
+              ));
+
+      if (response.statusCode == 200) {
+        print(response.data);
+        return true;
+      }
+
+      return false;
+    } on DioError catch (e) {
+      print(e.response.data['msg']);
+      Fluttertoast.showToast(
+          msg: e.response.data['msg'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
 
       return false;
     }
