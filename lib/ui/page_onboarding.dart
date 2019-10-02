@@ -20,9 +20,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   Screen  size;
   
   final List<Widget> _pages = [
-    IntroPage("assets/onboard_1.png","Activity", "View activity collected by your fitness trackers and your other mobile apps! \n \n Data has never been more beautiful or easier to understand!"),
-    IntroPage("assets/onboard_2.png","PhotoFIT", "A new kind of fittness tracking! \n \n 100% free, because great heath should be accessible to all!"),
-    IntroPage("assets/onboard_3.png","PhotoLAPSE", "Your progress photos are being put to good use! \n \n The photoLAPSE feature allows you to view your result over custom time periods!"),
+    IntroPage("assets/onboard_1.png","Step 1", "Complete personal details accompanied by a selfie! \n \n Head and shoulders only!"),
+    IntroPage("assets/onboard_2.png","Step 2", "Upload your ID/Smart Id"),
+    IntroPage("assets/onboard_3.png","Step 3", "Upload your CV! \n \n MaX 4 photos. \n \n Once ready click the submit button and you're done!"),
   ];
   int currentPageIndex = 0;
 
