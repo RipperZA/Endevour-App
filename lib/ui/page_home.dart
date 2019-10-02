@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ui_collections/ui/page_create_new_job.dart';
+import 'package:flutter_ui_collections/ui/page_dashboard.dart';
 import 'package:flutter_ui_collections/widgets/bottom_navigationBar.dart';
 
 import '../main.dart';
@@ -18,12 +19,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   int currentTab = 0;
   PageController pageController;
+  List<Widget> tabView = [];
+  GlobalKey globalKey = new GlobalKey(debugLabel: 'btm_app_bar');
 
-  _changeCurrentTab(int tab) {
+  void buttonNavigation(dynamic childValue) {
+    this.changeCurrentTab(childValue);
+    final BottomNavBar navigationBar = globalKey.currentWidget;
+//    navigationBar.onTap(childValue);
+
+  }
+
+  changeCurrentTab(int tab) {
     //Changing tabs from BottomNavigationBar
     setState(() {
       currentTab = tab;
-      pageController.jumpToPage(0);
+      pageController.jumpToPage(tab);
     });
   }
 
@@ -41,17 +51,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       home: Scaffold(
           body: bodyView(currentTab),
           bottomNavigationBar:
-              BottomNavBar(changeCurrentTab: _changeCurrentTab)),
+              BottomNavBar(key: globalKey,changeCurrentTab: changeCurrentTab)),
     );
   }
 
   bodyView(currentTab) {
-    List<Widget> tabView = [];
     //Current Tabs in Home Screen...
     switch (currentTab) {
       case 0:
         //Dashboard Page
-        tabView = [SearchPage()];
+        tabView = [DashboardPage(buttonNavigation: buttonNavigation,)];
         break;
       case 1:
         //Search Page

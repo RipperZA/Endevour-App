@@ -31,6 +31,8 @@ class AuthService {
       if (response.statusCode == 200) {
         UserDetails.userPermissions = response.data['permissions'];
         UserDetails.token = response.data['token'];
+        UserDetails.name = response.data['name'];
+        UserDetails.surname = response.data['surname'];
 
         this.updateUserPushIdAndToken();
 
