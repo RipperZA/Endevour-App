@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:calendarro/calendarro_page.dart';
+import 'package:calendarro/date_utils.dart';
+import 'package:calendarro/default_day_tile_builder.dart';
+import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +26,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_ui_collections/utils/data.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:calendarro/calendarro.dart';
 
 class CreateNewJobPage extends StatefulWidget {
   @override
@@ -55,10 +60,11 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   bool showSiteOnMaps = false;
   bool _saving = false;
   var uploadUrl = Constants.urlNewJobUpload;
+  String calendarMonthName =
+      DateFormat('yyyy-MMMM').format(DateTime.now()).toString();
+  var workDates = [];
 
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  final GlobalKey<FormFieldState> _specifyTextFieldKey =
-      GlobalKey<FormFieldState>();
 
   ValueChanged _clientSite = (val) {
     print(val);
@@ -206,6 +212,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
           FormData formData = new FormData(); // just like JS
           formData.addAll(formValues);
+          formData.add('dates', workDates);
 
           Dio dio = new Dio();
           response = await dio.post(uploadUrl,
@@ -427,19 +434,72 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                   InputDecoration(labelText: "End Time"),
                               // readonly: true,
                             ),
-                            FormBuilderDateRangePicker(
-                              attribute: "date_range",
-                              firstDate: DateTime(2019),
-                              lastDate: DateTime(2020),
-                              validators: [
-                                FormBuilderValidators.required(),
+
+                            Column(
+                              children: <Widget>[
+                                SizedBox(height: 10),
+                                Text(
+                                  "Select Dates For Work",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      decoration: TextDecoration.underline
+//                              fontFamily: 'Exo2',
+                                      ),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  calendarMonthName,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Container(
+                                  height: 260,
+                                  child: Calendarro(
+                                    startDate: DateTime(DateTime.now().year,
+                                        DateTime.now().month, 01),
+                                    endDate: DateTime(DateTime.now().year,
+                                        DateTime.now().month + 3, 0),
+                                    selectedDate: DateTime(2019, 10, 03),
+                                    onPageSelected:
+                                        (pageStartDate, pageEndDate) {
+                                      print(222222);
+                                      setState(() {
+                                        calendarMonthName =
+                                            DateFormat('yyyy-MMMM')
+                                                .format(pageStartDate)
+                                                .toString();
+                                      });
+                                    },
+                                    weekdayLabelsRow:
+                                        CalendarroWeekdayLabelsView(),
+                                    dayTileBuilder: DefaultDayTileBuilder(),
+                                    displayMode: DisplayMode.MONTHS,
+                                    selectionMode: SelectionMode.MULTI,
+//                                      onTap: (date) =>
+                                    onTap: (date) {
+                                      workDates.indexOf(date) != -1
+                                          ? workDates.remove(date)
+                                          : workDates.add(date);
+                                    },
+                                  ),
+                                ),
                               ],
-                              format: DateFormat("yyyy-MM-dd"),
-                              onChanged: _onChanged,
-                              decoration:
-                                  InputDecoration(labelText: "Date Range"),
-                              // readonly: true,
                             ),
+//                            FormBuilderDateRangePicker(
+//                              attribute: "date_range",
+//                              firstDate: DateTime(2019),
+//                              lastDate: DateTime(2020),
+//                              validators: [
+//                                FormBuilderValidators.required(),
+//                              ],
+//                              format: DateFormat("yyyy-MM-dd"),
+//                              onChanged: _onChanged,
+//                              decoration:
+//                                  InputDecoration(labelText: "Date Range"),
+//                              // readonly: true,
+//                            ),
                           ],
                         ),
                       ),
@@ -492,7 +552,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                           color: themeColour,
                           disabledColor: disabledButtonColour,
                           onPressed: () {
-                            if (_fbKey.currentState.saveAndValidate()) {
+                            print(_fbKey.currentState.value);
+
+                            if (_fbKey.currentState.saveAndValidate() &&
+                                workDates.length > 0) {
                               setState(() {
                                 _fbKey.currentState.value['client_site'] =
                                     _currentSite.uuid;
@@ -501,6 +564,14 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                 uploadNewJob(context);
                               });
                             } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Validation Falied. Fill out all fields and select valid work dates.',
+                                  toastLength: Toast.LENGTH_LONG,
+                                  gravity: ToastGravity.TOP,
+                                  timeInSecForIos: 1,
+                                  backgroundColor: colorErrorMessage,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
                               print(_fbKey.currentState.value);
                               print("validation failed");
                             }
