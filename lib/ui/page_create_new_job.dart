@@ -27,6 +27,7 @@ import 'package:flutter_ui_collections/utils/data.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:calendarro/calendarro.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class CreateNewJobPage extends StatefulWidget {
   @override
@@ -412,6 +413,22 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               max: 10,
                               step: 1,
                             ),
+                            FlatButton(
+                                onPressed: () {
+                                  DatePicker.showTimePicker(context,
+                                      showTitleActions: true,
+//                                      minTime: DateTime(2018, 3, 5),
+//                                      maxTime: DateTime(2019, 6, 7),
+                                      onChanged: (date) {
+                                    print('change $date');
+                                  }, onConfirm: (date) {
+                                    print('confirm $date');
+                                  }, currentTime: DateTime.now());
+                                },
+                                child: Text(
+                                  'show date time picker',
+                                  style: TextStyle(color: Colors.blue),
+                                )),
                             FormBuilderDateTimePicker(
                               attribute: "start_time",
                               onChanged: _onChanged,
