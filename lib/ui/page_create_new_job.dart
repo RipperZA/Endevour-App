@@ -105,9 +105,11 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
         for (var x in sites) {
           var site = Site.fromJson(x);
-          setState(() {
-            this.siteList.add(site);
-          });
+          if (this.mounted) {
+            setState(() {
+              this.siteList.add(site);
+            });
+          }
         }
       }
 
@@ -144,9 +146,11 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
           var rate = Rate.fromJson(x);
           print(rate.ratePerHour);
 
-          setState(() {
-            this.rateList.add(rate);
-          });
+          if (this.mounted) {
+            setState(() {
+              this.rateList.add(rate);
+            });
+          }
         }
       }
 
@@ -479,9 +483,11 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                     selectionMode: SelectionMode.MULTI,
 //                                      onTap: (date) =>
                                     onTap: (date) {
-                                      workDates.indexOf(date) != -1
-                                          ? workDates.remove(date)
-                                          : workDates.add(date);
+                                      setState(() {
+                                        workDates.indexOf(date) != -1
+                                            ? workDates.remove(date)
+                                            : workDates.add(date);
+                                      });
                                     },
                                   ),
                                 ),
@@ -551,31 +557,35 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                           ),
                           color: themeColour,
                           disabledColor: disabledButtonColour,
-                          onPressed: () {
-                            print(_fbKey.currentState.value);
+                          onPressed: _fbKey.currentState != null &&
+                                  workDates.length > 0
+                              ? () {
+                                  print(_fbKey.currentState.value);
 
-                            if (_fbKey.currentState.saveAndValidate() &&
-                                workDates.length > 0) {
-                              setState(() {
-                                _fbKey.currentState.value['client_site'] =
-                                    _currentSite.uuid;
-                                print(_fbKey.currentState.value);
-                                _saving = true;
-                                uploadNewJob(context);
-                              });
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Validation Falied. Fill out all fields and select valid work dates.',
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.TOP,
-                                  timeInSecForIos: 1,
-                                  backgroundColor: colorErrorMessage,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                              print(_fbKey.currentState.value);
-                              print("validation failed");
-                            }
-                          },
+                                  if (_fbKey.currentState.saveAndValidate() &&
+                                      workDates.length > 0) {
+                                    setState(() {
+                                      _fbKey.currentState.value['client_site'] =
+                                          _currentSite.uuid;
+                                      print(_fbKey.currentState.value);
+                                      _saving = true;
+                                      uploadNewJob(context);
+                                    });
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            'Validation Falied. Fill out all fields and select valid work dates.',
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.TOP,
+                                        timeInSecForIos: 1,
+                                        backgroundColor: colorErrorMessage,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                    print(_fbKey.currentState.value);
+                                    print("validation failed");
+                                  }
+                                }
+                              : null,
                         ),
                       ],
                     ),
