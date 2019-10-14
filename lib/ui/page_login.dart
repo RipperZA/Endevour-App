@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ui_collections/services/auth_service.dart';
+import 'package:flutter_ui_collections/services/user_service.dart';
+import 'package:flutter_ui_collections/ui/page_home_worker.dart';
 import 'package:flutter_ui_collections/ui/page_onboarding.dart';
 import 'package:flutter_ui_collections/ui/page_register.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
@@ -62,9 +64,14 @@ class _LoginPageState extends State<LoginPage> {
       bool _result = await appAuth.login(
           this.emailController.text, this.passwordController.text);
 
-      if (_result) {
+      if (_result)
+      {
+       if(UserDetails.userRoles.contains('worker'))
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+            context, MaterialPageRoute(builder: (context) => HomePageWorker()));
+       if(UserDetails.userRoles.contains('area_manager'))
+         Navigator.pushReplacement(
+             context, MaterialPageRoute(builder: (context) => HomePage()));
       }
       setState(() {
         _loggingIn = false;

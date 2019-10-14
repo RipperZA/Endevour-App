@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class AuthService {
-  var loginUrl = Constants.urlBase + "login";
+  var loginUrl = Constants.urlLogin;
 
   Future<bool> login(email, password) async {
     try {
@@ -30,6 +30,7 @@ class AuthService {
 
       if (response.statusCode == 200) {
         UserDetails.userPermissions = response.data['permissions'];
+        UserDetails.userRoles = response.data['roles'];
         UserDetails.token = response.data['token'];
         UserDetails.name = response.data['name'];
         UserDetails.surname = response.data['surname'];
