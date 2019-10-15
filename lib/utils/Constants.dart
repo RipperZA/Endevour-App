@@ -12,6 +12,7 @@ class Constants {
   static String urlGetRates = urlBase + 'rates/getRatesApi';
   static String urlNewJobUpload = urlBase + 'work';
   static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
+  static String urlGetAvailableWork = urlBase + 'work';
 
   //colors
   static const Color clr_purple = const Color(0xFF9C27B0);
