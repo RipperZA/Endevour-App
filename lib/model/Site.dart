@@ -15,7 +15,7 @@ class Site {
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
         'name': name,
-        'nalatitudeme': latitude,
+        'latitude': latitude,
         'longitude': longitude,
       };
 }

@@ -29,6 +29,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:calendarro/calendarro.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ApplyJobPage extends StatefulWidget {
   @override
@@ -103,6 +104,22 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
       setState(() {});
     }
 
+    _launchURL(lat, long) async {
+      var url = 'https://www.google.com/maps/search/?api=1&query='+ lat.toString()+ ','+long.toString();
+      print(url);
+
+      if (await canLaunch(url
+      ))
+      {
+        await launch(url
+        );
+      }
+      else
+      {
+        throw 'Could not launch $url';
+      }
+    }
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: ModalProgressHUD(
@@ -146,9 +163,13 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                         itemBuilder: (context, i) {
                           return new Card(
                             child: new ListTile(
+                              onTap: ()
+                              {
+                                _launchURL(workList[i].latitude, workList[i].longitude);
+                              },
                               leading: new CircleAvatar(
                                 backgroundImage: new NetworkImage(
-                                  _searchResult[i].uuid,
+                                  'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
                                 ),
                               ),
                               title: new Text(_searchResult[i].name +
@@ -161,12 +182,17 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                       )
                     : new ListView.builder(
                         itemCount: workList.length,
-                        itemBuilder: (context, index) {
+                        itemBuilder: (context, index)
+                        {
                           return new Card(
                             child: new ListTile(
+                              onTap: ()
+                              {
+                                _launchURL(workList[index].latitude, workList[index].longitude);
+                              },
                               leading: new CircleAvatar(
                                 backgroundImage: new NetworkImage(
-                                  workList[index].uuid,
+                                  'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
                                 ),
                               ),
                               title: new Text(workList[index].name +
