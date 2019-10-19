@@ -3,19 +3,22 @@ class Site {
   String name;
   double latitude;
   double longitude;
+  String fullAddress;
 
-  Site({this.uuid, this.name, this.latitude, this.longitude});
+  Site({this.uuid, this.name, this.latitude, this.longitude,this.fullAddress});
 
   Site.fromJson(Map<String, dynamic> json)
       : uuid = json['uuid'],
         name = json['name'],
         latitude = json['latitude'],
-        longitude = json['longitude'];
+        longitude = json['longitude'],
+        fullAddress = json['full_address'];
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
         'name': name,
         'latitude': latitude,
         'longitude': longitude,
+        'fullAddress': fullAddress,
       };
 }

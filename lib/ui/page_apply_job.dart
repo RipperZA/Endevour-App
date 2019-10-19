@@ -8,12 +8,15 @@ import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ui_collections/model/Job.dart';
 import 'package:flutter_ui_collections/model/Rate.dart';
 import 'package:flutter_ui_collections/model/Site.dart';
 import 'package:flutter_ui_collections/model/Work.dart';
 import 'package:flutter_ui_collections/model/models.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
 import 'package:flutter_ui_collections/ui/page_home.dart';
+import 'package:flutter_ui_collections/ui/page_home_worker.dart';
+import 'package:flutter_ui_collections/ui/page_job_details.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/utils/utils.dart' as prefix0;
 import 'package:flutter_ui_collections/widgets/widgets.dart';
@@ -39,6 +42,7 @@ class ApplyJobPage extends StatefulWidget {
 class _ApplyJobPageState extends State<ApplyJobPage> {
   bool _saving = false;
   Screen size;
+  Job jobDetails = Job();
 
   List<Work> workList = List();
   List<Work> _searchResult = [];
@@ -82,6 +86,46 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
     }
   }
 
+  getJobInformation(uuid) async {
+    try {
+      Response response;
+
+      Dio dio = new Dio();
+      response = await dio.get(Constants.urlGetJobDetails + uuid,
+          options: Options(
+              method: 'GET',
+              headers: {'Authorization': 'Bearer ' + UserDetails.token},
+              responseType: ResponseType.json));
+
+      print(22222222);
+
+
+      if (response.statusCode == 200) {
+        var jobInformation = response.data['data']['jobInformation'];
+
+        var job = Job.fromJson(jobInformation);
+
+        print(job.site.name);
+
+        if (this.mounted) {
+          setState(() {
+            this.jobDetails = job;
+          });
+        }
+      }
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: json.decode(e.response.data)['error'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+
   @override
   void initState() {
     getAvailableWork();
@@ -122,8 +166,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
           work.area.toLowerCase().contains(text)) _searchResult.add(work);
     });
 
-    setState(()
-    {
+    setState(() {
       _saving = false;
     });
   }
@@ -213,9 +256,32 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                               itemBuilder: (context, i) {
                                 return new Card(
                                   child: new ListTile(
-                                    onTap: () {
-                                      _launchURL(workList[i].latitude,
-                                          workList[i].longitude);
+                                    onTap: () async {
+                                     await getJobInformation(workList[i].uuid.toString());
+
+                                      print(this.jobDetails);
+
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  JobDetailsPage(
+                                                    jobDetails: jobDetails,
+                                                  )));
+
+
+
+//                                      Navigator.push(
+//                                          context,
+//                                          MaterialPageRoute(
+//                                              builder: (context) =>
+//                                                  JobDetailsPage(
+//                                                    jobUuid: workList[i].uuid.toString(),
+//                                                  )));
+//                                      _launchURL(workList[i].latitude,
+//                                          workList[i].longitude);
+//                                      Navigator.push(
+//                                          context, MaterialPageRoute(builder: (context) => JobDetailsPage()));
                                     },
 //                                leading: new CircleAvatar(
 //                                  backgroundImage: new NetworkImage(
@@ -238,9 +304,29 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                               itemBuilder: (context, index) {
                                 return new Card(
                                   child: new ListTile(
-                                    onTap: () {
-                                      _launchURL(workList[index].latitude,
-                                          workList[index].longitude);
+                                    onTap: () async {
+
+                                      await getJobInformation(workList[index].uuid.toString());
+
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  JobDetailsPage(
+                                                    jobDetails: jobDetails,
+                                                  )));
+
+
+//                                      _launchURL(workList[index].latitude,
+//                                          workList[index].longitude);
+
+//                                      Navigator.push(
+//                                          context,
+//                                          MaterialPageRoute(
+//                                              builder: (context) =>
+//                                                  JobDetailsPage(
+//                                                    jobUuid: workList[index].uuid.toString(),
+//                                                  )));
                                     },
 //                                leading: new CircleAvatar(
 //                                  backgroundImage: new NetworkImage(

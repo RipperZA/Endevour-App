@@ -13,6 +13,7 @@ class Constants {
   static String urlNewJobUpload = urlBase + 'work';
   static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
   static String urlGetAvailableWork = urlBase + 'work';
+  static String urlGetJobDetails = urlBase + 'work/';
 
   //colors
   static const Color clr_purple = const Color(0xFF9C27B0);
