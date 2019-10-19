@@ -37,12 +37,13 @@ class ApplyJobPage extends StatefulWidget {
 }
 
 class _ApplyJobPageState extends State<ApplyJobPage> {
+  bool _saving = false;
+  Screen size;
+
   List<Work> workList = List();
   List<Work> _searchResult = [];
 
   TextEditingController controller = new TextEditingController();
-  String filter;
-  bool _saving = false;
 
   getAvailableWork() async {
     try {
@@ -83,41 +84,92 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
 
   @override
   void initState() {
-    super.initState();
     getAvailableWork();
+    super.initState();
+  }
+
+  _launchURL(lat, long) async {
+    var url = 'https://www.google.com/maps/search/?api=1&query=' +
+        lat.toString() +
+        ',' +
+        long.toString();
+    print(url);
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  onSearchTextChanged(String text) async {
+    setState(() {
+      _saving = true;
+    });
+
+    _searchResult.clear();
+    if (text.isEmpty) {
+      setState(() {
+        _saving = false;
+      });
+      return;
+    }
+
+    text = text.toLowerCase();
+
+    workList.forEach((work) {
+      if (work.name.toLowerCase().contains(text) ||
+          work.area.toLowerCase().contains(text)) _searchResult.add(work);
+    });
+
+    setState(()
+    {
+      _saving = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    onSearchTextChanged(String text) async {
-      _searchResult.clear();
-      if (text.isEmpty) {
-        setState(() {});
-        return;
-      }
+    size = Screen(MediaQuery.of(context).size);
 
-      workList.forEach((work) {
-        if (work.name.contains(text) || work.area.contains(text))
-          _searchResult.add(work);
-      });
-
-      setState(() {});
+    Text titleWidget() {
+      return Text("Search For Job",
+          style: TextStyle(
+              fontFamily: 'Exo2',
+              fontSize: 24.0,
+              fontWeight: FontWeight.w900,
+              color: Colors.white));
     }
 
-    _launchURL(lat, long) async {
-      var url = 'https://www.google.com/maps/search/?api=1&query='+ lat.toString()+ ','+long.toString();
-      print(url);
-
-      if (await canLaunch(url
-      ))
-      {
-        await launch(url
-        );
-      }
-      else
-      {
-        throw 'Could not launch $url';
-      }
+    Widget upperPart() {
+      return Stack(
+        children: <Widget>[
+          ClipPath(
+            clipper: UpperClipper(),
+            child: Container(
+              height: size.getWidthPx(110),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [colorCurve, colorCurveSecondary],
+                ),
+              ),
+            ),
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(top: size.getWidthPx(36)),
+                child: Column(
+                  children: <Widget>[
+                    Center(child: titleWidget()),
+                    SizedBox(height: size.getWidthPx(10)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
     }
 
     return Scaffold(
@@ -131,80 +183,86 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                 statusBarIconBrightness: Brightness.dark,
                 systemNavigationBarIconBrightness: Brightness.dark,
                 systemNavigationBarColor: backgroundColor),
-            child: new Column(children: <Widget>[
-              new Container(
-                color: Theme.of(context).primaryColor,
-                child: new Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Card(
-                    child: new ListTile(
-                      leading: new Icon(Icons.search),
-                      title: new TextField(
-                        controller: controller,
-                        decoration: new InputDecoration(
-                            hintText: 'Search', border: InputBorder.none),
-                        onChanged: onSearchTextChanged,
-                      ),
-                      trailing: new IconButton(
-                        icon: new Icon(Icons.cancel),
-                        onPressed: () {
-                          controller.clear();
-                          onSearchTextChanged('');
+            child: Container(
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    upperPart(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        onChanged: (value) {
+                          onSearchTextChanged(value);
                         },
+                        controller: controller,
+                        decoration: InputDecoration(
+                            labelText: "Search",
+                            hintText: "Search",
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25.0)))),
                       ),
                     ),
-                  ),
+                    new Expanded(
+                      child: _searchResult.length != 0 ||
+                              controller.text.isNotEmpty
+                          ? new ListView.builder(
+                              itemCount: _searchResult.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, i) {
+                                return new Card(
+                                  child: new ListTile(
+                                    onTap: () {
+                                      _launchURL(workList[i].latitude,
+                                          workList[i].longitude);
+                                    },
+//                                leading: new CircleAvatar(
+//                                  backgroundImage: new NetworkImage(
+//                                    'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
+//                                  ),
+//                                ),
+                                    leading: CircleAvatar(
+                                        child: Text(workList[i].name[0])),
+                                    title: new Text(_searchResult[i].name +
+                                        ' ' +
+                                        _searchResult[i].area),
+                                    subtitle: Text('Subtitle 1'),
+                                  ),
+                                  margin: const EdgeInsets.all(0.0),
+                                );
+                              },
+                            )
+                          : new ListView.builder(
+                              itemCount: workList.length,
+                              itemBuilder: (context, index) {
+                                return new Card(
+                                  child: new ListTile(
+                                    onTap: () {
+                                      _launchURL(workList[index].latitude,
+                                          workList[index].longitude);
+                                    },
+//                                leading: new CircleAvatar(
+//                                  backgroundImage: new NetworkImage(
+//                                    'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
+//                                  ),
+//                                ),
+                                    leading: CircleAvatar(
+                                        child: Text(workList[index].name[0])),
+                                    title: new Text(workList[index].name +
+                                        ' ' +
+                                        workList[index].area),
+                                    subtitle: Text('Subtitle 2'),
+                                  ),
+                                  margin: const EdgeInsets.all(0.0),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
                 ),
               ),
-              new Expanded(
-                child: _searchResult.length != 0 || controller.text.isNotEmpty
-                    ? new ListView.builder(
-                        itemCount: _searchResult.length,
-                        itemBuilder: (context, i) {
-                          return new Card(
-                            child: new ListTile(
-                              onTap: ()
-                              {
-                                _launchURL(workList[i].latitude, workList[i].longitude);
-                              },
-                              leading: new CircleAvatar(
-                                backgroundImage: new NetworkImage(
-                                  'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
-                                ),
-                              ),
-                              title: new Text(_searchResult[i].name +
-                                  ' ' +
-                                  _searchResult[i].area),
-                            ),
-                            margin: const EdgeInsets.all(0.0),
-                          );
-                        },
-                      )
-                    : new ListView.builder(
-                        itemCount: workList.length,
-                        itemBuilder: (context, index)
-                        {
-                          return new Card(
-                            child: new ListTile(
-                              onTap: ()
-                              {
-                                _launchURL(workList[index].latitude, workList[index].longitude);
-                              },
-                              leading: new CircleAvatar(
-                                backgroundImage: new NetworkImage(
-                                  'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
-                                ),
-                              ),
-                              title: new Text(workList[index].name +
-                                  ' ' +
-                                  workList[index].area),
-                            ),
-                            margin: const EdgeInsets.all(0.0),
-                          );
-                        },
-                      ),
-              ),
-            ]),
+            ),
           )
         ]),
         inAsyncCall: _saving,
