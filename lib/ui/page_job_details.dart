@@ -7,6 +7,8 @@ import 'package:flutter_ui_collections/model/Job.dart';
 import 'package:flutter_ui_collections/model/Work.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
 import 'package:flutter_ui_collections/ui/page_apply_job.dart';
+import 'package:flutter_ui_collections/ui/page_dashboard.dart';
+import 'package:flutter_ui_collections/ui/page_home_worker.dart';
 import 'package:flutter_ui_collections/ui/photo_list.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/utils_widget.dart';
@@ -72,8 +74,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 new FlatButton(
                   child: new Text("Close"),
                   onPressed: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => ApplyJobPage()));
+                    Navigator.pushReplacement(
+                        context, MaterialPageRoute(builder: (context) => HomePageWorker()));
                   },
                 ),
               ],
@@ -81,8 +83,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           },
         ).then((onValue) {
           Navigator.pop(context);
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ApplyJobPage()));
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomePageWorker()));
         }, onError: (err) {
           Navigator.pop(context);
         });
