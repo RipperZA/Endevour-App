@@ -10,10 +10,12 @@ class Constants {
   static String urlApplicationUpload = urlBase + 'applications';
   static String urlGetAreaManagerSites = urlBase + 'area_managers/getSitesApi';
   static String urlGetRates = urlBase + 'rates/getRatesApi';
-  static String urlNewJobUpload = urlBase + 'work';
   static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
+
+  static String urlNewJobUpload = urlBase + 'work';
   static String urlGetAvailableWork = urlBase + 'work';
   static String urlGetJobDetails = urlBase + 'work/';
+  static String urlAcceptJob = urlBase + 'work/accept/';
 
   //colors
   static const Color clr_purple = const Color(0xFF9C27B0);

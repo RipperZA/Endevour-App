@@ -6,11 +6,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_ui_collections/model/Job.dart';
 import 'package:flutter_ui_collections/model/Work.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
+import 'package:flutter_ui_collections/ui/page_apply_job.dart';
 import 'package:flutter_ui_collections/ui/photo_list.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/utils_widget.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JobDetailsPage extends StatefulWidget {
@@ -26,12 +28,81 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   Screen size;
 
   Job job = Job();
+  bool _saving = false;
 
   void initState() {
 //    getJobInformation();
     job = widget.jobDetails;
 
     super.initState();
+  }
+
+  acceptJob() async {
+    try {
+      setState(() {
+        _saving = true;
+      });
+
+      print(Constants.urlAcceptJob + job.uuid);
+
+      Response response;
+
+      Dio dio = new Dio();
+      response = await dio.get(Constants.urlAcceptJob + job.uuid,
+          options: Options(
+              method: 'GET',
+              headers: {'Authorization': 'Bearer ' + UserDetails.token},
+              responseType: ResponseType.json));
+
+      setState(() {
+        _saving = false;
+      });
+      if (response.statusCode == 200)
+      {
+        await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Success!"),
+              content: new Text(response.data['message']),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new FlatButton(
+                  child: new Text("Close"),
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => ApplyJobPage()));
+                  },
+                ),
+              ],
+            );
+          },
+        ).then((onValue) {
+          Navigator.pop(context);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ApplyJobPage()));
+        }, onError: (err) {
+          Navigator.pop(context);
+        });
+
+
+      }
+    } on DioError catch (e) {
+      setState(() {
+        _saving = false;
+      });
+
+      Fluttertoast.showToast(
+          msg: e.response.data['error'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   _launchURL(lat, long) async {
@@ -58,25 +129,27 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         title: Text("Registration"),
       ),
       backgroundColor: backgroundColor,
-      body: AnnotatedRegion(
-        value: SystemUiOverlayStyle(
-            statusBarColor: backgroundColor,
-            statusBarBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark,
-            systemNavigationBarIconBrightness: Brightness.dark,
-            systemNavigationBarColor: backgroundColor,
-            systemNavigationBarDividerColor: textSecondary54
-        ),
-
-
-        child: Container(
-          child: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
-              children: <Widget>[upperPart()],
+      body: ModalProgressHUD(
+        child: Stack(children: <Widget>[
+          AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: backgroundColor,
+                statusBarBrightness: Brightness.dark,
+                statusBarIconBrightness: Brightness.dark,
+                systemNavigationBarIconBrightness: Brightness.dark,
+                systemNavigationBarColor: backgroundColor,
+                systemNavigationBarDividerColor: textSecondary54),
+            child: Container(
+              child: SingleChildScrollView(
+                physics: ClampingScrollPhysics(),
+                child: Column(
+                  children: <Widget>[upperPart()],
+                ),
+              ),
             ),
           ),
-        ),
+        ]),
+        inAsyncCall: _saving,
       ),
     );
   }
@@ -219,9 +292,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         ),
         disabledColor: disabledButtonColour,
         onPressed: () {
-          setState(() {
-            _launchURL(job.site.latitude, job.site.longitude);
-          });
+          acceptJob();
         },
       ),
     );
