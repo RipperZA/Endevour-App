@@ -97,8 +97,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.json));
 
-      print(22222222);
-
 
       if (response.statusCode == 200) {
         var jobInformation = response.data['data']['jobInformation'];

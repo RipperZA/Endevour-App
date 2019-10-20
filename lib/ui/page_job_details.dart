@@ -54,18 +54,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: themeColour,
-          ),
-          onPressed: () => Navigator.pop(context, false),
-        ),
-        centerTitle: true,
-        title: Text("Job Details",
-            style:
-                TextStyle(fontFamily: "Exo2", color: textSecondaryLightColor)),
-        backgroundColor: Colors.white,
+        backgroundColor: themeColour,
+        title: Text("Registration"),
       ),
       backgroundColor: backgroundColor,
       body: AnnotatedRegion(
@@ -74,7 +64,11 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
             statusBarBrightness: Brightness.dark,
             statusBarIconBrightness: Brightness.dark,
             systemNavigationBarIconBrightness: Brightness.dark,
-            systemNavigationBarColor: backgroundColor),
+            systemNavigationBarColor: backgroundColor,
+            systemNavigationBarDividerColor: textSecondary54
+        ),
+
+
         child: Container(
           child: SingleChildScrollView(
             physics: ClampingScrollPhysics(),
@@ -89,17 +83,17 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
 
   Widget upperPart() {
     return Stack(children: <Widget>[
-      ClipPath(
-        clipper: UpperClipper(),
-        child: Container(
-          height: size.getWidthPx(80),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [colorCurve, colorCurve],
-            ),
-          ),
-        ),
-      ),
+//      ClipPath(
+//        clipper: UpperClipper(),
+//        child: Container(
+//          height: size.getWidthPx(80),
+//          decoration: BoxDecoration(
+//            gradient: LinearGradient(
+//              colors: [colorCurve, colorCurve],
+//            ),
+//          ),
+//        ),
+//      ),
       Column(
         children: <Widget>[
           profileWidget(),
@@ -147,8 +141,17 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           children: <Widget>[
             jobInformationRow(
                 'Area Manager', job.areaManagerName.toLowerCase()),
+            SizedBox(height: 10),
             jobInformationRow('Site', job.site.name.toLowerCase()),
+            SizedBox(height: 10),
             jobInformationRow('Address', job.site.fullAddress.toString()),
+            SizedBox(height: 10),
+            jobInformationRow('Hours', job.hours.toString()),
+            SizedBox(height: 10),
+            jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
+            SizedBox(height: 10),
+            jobInformationRow(
+                'Partial Pay', "R ${job.payPartialDay.toString()}"),
           ],
         ),
       ),
@@ -159,20 +162,26 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(jobLabel + ': ',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontFamily: 'Exo2',
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: textPrimaryColor)),
-        Text(jobProperty,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontFamily: 'Exo2',
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: textPrimaryColor)),
+        Flexible(
+          child: Column(
+            children: <Widget>[
+              Text(jobLabel + ': ',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: 'Exo2',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: textPrimaryColor)),
+              Text(jobProperty,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: 'Exo2',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: textPrimaryColor))
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -252,7 +261,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     return Align(
       alignment: Alignment.center,
       child: Container(
-        margin: EdgeInsets.only(top: size.getWidthPx(30)),
+        margin: EdgeInsets.only(top: size.getWidthPx(10)),
         child: CircleAvatar(
           foregroundColor: backgroundColor,
           maxRadius: size.getWidthPx(50),
@@ -272,7 +281,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   Column likeWidget() {
     return Column(
       children: <Widget>[
-        Text("R200",
+        Text("R ${job.payPartialDay}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
@@ -307,7 +316,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   Column followersWidget() {
     return Column(
       children: <Widget>[
-        Text("R1000",
+        Text("R ${job.payTotalDay}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
