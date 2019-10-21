@@ -70,15 +70,29 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               content: new Text(response.data['message']),
               actions: <Widget>[
                 // usually buttons at the bottom of the dialog
-                new FlatButton(
-                  child: new Text("Close"),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomePageWorker()));
-                  },
-                ),
+                RaisedButton.icon(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    icon: Icon(
+                      Icons.close,
+                      color: imagePrimaryLightColor,
+                    ),
+                    color: colorSuccessMessage,
+                    label: new Text(
+                      "Close!",
+                      style: TextStyle(
+//                              fontFamily: 'Exo2',
+                        color: textPrimaryLightColor,
+                      ),
+                    ),
+                    disabledColor: disabledButtonColour,
+                    onPressed: () async {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePageWorker()));
+                    }),
               ],
             );
           },
@@ -303,19 +317,47 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 content: new Text("Are you sure you want to accept this job?"),
                 actions: <Widget>[
                   // usually buttons at the bottom of the dialog
-                  new FlatButton(
-                    child: new Text("No!"),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    },
-                  ),
-                  new FlatButton(
-                    child: new Text("Yes!"),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                      acceptJob();
-                    },
-                  ),
+                  RaisedButton.icon(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0)),
+                      icon: Icon(
+                        Icons.thumb_down,
+                        color: imagePrimaryLightColor,
+                      ),
+                      color: colorErrorMessage,
+                      label: new Text(
+                        "No!",
+                        style: TextStyle(
+//                              fontFamily: 'Exo2',
+                          color: textPrimaryLightColor,
+                        ),
+                      ),
+                      disabledColor: disabledButtonColour,
+                      onPressed: () async {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      }),
+                  RaisedButton.icon(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0)),
+                      icon: Icon(
+                        Icons.thumb_up,
+                        color: imagePrimaryLightColor,
+                      ),
+                      color: colorSuccessMessage,
+                      label: new Text(
+                        "Yes!",
+                        style: TextStyle(
+//                              fontFamily: 'Exo2',
+                          color: textPrimaryLightColor,
+                        ),
+                      ),
+                      disabledColor: disabledButtonColour,
+                      onPressed: () async {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        acceptJob();
+                      }),
                 ],
               );
             },
