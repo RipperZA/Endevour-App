@@ -91,6 +91,9 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
 
   getJobInformation(uuid) async {
     try {
+      setState(() {
+        _saving = true;
+      });
       Response response;
 
       Dio dio = new Dio();
@@ -101,6 +104,9 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
               responseType: ResponseType.json));
 
 
+      setState(() {
+        _saving = false;
+      });
       if (response.statusCode == 200) {
         var jobInformation = response.data['data']['jobInformation'];
 
@@ -115,6 +121,9 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
         }
       }
     } on DioError catch (e) {
+      setState(() {
+        _saving = false;
+      });
       Fluttertoast.showToast(
           msg: json.decode(e.response.data)['error'],
           toastLength: Toast.LENGTH_LONG,

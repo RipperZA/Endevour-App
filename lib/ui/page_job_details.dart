@@ -59,8 +59,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
       setState(() {
         _saving = false;
       });
-      if (response.statusCode == 200)
-      {
+      if (response.statusCode == 200) {
         await showDialog(
           barrierDismissible: false,
           context: context,
@@ -75,7 +74,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                   child: new Text("Close"),
                   onPressed: () {
                     Navigator.pushReplacement(
-                        context, MaterialPageRoute(builder: (context) => HomePageWorker()));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomePageWorker()));
                   },
                 ),
               ],
@@ -83,13 +84,11 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           },
         ).then((onValue) {
           Navigator.pop(context);
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomePageWorker()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => HomePageWorker()));
         }, onError: (err) {
           Navigator.pop(context);
         });
-
-
       }
     } on DioError catch (e) {
       setState(() {
@@ -293,8 +292,34 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: () {
-          acceptJob();
+        onPressed: () async {
+          await showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              // return object of type Dialog
+              return AlertDialog(
+                title: new Text("Please Confirm!"),
+                content: new Text("Are you sure you want to accept this job?"),
+                actions: <Widget>[
+                  // usually buttons at the bottom of the dialog
+                  new FlatButton(
+                    child: new Text("No!"),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                  ),
+                  new FlatButton(
+                    child: new Text("Yes!"),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                      acceptJob();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         },
       ),
     );
