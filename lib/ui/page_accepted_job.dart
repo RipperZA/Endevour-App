@@ -1,37 +1,17 @@
-import 'dart:async';
 import 'dart:convert';
 
-import 'package:calendarro/calendarro_page.dart';
-import 'package:calendarro/date_utils.dart';
-import 'package:calendarro/default_day_tile_builder.dart';
-import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ui_collections/model/Job.dart';
-import 'package:flutter_ui_collections/model/Rate.dart';
-import 'package:flutter_ui_collections/model/Site.dart';
 import 'package:flutter_ui_collections/model/Work.dart';
-import 'package:flutter_ui_collections/model/models.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
-import 'package:flutter_ui_collections/ui/page_home.dart';
-import 'package:flutter_ui_collections/ui/page_home_worker.dart';
-import 'package:flutter_ui_collections/ui/page_job_details.dart';
+import 'package:flutter_ui_collections/ui/page_accepted_job_details.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
-import 'package:flutter_ui_collections/utils/utils.dart' as prefix0;
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_ui_collections/utils/data.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:calendarro/calendarro.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AcceptedJobPage extends StatefulWidget {
@@ -280,21 +260,9 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      JobDetailsPage(
+                                                      AcceptedJobDetailsPage(
                                                         jobDetails: jobDetails,
                                                       )));
-
-//                                      Navigator.push(
-//                                          context,
-//                                          MaterialPageRoute(
-//                                              builder: (context) =>
-//                                                  JobDetailsPage(
-//                                                    jobUuid: workList[i].uuid.toString(),
-//                                                  )));
-//                                      _launchURL(workList[i].latitude,
-//                                          workList[i].longitude);
-//                                      Navigator.push(
-//                                          context, MaterialPageRoute(builder: (context) => JobDetailsPage()));
                                         },
 //                                leading: new CircleAvatar(
 //                                  backgroundImage: new NetworkImage(
@@ -332,26 +300,10 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      JobDetailsPage(
-                                                        jobDetails: jobDetails,
-                                                      )));
-
-//                                      _launchURL(workList[index].latitude,
-//                                          workList[index].longitude);
-
-//                                      Navigator.push(
-//                                          context,
-//                                          MaterialPageRoute(
-//                                              builder: (context) =>
-//                                                  JobDetailsPage(
-//                                                    jobUuid: workList[index].uuid.toString(),
-//                                                  )));
+                                                      AcceptedJobDetailsPage(
+                                                          jobDetails:
+                                                              jobDetails)));
                                         },
-//                                leading: new CircleAvatar(
-//                                  backgroundImage: new NetworkImage(
-//                                    'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
-//                                  ),
-//                                ),
                                         leading: CircleAvatar(
                                             child:
                                                 Text(workList[index].name[0])),
@@ -374,7 +326,9 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
-                                                  TextSpan(text: ' ${workList[index].startDate}'),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${workList[index].startDate}'),
                                                 ],
                                               ),
                                             ),
@@ -390,7 +344,9 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
-                                                  TextSpan(text: ' ${workList[index].endDate}'),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${workList[index].endDate}'),
                                                 ],
                                               ),
                                             ),
