@@ -26,9 +26,8 @@ class _HomePageWorkerState extends State<HomePageWorker> with TickerProviderStat
 
   void buttonNavigation(dynamic childValue) {
     this.changeCurrentTab(childValue);
-    final BottomNavBar navigationBar = globalKey.currentWidget;
+    final BottomNavBarWorker navigationBar = globalKey.currentWidget;
 //    navigationBar.onTap(childValue);
-
   }
 
   changeCurrentTab(int tab) {
@@ -53,7 +52,7 @@ class _HomePageWorkerState extends State<HomePageWorker> with TickerProviderStat
       home: Scaffold(
           body: bodyView(currentTab),
           bottomNavigationBar:
-              BottomNavBarWorker(key: globalKey,changeCurrentTab: changeCurrentTab)),
+              BottomNavBarWorker(key: globalKey,changeCurrentTab: changeCurrentTab, tab: currentTab)),
     );
   }
 
@@ -66,7 +65,7 @@ class _HomePageWorkerState extends State<HomePageWorker> with TickerProviderStat
         break;
       case 1:
         //Search Page
-        tabView = [ApplyJobPage()];
+        tabView = [ApplyJobPage(changeCurrentTab: changeCurrentTab)];
         break;
       case 2:
         //Profile Page

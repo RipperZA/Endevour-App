@@ -3,8 +3,9 @@ import 'package:flutter_ui_collections/utils/utils.dart';
 
 class BottomNavBarWorker extends StatefulWidget {
   final ValueChanged<int> changeCurrentTab;
+   int tab;
 
-  BottomNavBarWorker({Key key, this.changeCurrentTab}) : super(key: key);
+  BottomNavBarWorker({Key key, this.changeCurrentTab, this.tab}) : super(key: key);
 
   @override
   _BottomNavBarWorkerState createState() => _BottomNavBarWorkerState();
@@ -12,9 +13,15 @@ class BottomNavBarWorker extends StatefulWidget {
 
 class _BottomNavBarWorkerState extends State<BottomNavBarWorker>
     with SingleTickerProviderStateMixin {
-  int tab = 0;
+//  int tab = 0;
 
   Screen size;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.tab = 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +30,7 @@ class _BottomNavBarWorkerState extends State<BottomNavBarWorker>
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       iconSize: size.getWidthPx(24),
-      currentIndex: tab,
+      currentIndex: widget.tab,
       unselectedItemColor: Colors.black45,
       selectedItemColor: colorCurve,
       elevation: 150.0,
@@ -32,7 +39,7 @@ class _BottomNavBarWorkerState extends State<BottomNavBarWorker>
       onTap: (int index) {
         setState(() {
           if (index != 4) {
-            tab = index;
+            widget.tab = index;
             widget.changeCurrentTab(index);
           }
         });

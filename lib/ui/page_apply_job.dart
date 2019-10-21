@@ -35,6 +35,9 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ApplyJobPage extends StatefulWidget {
+  final ValueChanged<int> changeCurrentTab;
+  ApplyJobPage({Key key, this.changeCurrentTab}) : super(key: key);
+
   @override
   _ApplyJobPageState createState() => _ApplyJobPageState();
 }
@@ -303,7 +306,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                 return new Card(
                                   child: new ListTile(
                                     onTap: () async {
-
                                       await getJobInformation(workList[index].uuid.toString());
 
                                       Navigator.push(
