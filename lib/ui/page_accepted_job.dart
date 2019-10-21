@@ -34,15 +34,16 @@ import 'package:calendarro/calendarro.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ApplyJobPage extends StatefulWidget {
+class AcceptedJobPage extends StatefulWidget {
   final ValueChanged<int> changeCurrentTab;
-  ApplyJobPage({Key key, this.changeCurrentTab}) : super(key: key);
+
+  AcceptedJobPage({Key key, this.changeCurrentTab}) : super(key: key);
 
   @override
-  _ApplyJobPageState createState() => _ApplyJobPageState();
+  _AcceptedJobPageState createState() => _AcceptedJobPageState();
 }
 
-class _ApplyJobPageState extends State<ApplyJobPage> {
+class _AcceptedJobPageState extends State<AcceptedJobPage> {
   bool _saving = false;
   Screen size;
   Job jobDetails = Job();
@@ -52,19 +53,19 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
 
   TextEditingController controller = new TextEditingController();
 
-  getAvailableWork() async {
+  getAcceptedWork() async {
     try {
       Response response;
 
       Dio dio = new Dio();
-      response = await dio.get(Constants.urlGetAvailableWork,
+      response = await dio.get(Constants.urlAcceptedJobs,
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.json));
 
       if (response.statusCode == 200) {
-        var availableWork = response.data['data']['availableWork'];
+        var availableWork = response.data['data']['acceptedWork'];
 
         for (var x in availableWork) {
           var work = Work.fromJson(x);
@@ -103,7 +104,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.json));
 
-
       setState(() {
         _saving = false;
       });
@@ -135,10 +135,9 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
     }
   }
 
-
   @override
   void initState() {
-    getAvailableWork();
+    getAcceptedWork();
     super.initState();
   }
 
@@ -186,7 +185,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
     size = Screen(MediaQuery.of(context).size);
 
     Text titleWidget() {
-      return Text("Search For Job",
+      return Text("Accepted Jobs",
           style: TextStyle(
               fontFamily: 'Exo2',
               fontSize: 24.0,
@@ -266,11 +265,14 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                               itemBuilder: (context, i) {
                                 return Column(
                                   children: <Widget>[
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     new Card(
                                       child: new ListTile(
                                         onTap: () async {
-                                         await getJobInformation(workList[i].uuid.toString());
+                                          await getJobInformation(
+                                              workList[i].uuid.toString());
 
                                           print(this.jobDetails);
 
@@ -281,8 +283,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                       JobDetailsPage(
                                                         jobDetails: jobDetails,
                                                       )));
-
-
 
 //                                      Navigator.push(
 //                                          context,
@@ -319,11 +319,14 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                               itemBuilder: (context, index) {
                                 return Column(
                                   children: <Widget>[
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     new Card(
                                       child: new ListTile(
                                         onTap: () async {
-                                          await getJobInformation(workList[index].uuid.toString());
+                                          await getJobInformation(
+                                              workList[index].uuid.toString());
 
                                           Navigator.push(
                                               context,
@@ -332,7 +335,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                       JobDetailsPage(
                                                         jobDetails: jobDetails,
                                                       )));
-
 
 //                                      _launchURL(workList[index].latitude,
 //                                          workList[index].longitude);
@@ -351,11 +353,49 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
 //                                  ),
 //                                ),
                                         leading: CircleAvatar(
-                                            child: Text(workList[index].name[0])),
+                                            child:
+                                                Text(workList[index].name[0])),
                                         title: new Text(workList[index].name +
                                             ' ' +
                                             workList[index].area),
-                                        subtitle: Text('Subtitle 2'),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Start:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(text: ' ${workList[index].startDate}'),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'End:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(text: ' ${workList[index].endDate}'),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       margin: const EdgeInsets.all(0.0),
                                     ),

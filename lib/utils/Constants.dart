@@ -16,6 +16,7 @@ class Constants {
   static String urlGetAvailableWork = urlBase + 'work';
   static String urlGetJobDetails = urlBase + 'work/';
   static String urlAcceptJob = urlBase + 'work/accept/';
+  static String urlAcceptedJobs = urlBase + 'work/acceptedWork';
 
   //colors
   static const Color clr_purple = const Color(0xFF9C27B0);

@@ -57,8 +57,8 @@ class _BottomNavBarWorkerState extends State<BottomNavBarWorker>
         ),
         BottomNavigationBarItem(
           backgroundColor: Colors.grey.shade50,
-          icon: Icon(Icons.person),
-          title: Text('Profile', style: TextStyle(fontFamily: 'Exo2')),
+          icon: Icon(Icons.watch_later),
+          title: Text('Current Jobs', style: TextStyle(fontFamily: 'Exo2')),
         ),
         BottomNavigationBarItem(
           backgroundColor: Colors.grey.shade50,

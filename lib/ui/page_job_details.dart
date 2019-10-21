@@ -141,7 +141,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColour,
-        title: Text("Registration"),
+        title: Text("Job Details"),
       ),
       backgroundColor: backgroundColor,
       body: ModalProgressHUD(
@@ -389,9 +389,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         ),
         disabledColor: disabledButtonColour,
         onPressed: () {
-          setState(() {
             _launchURL(job.site.latitude, job.site.longitude);
-          });
         },
       ),
     );

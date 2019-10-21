@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ui_collections/ui/page_accepted_job.dart';
 import 'package:flutter_ui_collections/ui/page_apply_job.dart';
 import 'package:flutter_ui_collections/ui/page_create_new_job.dart';
 import 'package:flutter_ui_collections/ui/page_dashboard.dart';
@@ -69,7 +70,7 @@ class _HomePageWorkerState extends State<HomePageWorker> with TickerProviderStat
         break;
       case 2:
         //Profile Page
-        tabView = [ProfilePage()];
+        tabView = [AcceptedJobPage(changeCurrentTab: changeCurrentTab)];
         break;
       case 3:
         //Setting Page
