@@ -30,6 +30,9 @@ import 'package:calendarro/calendarro.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class CreateNewJobPage extends StatefulWidget {
+  final ValueChanged<int> changeCurrentTab;
+  CreateNewJobPage({Key key, this.changeCurrentTab}) : super(key: key);
+
   @override
   _CreateNewJobPageState createState() => _CreateNewJobPageState();
 }

@@ -306,7 +306,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                         title: new Text(_searchResult[i].name +
                                             ' ' +
                                             _searchResult[i].area),
-                                        subtitle: Text('Subtitle 1'),
+                                        subtitle: Text('${workList[i].startDate}'),
                                       ),
                                       margin: const EdgeInsets.all(0.0),
                                     ),

@@ -26,7 +26,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     this.changeCurrentTab(childValue);
     final BottomNavBar navigationBar = globalKey.currentWidget;
 //    navigationBar.onTap(childValue);
-
   }
 
   changeCurrentTab(int tab) {
@@ -51,7 +50,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       home: Scaffold(
           body: bodyView(currentTab),
           bottomNavigationBar:
-              BottomNavBar(key: globalKey,changeCurrentTab: changeCurrentTab)),
+          BottomNavBar(key: globalKey,changeCurrentTab: changeCurrentTab, tab: currentTab)),
     );
   }
 
@@ -64,7 +63,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         break;
       case 1:
         //Search Page
-        tabView = [CreateNewJobPage()];
+        tabView = [CreateNewJobPage(changeCurrentTab: changeCurrentTab)];
         break;
       case 2:
         //Profile Page
