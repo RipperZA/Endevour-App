@@ -1,24 +1,19 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ui_collections/model/Job.dart';
-import 'package:flutter_ui_collections/model/Work.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
-import 'package:flutter_ui_collections/ui/page_apply_job.dart';
-import 'package:flutter_ui_collections/ui/page_dashboard.dart';
 import 'package:flutter_ui_collections/ui/page_home_worker.dart';
-import 'package:flutter_ui_collections/ui/photo_list.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/utils_widget.dart';
-import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:location/location.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AcceptedJobDetailsPage extends StatefulWidget {
-  const AcceptedJobDetailsPage({Key key, @required this.jobDetails}) : super(key: key);
+  const AcceptedJobDetailsPage({Key key, @required this.jobDetails})
+      : super(key: key);
 
 //  final String jobUuid;
   final Job jobDetails;
@@ -31,6 +26,8 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
 
   Job job = Job();
   bool _saving = false;
+  LocationData currentLocation;
+  var location = new Location();
 
   void initState() {
 //    getJobInformation();
@@ -119,6 +116,335 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
     }
   }
 
+  arrivedAtWork() async {
+    try {
+      if (await location.hasPermission() == false) {
+        await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Enable Location Permission!"),
+              content: new Text(
+                  "Before you can sign in to work you need to enable your location permission for this app"),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                RaisedButton.icon(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    icon: Icon(
+                      Icons.close,
+                      color: imagePrimaryLightColor,
+                    ),
+                    color: colorSuccessMessage,
+                    label: new Text(
+                      "Close!",
+                      style: TextStyle(
+//                              fontFamily: 'Exo2',
+                        color: textPrimaryLightColor,
+                      ),
+                    ),
+                    disabledColor: disabledButtonColour,
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    }),
+              ],
+            );
+          },
+        );
+        location.requestPermission();
+      } else if (await location.serviceEnabled() == false) {
+        await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Enable GPS Location!"),
+              content: new Text(
+                  "Before you can sign in to work you need to enable GPS on your device"),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                RaisedButton.icon(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    icon: Icon(
+                      Icons.close,
+                      color: imagePrimaryLightColor,
+                    ),
+                    color: colorSuccessMessage,
+                    label: new Text(
+                      "Close!",
+                      style: TextStyle(
+//                              fontFamily: 'Exo2',
+                        color: textPrimaryLightColor,
+                      ),
+                    ),
+                    disabledColor: disabledButtonColour,
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    }),
+              ],
+            );
+          },
+        );
+        location.requestService();
+      } else {
+        currentLocation = await location.getLocation();
+        if (currentLocation == null) {
+          Fluttertoast.showToast(
+              msg: 'Cannot Find Current Location. Please Try Again',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.TOP,
+              timeInSecForIos: 1,
+              backgroundColor: colorErrorMessage,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else {
+          setState(() {
+            _saving = true;
+          });
+          Response response;
+
+          Dio dio = new Dio();
+
+          response = await dio.get(
+              Constants.urlArrivedAtWork +
+                  job.uuid +
+                  '/' +
+                  currentLocation.latitude.toString() +
+                  '/' +
+                  currentLocation.longitude.toString(),
+              options: Options(
+                  method: 'GET',
+                  headers: {'Authorization': 'Bearer ' + UserDetails.token},
+                  responseType: ResponseType.json));
+
+          setState(() {
+            _saving = false;
+          });
+          if (response.statusCode == 200) {
+            await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                // return object of type Dialog
+                return AlertDialog(
+                  title: new Text("Success!"),
+                  content: new Text(response.data['message']),
+                  actions: <Widget>[
+                    // usually buttons at the bottom of the dialog
+                    RaisedButton.icon(
+                        elevation: 4.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
+                        icon: Icon(
+                          Icons.close,
+                          color: imagePrimaryLightColor,
+                        ),
+                        color: colorSuccessMessage,
+                        label: new Text(
+                          "Close!",
+                          style: TextStyle(
+//                              fontFamily: 'Exo2',
+                            color: textPrimaryLightColor,
+                          ),
+                        ),
+                        disabledColor: disabledButtonColour,
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        }),
+                  ],
+                );
+              },
+            );
+          }
+        }
+      }
+    } on DioError catch (e) {
+      setState(() {
+        _saving = false;
+      });
+
+      Fluttertoast.showToast(
+          msg: e.response.data['error'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  leftWork() async {
+    try {
+      if (await location.hasPermission() == false) {
+        await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Enable Location Permission!"),
+              content: new Text(
+                  "Before you can sign out of work you need to enable your location permission for this app"),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                RaisedButton.icon(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    icon: Icon(
+                      Icons.close,
+                      color: imagePrimaryLightColor,
+                    ),
+                    color: colorSuccessMessage,
+                    label: new Text(
+                      "Close!",
+                      style: TextStyle(
+//                              fontFamily: 'Exo2',
+                        color: textPrimaryLightColor,
+                      ),
+                    ),
+                    disabledColor: disabledButtonColour,
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    }),
+              ],
+            );
+          },
+        );
+        location.requestPermission();
+      } else if (await location.serviceEnabled() == false) {
+        await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Enable GPS Location!"),
+              content: new Text(
+                  "Before you can sign out of work you need to enable GPS on your device"),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                RaisedButton.icon(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    icon: Icon(
+                      Icons.close,
+                      color: imagePrimaryLightColor,
+                    ),
+                    color: colorSuccessMessage,
+                    label: new Text(
+                      "Close!",
+                      style: TextStyle(
+//                              fontFamily: 'Exo2',
+                        color: textPrimaryLightColor,
+                      ),
+                    ),
+                    disabledColor: disabledButtonColour,
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    }),
+              ],
+            );
+          },
+        );
+        location.requestService();
+      } else {
+        currentLocation = await location.getLocation();
+
+        if (currentLocation == null) {
+          Fluttertoast.showToast(
+              msg: 'Cannot Find Current Location. Please Try Again',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.TOP,
+              timeInSecForIos: 1,
+              backgroundColor: colorErrorMessage,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else {
+          setState(() {
+            _saving = true;
+          });
+          Response response;
+
+          Dio dio = new Dio();
+
+          response = await dio.get(
+              Constants.urlLeftWork +
+                  job.uuid +
+                  '/' +
+                  currentLocation.latitude.toString() +
+                  '/' +
+                  currentLocation.longitude.toString(),
+              options: Options(
+                  method: 'GET',
+                  headers: {'Authorization': 'Bearer ' + UserDetails.token},
+                  responseType: ResponseType.json));
+
+          setState(() {
+            _saving = false;
+          });
+          if (response.statusCode == 200) {
+            await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                // return object of type Dialog
+                return AlertDialog(
+                  title: new Text("Success!"),
+                  content: new Text(response.data['message']),
+                  actions: <Widget>[
+                    // usually buttons at the bottom of the dialog
+                    RaisedButton.icon(
+                        elevation: 4.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
+                        icon: Icon(
+                          Icons.close,
+                          color: imagePrimaryLightColor,
+                        ),
+                        color: colorSuccessMessage,
+                        label: new Text(
+                          "Close!",
+                          style: TextStyle(
+//                              fontFamily: 'Exo2',
+                            color: textPrimaryLightColor,
+                          ),
+                        ),
+                        disabledColor: disabledButtonColour,
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        }),
+                  ],
+                );
+              },
+            );
+          }
+        }
+      }
+    } on DioError catch (e) {
+      setState(() {
+        _saving = false;
+      });
+
+      Fluttertoast.showToast(
+          msg: e.response.data['error'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
   _launchURL(lat, long) async {
     var url = 'https://www.google.com/maps/search/?api=1&query=' +
         lat.toString() +
@@ -183,49 +509,98 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
 //      ),
       Column(
         children: <Widget>[
-          profileWidget(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              followersWidget(),
-              nameWidget(),
-              likeWidget(),
-            ],
+          Container(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              color: backgroundColor,
+              elevation: 5,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  profileWidget(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      followersWidget(),
+                      nameWidget(),
+                      likeWidget(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: size.getWidthPx(8),
-                left: size.getWidthPx(20),
-                right: size.getWidthPx(20)),
-            child: Container(height: size.getWidthPx(4), color: colorCurve),
+//          Padding(
+//            padding: EdgeInsets.only(
+//                top: size.getWidthPx(8),
+//                left: size.getWidthPx(20),
+//                right: size.getWidthPx(20)),
+//            child: Container(height: size.getWidthPx(4), color: colorCurve),
+//          ),
+          Container(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              color: backgroundColor,
+              elevation: 5,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  centreAlignText(
+                      text: "Actions",
+                      padding: size.getWidthPx(16),
+                      textColor: textPrimaryColor,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      underline: true),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      buttonWidgetCancel(),
+                      buttonWidgetNavigate(),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      buttonArrivedAtWork(),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      buttonFinishedAtWork(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buttonWidgetCancel(),
-              buttonWidgetNavigate(),
-            ],
+          Container(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              color: backgroundColor,
+              elevation: 5,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  centreAlignText(
+                      text: "Information:",
+                      padding: size.getWidthPx(16),
+                      textColor: textPrimaryColor,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      underline: true),
+                  jobInformationWidget()
+                ],
+              ),
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buttonArrivedAtWork(),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buttonFinishedAtWork(),
-            ],
-          ),
-          centreAlignText(
-              text: "Job Information:",
-              padding: size.getWidthPx(16),
-              textColor: textPrimaryColor,
-              fontSize: 24.0,
-              fontWeight: null,
-              underline: true),
-          jobInformationWidget()
         ],
       )
     ]);
@@ -400,7 +775,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
         ),
         disabledColor: disabledButtonColour,
         onPressed: () {
-            _launchURL(job.site.latitude, job.site.longitude);
+          _launchURL(job.site.latitude, job.site.longitude);
         },
       ),
     );
@@ -435,7 +810,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
               // return object of type Dialog
               return AlertDialog(
                 title: new Text("Please Confirm!"),
-                content: new Text("Are you sure you want to cancel this job?"),
+                content: new Text("Are you sure you want to sign in to work?"),
                 actions: <Widget>[
                   // usually buttons at the bottom of the dialog
                   RaisedButton.icon(
@@ -477,7 +852,8 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                       disabledColor: disabledButtonColour,
                       onPressed: () async {
                         Navigator.of(context, rootNavigator: true).pop();
-                        cancelJob();
+                        currentLocation = await location.getLocation();
+                        await arrivedAtWork();
                       }),
                 ],
               );
@@ -517,7 +893,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
               // return object of type Dialog
               return AlertDialog(
                 title: new Text("Please Confirm!"),
-                content: new Text("Are you sure you want to cancel this job?"),
+                content: new Text("Are you sure you want to sign out of work?"),
                 actions: <Widget>[
                   // usually buttons at the bottom of the dialog
                   RaisedButton.icon(
@@ -559,7 +935,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                       disabledColor: disabledButtonColour,
                       onPressed: () async {
                         Navigator.of(context, rootNavigator: true).pop();
-                        cancelJob();
+                        await leftWork();
                       }),
                 ],
               );

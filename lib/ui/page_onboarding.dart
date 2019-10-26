@@ -22,7 +22,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   final List<Widget> _pages = [
     IntroPage("assets/onboard_1.png","Step 1", "Complete personal details accompanied by a selfie! \n \n Head and shoulders only!"),
     IntroPage("assets/onboard_2.png","Step 2", "Upload your ID/Smart Id"),
-    IntroPage("assets/onboard_3.png","Step 3", "Upload your CV! \n \n MaX 4 photos. \n \n Once ready click the submit button and you're done!"),
+    IntroPage("assets/onboard_3.png","Step 3", "Upload your CV! \n \n Max 4 photos. \n \n Once ready click the submit button and you're done!"),
   ];
   int currentPageIndex = 0;
 

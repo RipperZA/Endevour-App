@@ -17,6 +17,8 @@ class Constants {
   static String urlGetJobDetails = urlBase + 'work/';
   static String urlAcceptJob = urlBase + 'work/accept/';
   static String urlCancelJob = urlBase + 'work/cancel/';
+  static String urlArrivedAtWork = urlBase + 'work/arrived/';
+  static String urlLeftWork = urlBase + 'work/left/';
   static String urlAcceptedJobs = urlBase + 'work/acceptedWork';
 
   //colors

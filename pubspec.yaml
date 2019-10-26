@@ -41,6 +41,8 @@ dependencies:
   onesignal_flutter: ^2.0.1
   calendarro: ^1.1.1
   flutter_datetime_picker: ^1.2.6
+  location: ^2.3.5
+
 
 
 
