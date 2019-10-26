@@ -48,6 +48,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
       Response response;
 
       Dio dio = new Dio();
+
       response = await dio.get(Constants.urlCancelJob + job.uuid,
           options: Options(
               method: 'GET',
