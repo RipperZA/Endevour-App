@@ -140,20 +140,22 @@ class _LoginPageState extends State<LoginPage> {
                         child: Container(
                           color: colorCurve,
                         )),
-                    SingleChildScrollView(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: size.getWidthPx(20),
-                            vertical: size.getWidthPx(20)),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              _loginGradientText(),
-                              SizedBox(height: size.getWidthPx(10)),
-                              _textAccount(),
-                              SizedBox(height: size.getWidthPx(30)),
-                              loginFields()
-                            ]),
+                    Center(
+                      child: SingleChildScrollView(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: size.getWidthPx(20),
+                              vertical: size.getWidthPx(20)),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                _loginGradientText(),
+                                SizedBox(height: size.getWidthPx(10)),
+                                _textAccount(),
+                                SizedBox(height: size.getWidthPx(30)),
+                                loginFields()
+                              ]),
+                        ),
                       ),
                     )
                   ]),

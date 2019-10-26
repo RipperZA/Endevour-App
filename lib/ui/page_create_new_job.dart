@@ -1,36 +1,28 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:calendarro/calendarro_page.dart';
-import 'package:calendarro/date_utils.dart';
+import 'package:calendarro/calendarro.dart';
 import 'package:calendarro/default_day_tile_builder.dart';
 import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_ui_collections/model/Rate.dart';
 import 'package:flutter_ui_collections/model/Site.dart';
 import 'package:flutter_ui_collections/model/models.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
-import 'package:flutter_ui_collections/ui/page_home.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
-import 'package:flutter_ui_collections/utils/utils.dart' as prefix0;
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_ui_collections/utils/data.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:calendarro/calendarro.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class CreateNewJobPage extends StatefulWidget {
   final ValueChanged<int> changeCurrentTab;
+
   CreateNewJobPage({Key key, this.changeCurrentTab}) : super(key: key);
 
   @override
@@ -67,6 +59,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   String calendarMonthName =
       DateFormat('yyyy-MMMM').format(DateTime.now()).toString();
   var workDates = [];
+  var startTime;
+  var endTime;
 
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
@@ -221,6 +215,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
           FormData formData = new FormData(); // just like JS
           formData.addAll(formValues);
           formData.add('dates', workDates);
+          formData.add('start_time', startTime);
+          formData.add('end_time', endTime);
 
           Dio dio = new Dio();
           response = await dio.post(uploadUrl,
@@ -416,49 +412,77 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               max: 10,
                               step: 1,
                             ),
+
                             FlatButton(
-                                onPressed: () {
-                                  DatePicker.showTimePicker(context,
-                                      showTitleActions: true,
-//                                      minTime: DateTime(2018, 3, 5),
-//                                      maxTime: DateTime(2019, 6, 7),
-                                      onChanged: (date) {
-                                    print('change $date');
-                                  }, onConfirm: (date) {
-                                    print('confirm $date');
-                                  }, currentTime: DateTime.now());
-                                },
-                                child: Text(
-                                  'show date time picker',
-                                  style: TextStyle(color: Colors.blue),
-                                )),
-                            FormBuilderDateTimePicker(
-                              attribute: "start_time",
-                              onChanged: _onChanged,
-                              inputType: InputType.time,
-                              validators: [
-                                FormBuilderValidators.required(),
-                              ],
-                              // format: DateFormat("yyyy-MM-dd hh:mm"),
-//                               initialValue: DateTime.now(),
-                              decoration:
-                                  InputDecoration(labelText: "Start Time"),
-                              // readonly: true,
-                            ),
-                            FormBuilderDateTimePicker(
-                              attribute: "end_time",
-                              onChanged: _onChanged,
-                              inputType: InputType.time,
-                              validators: [
-                                FormBuilderValidators.required(),
-                              ],
-                              // format: DateFormat("yyyy-MM-dd hh:mm"),
-                              // initialValue: DateTime.now(),
-                              decoration:
-                                  InputDecoration(labelText: "End Time"),
-                              // readonly: true,
+                              onPressed: () {},
+                              child: Text(
+                                "Start Time",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    decoration: TextDecoration.underline
+//                              fontFamily: 'Exo2',
+                                    ),
+                              ),
                             ),
 
+                            new GestureDetector(
+                              onTap: () {
+                                DatePicker.showTimePicker(context,
+                                    showTitleActions: true,
+//                                      minTime: DateTime(2018, 3, 5),
+//                                      maxTime: DateTime(2019, 6, 7),
+                                    onChanged: (date) {}, onConfirm: (date) {
+                                  setState(() {
+                                    startTime = date;
+                                  });
+                                },
+                                    currentTime: startTime != null
+                                        ? startTime
+                                        : DateTime.now());
+                              },
+                              child: startTime != null
+                                  ? Text(startTime.toString())
+                                  : Text("Set Start Time",
+                                      style: TextStyle(
+                                          color: textSecondaryDarkColor)),
+                            ),
+                            FlatButton(
+                              onPressed: () {},
+                              child: Text(
+                                "End Time",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    decoration: TextDecoration.underline
+//                              fontFamily: 'Exo2',
+                                    ),
+                              ),
+                            ),
+                            new GestureDetector(
+                              onTap: () {
+                                DatePicker.showTimePicker(context,
+                                    showTitleActions: true,
+//                                      minTime: DateTime(2018, 3, 5),
+//                                      maxTime: DateTime(2019, 6, 7),
+                                    onChanged: (date) {}, onConfirm: (date) {
+                                  setState(() {
+                                    endTime = date;
+                                  });
+                                },
+                                    currentTime: endTime != null
+                                        ? endTime
+                                        : DateTime.now());
+                              },
+                              child: endTime != null
+                                  ? Text(endTime.toString())
+                                  : Text(
+                                      "Set End Time",
+                                      style: TextStyle(
+                                          color: textSecondaryDarkColor),
+                                    ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
                             Column(
                               children: <Widget>[
                                 SizedBox(height: 10),
@@ -488,7 +512,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                     selectedDate: DateTime(2019, 10, 03),
                                     onPageSelected:
                                         (pageStartDate, pageEndDate) {
-                                      print(222222);
                                       setState(() {
                                         calendarMonthName =
                                             DateFormat('yyyy-MMMM')
@@ -583,7 +606,9 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                   print(_fbKey.currentState.value);
 
                                   if (_fbKey.currentState.saveAndValidate() &&
-                                      workDates.length > 0) {
+                                      workDates.length > 0 &&
+                                      startTime != null &&
+                                      endTime != null) {
                                     setState(() {
                                       _fbKey.currentState.value['client_site'] =
                                           _currentSite.uuid;
@@ -594,7 +619,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                   } else {
                                     Fluttertoast.showToast(
                                         msg:
-                                            'Validation Falied. Fill out all fields and select valid work dates.',
+                                            'Validation Falied. Fill out all fields and select valid work dates and times.',
                                         toastLength: Toast.LENGTH_LONG,
                                         gravity: ToastGravity.TOP,
                                         timeInSecForIos: 1,
