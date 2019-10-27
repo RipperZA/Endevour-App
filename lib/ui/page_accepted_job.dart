@@ -10,7 +10,6 @@ import 'package:flutter_ui_collections/ui/page_accepted_job_details.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -270,11 +269,55 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
 //                                  ),
 //                                ),
                                         leading: CircleAvatar(
-                                            child: Text(workList[i].name[0])),
+                                          child: Text(workList[i].name[0]),
+                                          backgroundColor: themeColour,
+                                          foregroundColor: backgroundColor,
+                                        ),
                                         title: new Text(_searchResult[i].name +
                                             ' ' +
                                             _searchResult[i].area),
-                                        subtitle: Text('Subtitle 1'),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Start:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${_searchResult[i].startDate}'),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'End:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${_searchResult[i].endDate}'),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       margin: const EdgeInsets.all(0.0),
                                     ),
@@ -305,8 +348,10 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                                               jobDetails)));
                                         },
                                         leading: CircleAvatar(
-                                            child:
-                                                Text(workList[index].name[0])),
+                                          child: Text(workList[index].name[0]),
+                                          backgroundColor: themeColour,
+                                          foregroundColor: backgroundColor,
+                                        ),
                                         title: new Text(workList[index].name +
                                             ' ' +
                                             workList[index].area),

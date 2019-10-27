@@ -1,41 +1,21 @@
-import 'dart:async';
 import 'dart:convert';
 
-import 'package:calendarro/calendarro_page.dart';
-import 'package:calendarro/date_utils.dart';
-import 'package:calendarro/default_day_tile_builder.dart';
-import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ui_collections/model/Job.dart';
-import 'package:flutter_ui_collections/model/Rate.dart';
-import 'package:flutter_ui_collections/model/Site.dart';
 import 'package:flutter_ui_collections/model/Work.dart';
-import 'package:flutter_ui_collections/model/models.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
-import 'package:flutter_ui_collections/ui/page_home.dart';
-import 'package:flutter_ui_collections/ui/page_home_worker.dart';
 import 'package:flutter_ui_collections/ui/page_job_details.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
-import 'package:flutter_ui_collections/utils/utils.dart' as prefix0;
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_ui_collections/utils/data.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:calendarro/calendarro.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ApplyJobPage extends StatefulWidget {
   final ValueChanged<int> changeCurrentTab;
+
   ApplyJobPage({Key key, this.changeCurrentTab}) : super(key: key);
 
   @override
@@ -103,7 +83,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.json));
 
-
       setState(() {
         _saving = false;
       });
@@ -134,7 +113,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
           fontSize: 16.0);
     }
   }
-
 
   @override
   void initState() {
@@ -266,14 +244,14 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                               itemBuilder: (context, i) {
                                 return Column(
                                   children: <Widget>[
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     new Card(
                                       child: new ListTile(
                                         onTap: () async {
-                                         await getJobInformation(workList[i].uuid.toString());
-
-                                          print(this.jobDetails);
-
+                                          await getJobInformation(
+                                              workList[i].uuid.toString());
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -281,32 +259,57 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                       JobDetailsPage(
                                                         jobDetails: jobDetails,
                                                       )));
-
-
-
-//                                      Navigator.push(
-//                                          context,
-//                                          MaterialPageRoute(
-//                                              builder: (context) =>
-//                                                  JobDetailsPage(
-//                                                    jobUuid: workList[i].uuid.toString(),
-//                                                  )));
-//                                      _launchURL(workList[i].latitude,
-//                                          workList[i].longitude);
-//                                      Navigator.push(
-//                                          context, MaterialPageRoute(builder: (context) => JobDetailsPage()));
                                         },
-//                                leading: new CircleAvatar(
-//                                  backgroundImage: new NetworkImage(
-//                                    'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
-//                                  ),
-//                                ),
                                         leading: CircleAvatar(
-                                            child: Text(workList[i].name[0])),
+                                          child: Text(workList[i].name[0]),
+                                          backgroundColor: themeColour,
+                                          foregroundColor: backgroundColor,
+                                        ),
                                         title: new Text(_searchResult[i].name +
                                             ' ' +
                                             _searchResult[i].area),
-                                        subtitle: Text('${workList[i].startDate}'),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Start:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${_searchResult[i].startDate}'),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'End:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${_searchResult[i].endDate}'),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       margin: const EdgeInsets.all(0.0),
                                     ),
@@ -319,11 +322,14 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                               itemBuilder: (context, index) {
                                 return Column(
                                   children: <Widget>[
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     new Card(
                                       child: new ListTile(
                                         onTap: () async {
-                                          await getJobInformation(workList[index].uuid.toString());
+                                          await getJobInformation(
+                                              workList[index].uuid.toString());
 
                                           Navigator.push(
                                               context,
@@ -332,7 +338,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                       JobDetailsPage(
                                                         jobDetails: jobDetails,
                                                       )));
-
 
 //                                      _launchURL(workList[index].latitude,
 //                                          workList[index].longitude);
@@ -351,11 +356,61 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
 //                                  ),
 //                                ),
                                         leading: CircleAvatar(
-                                            child: Text(workList[index].name[0])),
-                                        title: new Text(workList[index].name +
-                                            ' ' +
-                                            workList[index].area),
-                                        subtitle: Text('Subtitle 2'),
+                                          child: Text(workList[index].name[0]),
+                                          backgroundColor: themeColour,
+                                          foregroundColor: backgroundColor,
+                                        ),
+                                        title: new Text(
+                                          workList[index].name +
+                                              ' ' +
+                                              workList[index].area,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Start:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${workList[index].startDate}'),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'End:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${workList[index].endDate}'),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       margin: const EdgeInsets.all(0.0),
                                     ),

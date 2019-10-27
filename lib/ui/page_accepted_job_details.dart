@@ -852,7 +852,6 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                       disabledColor: disabledButtonColour,
                       onPressed: () async {
                         Navigator.of(context, rootNavigator: true).pop();
-                        currentLocation = await location.getLocation();
                         await arrivedAtWork();
                       }),
                 ],

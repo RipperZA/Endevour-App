@@ -13,7 +13,7 @@ class Constants {
   static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
 
   static String urlNewJobUpload = urlBase + 'work';
-  static String urlGetAvailableWork = urlBase + 'work';
+  static String urlGetAvailableWork = urlBase + 'work/getAvailableWork';
   static String urlGetJobDetails = urlBase + 'work/';
   static String urlAcceptJob = urlBase + 'work/accept/';
   static String urlCancelJob = urlBase + 'work/cancel/';
