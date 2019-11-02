@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ui_collections/ui/page_create_new_job.dart';
+import 'package:flutter_ui_collections/ui/page_created_job.dart';
 import 'package:flutter_ui_collections/ui/page_dashboard.dart';
 import 'package:flutter_ui_collections/widgets/bottom_navigationBar.dart';
 
-import '../main.dart';
-import 'page_coming_soon.dart';
-import 'page_login.dart';
-import 'page_profile.dart';
-import 'page_search.dart';
 import 'page_settings.dart';
-import 'page_signup.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -49,8 +44,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           body: bodyView(currentTab),
-          bottomNavigationBar:
-          BottomNavBar(key: globalKey,changeCurrentTab: changeCurrentTab, tab: currentTab)),
+          bottomNavigationBar: BottomNavBar(
+              key: globalKey,
+              changeCurrentTab: changeCurrentTab,
+              tab: currentTab)),
     );
   }
 
@@ -59,7 +56,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     switch (currentTab) {
       case 0:
         //Dashboard Page
-        tabView = [DashboardPage(buttonNavigation: buttonNavigation,)];
+        tabView = [
+          DashboardPage(
+            buttonNavigation: buttonNavigation,
+          )
+        ];
         break;
       case 1:
         //Search Page
@@ -67,7 +68,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         break;
       case 2:
         //Profile Page
-        tabView = [ProfilePage()];
+        tabView = [PendingJobPage()];
         break;
       case 3:
         //Setting Page

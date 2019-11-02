@@ -1,3 +1,5 @@
+import 'package:flutter_ui_collections/model/Worker.dart';
+
 class Work {
   String uuid;
   String name;
@@ -6,8 +8,17 @@ class Work {
   double longitude;
   String startDate;
   String endDate;
+  Worker worker;
 
-  Work({this.uuid, this.name, this.area,this.latitude, this.longitude,this.startDate,this.endDate});
+  Work(
+      {this.uuid,
+      this.name,
+      this.area,
+      this.latitude,
+      this.longitude,
+      this.startDate,
+      this.endDate,
+      this.worker});
 
   Work.fromJson(Map<String, dynamic> json)
       : uuid = json['uuid'],
@@ -16,15 +27,17 @@ class Work {
         latitude = json['address_latitude'],
         longitude = json['address_longitude'],
         startDate = json['start_date'],
-        endDate = json['end_date'];
+        endDate = json['end_date'],
+        worker = Worker.fromJson(json['worker']);
 
   Map<String, dynamic> toJson() => {
-    'uuid': uuid,
-    'name': name,
-    'area': area,
-    'latitude': latitude,
-    'longitude': longitude,
-    'startDate': startDate,
-    'endDate': endDate,
-  };
+        'uuid': uuid,
+        'name': name,
+        'area': area,
+        'latitude': latitude,
+        'longitude': longitude,
+        'startDate': startDate,
+        'endDate': endDate,
+        'worker': worker,
+      };
 }

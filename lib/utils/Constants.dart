@@ -2,7 +2,7 @@ import 'dart:ui';
 
 class Constants {
   //URLs
-  static String urlBase = 'http://192.168.1.107:8000/api/';
+  static String urlBase = 'http://192.168.1.104:8000/api/';
 
 //  static String urlBase = 'http://10.2.2.106:8000/api/';
 //  static String urlBase = 'http://10.0.0.161:8000/api/';
@@ -20,6 +20,7 @@ class Constants {
   static String urlArrivedAtWork = urlBase + 'work/arrived/';
   static String urlLeftWork = urlBase + 'work/left/';
   static String urlAcceptedJobs = urlBase + 'work/acceptedWork';
+  static String urlPendingJobs = urlBase + 'work/pendingWork';
 
   //colors
   static const Color clr_purple = const Color(0xFF9C27B0);
@@ -40,4 +41,7 @@ class Constants {
   //Google Maps API Key
   static const String accessKey =
       "f96abcd230664d7cab7ed900470db93878d44b15d672603e8c6817a267a96c78";
+
+  static const String standardErrorMessage =
+      "Something Went Wrong. Please Try Again. If the problem continues please contact support";
 }
