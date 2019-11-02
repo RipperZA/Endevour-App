@@ -2,7 +2,8 @@ import 'dart:ui';
 
 class Constants {
   //URLs
-  static String urlBase = 'http://192.168.1.104:8000/api/';
+//  static String urlBase = 'http://192.168.1.104:8000/api/';
+  static String urlBase = 'http://134.209.93.55/api/';
 
 //  static String urlBase = 'http://10.2.2.106:8000/api/';
 //  static String urlBase = 'http://10.0.0.161:8000/api/';
