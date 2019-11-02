@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ui_collections/model/Job.dart';
 import 'package:flutter_ui_collections/model/Work.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
-import 'package:flutter_ui_collections/ui/page_accepted_job_details.dart';
+import 'package:flutter_ui_collections/ui/page_pending_job_details.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,7 +23,7 @@ class PendingJobPage extends StatefulWidget {
 class _PendingJobPageState extends State<PendingJobPage> {
   bool _saving = false;
   Screen size;
-  Job jobDetails = Job();
+  Job jobDetails;
 
   List<Work> workList = List();
   List<Work> _searchResult = [];
@@ -45,7 +43,6 @@ class _PendingJobPageState extends State<PendingJobPage> {
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.json));
 
-
       if (response.statusCode == 200) {
         var availableWork = response.data['data']['pendingWork'];
 
@@ -59,21 +56,31 @@ class _PendingJobPageState extends State<PendingJobPage> {
           }
         }
       }
-    } on DioError catch (e)
-    {
-      Fluttertoast.showToast(
-          msg: e.response.data['error'],
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-    on Error catch (e)
-    {
-      print(e);
+    } on DioError catch (e) {
+      setState(() {
+        _saving = false;
+      });
 
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on Error catch (e) {
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
@@ -93,7 +100,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
       Response response;
 
       Dio dio = new Dio();
-      response = await dio.get(Constants.urlGetJobDetails + uuid,
+      response = await dio.get(Constants.urlGetJobDetailsAreaManager + uuid,
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
@@ -112,6 +119,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
         if (this.mounted) {
           setState(() {
             this.jobDetails = job;
+            print(job.workerName);
           });
         }
       }
@@ -119,8 +127,29 @@ class _PendingJobPageState extends State<PendingJobPage> {
       setState(() {
         _saving = false;
       });
+
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on Error catch (e) {
       Fluttertoast.showToast(
-          msg: json.decode(e.response.data)['error'],
+          msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,
@@ -180,7 +209,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
     size = Screen(MediaQuery.of(context).size);
 
     Text titleWidget() {
-      return Text("Created Jobs",
+      return Text("Pending Jobs",
           style: TextStyle(
               fontFamily: 'Exo2',
               fontSize: 24.0,
@@ -269,21 +298,16 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                           await getJobInformation(
                                               workList[i].uuid.toString());
 
-                                          print(this.jobDetails);
-
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AcceptedJobDetailsPage(
-                                                        jobDetails: jobDetails,
-                                                      )));
+                                          if (jobDetails != null) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PendingJobDetailsPage(
+                                                            jobDetails:
+                                                                jobDetails)));
+                                          }
                                         },
-//                                leading: new CircleAvatar(
-//                                  backgroundImage: new NetworkImage(
-//                                    'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
-//                                  ),
-//                                ),
                                         leading: CircleAvatar(
                                           child: Text(workList[i].name[0]),
                                           backgroundColor: themeColour,
@@ -311,7 +335,6 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                                   TextSpan(
                                                       text:
                                                           ' ${_searchResult[i].startDate}'),
-
                                                 ],
                                               ),
                                             ),
@@ -392,13 +415,15 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                           await getJobInformation(
                                               workList[index].uuid.toString());
 
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AcceptedJobDetailsPage(
-                                                          jobDetails:
-                                                              jobDetails)));
+                                          if (jobDetails != null) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PendingJobDetailsPage(
+                                                            jobDetails:
+                                                                jobDetails)));
+                                          }
                                         },
                                         leading: CircleAvatar(
                                           child: Text(workList[index].name[0]),

@@ -29,7 +29,7 @@ class JobDetailsPage extends StatefulWidget {
 class _JobDetailsPageState extends State<JobDetailsPage> {
   Screen size;
 
-  Job job = Job();
+  Job job;
   bool _saving = false;
 
   void initState() {
@@ -109,8 +109,28 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         _saving = false;
       });
 
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on Error catch (e) {
       Fluttertoast.showToast(
-          msg: e.response.data['error'],
+          msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,

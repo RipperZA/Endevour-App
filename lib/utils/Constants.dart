@@ -15,12 +15,15 @@ class Constants {
   static String urlNewJobUpload = urlBase + 'work';
   static String urlGetAvailableWork = urlBase + 'work/getAvailableWork';
   static String urlGetJobDetails = urlBase + 'work/';
+  static String urlGetJobDetailsAreaManager = urlBase + 'workAreaManager/';
   static String urlAcceptJob = urlBase + 'work/accept/';
   static String urlCancelJob = urlBase + 'work/cancel/';
   static String urlArrivedAtWork = urlBase + 'work/arrived/';
   static String urlLeftWork = urlBase + 'work/left/';
   static String urlAcceptedJobs = urlBase + 'work/acceptedWork';
   static String urlPendingJobs = urlBase + 'work/pendingWork';
+  static String urlVerifyArrivedAtWork = urlBase + 'work/verifiedArrived/';
+  static String urlVerifyLeftWork = urlBase + 'work/verifiedLeft/';
 
   //colors
   static const Color clr_purple = const Color(0xFF9C27B0);
@@ -44,4 +47,10 @@ class Constants {
 
   static const String standardErrorMessage =
       "Something Went Wrong. Please Try Again. If the problem continues please contact support";
+
+  static bool isNullEmptyOrFalse(Object o) =>
+      o == null || false == o || "" == o;
+
+  static bool isNullEmptyFalseOrZero(Object o) =>
+      o == null || false == o || 0 == o || "" == o;
 }

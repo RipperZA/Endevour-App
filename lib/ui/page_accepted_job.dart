@@ -25,7 +25,7 @@ class AcceptedJobPage extends StatefulWidget {
 class _AcceptedJobPageState extends State<AcceptedJobPage> {
   bool _saving = false;
   Screen size;
-  Job jobDetails = Job();
+  Job jobDetails;
 
   List<Work> workList = List();
   List<Work> _searchResult = [];
@@ -58,8 +58,32 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
         }
       }
     } on DioError catch (e) {
+      setState(() {
+        _saving = false;
+      });
+
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on Error catch (e) {
       Fluttertoast.showToast(
-          msg: json.decode(e.response.data)['error'],
+          msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,
@@ -103,8 +127,29 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
       setState(() {
         _saving = false;
       });
+
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on Error catch (e) {
       Fluttertoast.showToast(
-          msg: json.decode(e.response.data)['error'],
+          msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,
@@ -253,21 +298,17 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                           await getJobInformation(
                                               workList[i].uuid.toString());
 
-                                          print(this.jobDetails);
-
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AcceptedJobDetailsPage(
-                                                        jobDetails: jobDetails,
-                                                      )));
+                                          if (jobDetails != null) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AcceptedJobDetailsPage(
+                                                          jobDetails:
+                                                              jobDetails,
+                                                        )));
+                                          }
                                         },
-//                                leading: new CircleAvatar(
-//                                  backgroundImage: new NetworkImage(
-//                                    'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4',
-//                                  ),
-//                                ),
                                         leading: CircleAvatar(
                                           child: Text(workList[i].name[0]),
                                           backgroundColor: themeColour,
@@ -339,13 +380,16 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                           await getJobInformation(
                                               workList[index].uuid.toString());
 
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AcceptedJobDetailsPage(
+                                          if (jobDetails != null) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AcceptedJobDetailsPage(
                                                           jobDetails:
-                                                              jobDetails)));
+                                                          jobDetails,
+                                                        )));
+                                          }
                                         },
                                         leading: CircleAvatar(
                                           child: Text(workList[index].name[0]),

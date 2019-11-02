@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ui_collections/ui/page_create_new_job.dart';
-import 'package:flutter_ui_collections/ui/page_created_job.dart';
 import 'package:flutter_ui_collections/ui/page_dashboard.dart';
+import 'package:flutter_ui_collections/ui/page_pending_job.dart';
 import 'package:flutter_ui_collections/widgets/bottom_navigationBar.dart';
 
 import 'page_settings.dart';
