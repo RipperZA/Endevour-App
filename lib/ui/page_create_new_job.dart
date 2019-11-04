@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:calendarro/calendarro.dart';
 import 'package:calendarro/default_day_tile_builder.dart';
@@ -13,6 +12,7 @@ import 'package:flutter_ui_collections/model/Rate.dart';
 import 'package:flutter_ui_collections/model/Site.dart';
 import 'package:flutter_ui_collections/model/models.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
+import 'package:flutter_ui_collections/ui/page_home.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -74,16 +74,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
   List<Site> siteList = List();
   List<Rate> rateList = List();
-  var citiesList = [
-    "Ahmedabad",
-    "Mumbai",
-    "Delhi ",
-    "Chennai",
-    "Goa",
-    "Kolkata",
-    "Indore",
-    "Jaipur"
-  ];
 
   getSites() async {
     try {
@@ -94,14 +84,15 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
-              responseType: ResponseType.plain // or ResponseType.JSON
+              responseType: ResponseType.json // or ResponseType.JSON
               ));
 
       if (response.statusCode == 200) {
-        var sites = json.decode(response.data)['data']['sites'];
+        var sites = response.data['data']['sites'];
 
         for (var x in sites) {
           var site = Site.fromJson(x);
+
           if (this.mounted) {
             setState(() {
               this.siteList.add(site);
@@ -112,15 +103,37 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
       return false;
     } on DioError catch (e) {
+      setState(() {
+        _saving = false;
+      });
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on Error catch (e) {
       Fluttertoast.showToast(
-          msg: json.decode(e.response.data)['error'],
+          msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,
           backgroundColor: colorErrorMessage,
           textColor: Colors.white,
           fontSize: 16.0);
-      return false;
     }
   }
 
@@ -133,11 +146,11 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
-              responseType: ResponseType.plain // or ResponseType.JSON
+              responseType: ResponseType.json // or ResponseType.JSON
               ));
 
       if (response.statusCode == 200) {
-        var rates = json.decode(response.data)['data']['rates'];
+        var rates = response.data['data']['rates'];
 
         for (var x in rates) {
           var rate = Rate.fromJson(x);
@@ -152,15 +165,37 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
       return false;
     } on DioError catch (e) {
+      setState(() {
+        _saving = false;
+      });
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on Error catch (e) {
       Fluttertoast.showToast(
-          msg: json.decode(e.response.data)['error'],
+          msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,
           backgroundColor: colorErrorMessage,
           textColor: Colors.white,
           fontSize: 16.0);
-      return false;
     }
   }
 
@@ -229,7 +264,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                   responseType: ResponseType.json // or ResponseType.JSON
                   ));
 
-          Fluttertoast.showToast(
+          await Fluttertoast.showToast(
               msg: response.data['success'],
               toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.TOP,
@@ -237,48 +272,38 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
               backgroundColor: colorSuccessMessage,
               textColor: Colors.white,
               fontSize: 16.0);
-//
-//          await showDialog(
-//            barrierDismissible: false,
-//            context: context,
-//            builder: (BuildContext context) {
-//              // return object of type Dialog
-//              return AlertDialog(
-//                title: new Text("Success!"),
-//                content: new Text(json.decode(response.data)['success']),
-//                actions: <Widget>[
-//                  // usually buttons at the bottom of the dialog
-//                  new FlatButton(
-//                    child: new Text("Close"),
-//                    onPressed: () {
-//                      Navigator.pop(context);
-//                    },
-//                  ),
-//                ],
-//              );
-//            },
-//          ).then((onValue) {
-//            Navigator.pop(context);
-//          }, onError: (err) {
-//            Navigator.pop(context);
-//          });
 
           setState(() {
             _saving = false;
-//            Navigator.pushReplacement(
-//                context, MaterialPageRoute(builder: (context) => HomePage()));
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
           });
         } on DioError catch (e) {
-          print((e.response));
-
           setState(() {
             _saving = false;
-//            Navigator.pushReplacement(
-//                context, MaterialPageRoute(builder: (context) => HomePage()));
           });
-
+          try {
+            Fluttertoast.showToast(
+                msg: e.response.data['error'],
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.TOP,
+                timeInSecForIos: 1,
+                backgroundColor: colorErrorMessage,
+                textColor: Colors.white,
+                fontSize: 16.0);
+          } catch (e) {
+            Fluttertoast.showToast(
+                msg: Constants.standardErrorMessage,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.TOP,
+                timeInSecForIos: 1,
+                backgroundColor: colorErrorMessage,
+                textColor: Colors.white,
+                fontSize: 16.0);
+          }
+        } on Error catch (e) {
           Fluttertoast.showToast(
-              msg: json.decode(e.response.toString())['message'],
+              msg: Constants.standardErrorMessage,
               toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.TOP,
               timeInSecForIos: 1,
@@ -335,14 +360,16 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 //                            enabledBorder: _underlineInputBorder,
 //                            focusedBorder: _underlineInputBorder,
 //                            labelStyle: style,
-                                        labelText: "Client Site (Search by Site Name)",
+                                        labelText:
+                                            "Client Site (Search by Site Name)",
                                       ),
                                       attribute: 'client_site',
                                       onChanged: (site) => {
                                         setState(() {
                                           _currentSite = site;
-                                          print(_currentSite.latitude);
-                                          _center = LatLng(_currentSite.latitude, _currentSite.longitude);
+                                          _center = LatLng(
+                                              _currentSite.latitude,
+                                              _currentSite.longitude);
                                           _goToNewSite();
                                         })
                                       },
@@ -353,10 +380,11 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       },
 //                          initialValue: siteList[0].name,
                                       selectionToTextTransformer: (Site site) =>
-                                      site.name,
+                                          site.name,
                                       suggestionsCallback: (query) {
                                         if (query.length != 0) {
-                                          var lowercaseQuery = query.toLowerCase();
+                                          var lowercaseQuery =
+                                              query.toLowerCase();
                                           return siteList.where((site) {
                                             return site.name
                                                 .toLowerCase()
@@ -366,8 +394,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                                 .toLowerCase()
                                                 .indexOf(lowercaseQuery)
                                                 .compareTo(b.name
-                                                .toLowerCase()
-                                                .indexOf(lowercaseQuery)));
+                                                    .toLowerCase()
+                                                    .indexOf(lowercaseQuery)));
                                         } else {
                                           return siteList;
                                         }
@@ -397,7 +425,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         // key: _fieldKey,
                                         enabled: true,
 //                              initialValue: rateList.first.uuid,
-                                        builder: (FormFieldState<dynamic> field) {
+                                        builder:
+                                            (FormFieldState<dynamic> field) {
                                           return InputDecorator(
                                             decoration: InputDecoration(
                                               labelStyle: style,
@@ -412,8 +441,9 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                               items: rateList.map((option) {
                                                 return DropdownMenuItem(
                                                   child: Text(option.name +
-                                                              '- R' +
-                                                              option.ratePerHour.toString()),
+                                                      '- R' +
+                                                      option.ratePerHour
+                                                          .toString()),
                                                   value: option.uuid,
                                                 );
                                               }).toList(),
@@ -426,7 +456,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         },
                                       ),
                                     ),
-
                                   ],
                                 ),
                               ),
@@ -449,6 +478,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       ),
                                       attribute: "number_workers",
                                       initialValue: 1,
+                                      min: 1,
                                       max: 10,
                                       step: 1,
                                     ),
@@ -475,9 +505,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                           "Start Time",
                                           style: TextStyle(
                                               fontSize: 20,
-                                              decoration: TextDecoration.underline
+                                              decoration:
+                                                  TextDecoration.underline
 //                              fontFamily: 'Exo2',
-                                          ),
+                                              ),
                                         ),
                                       ),
                                       new GestureDetector(
@@ -486,20 +517,32 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                               showTitleActions: true,
 //                                      minTime: DateTime(2018, 3, 5),
 //                                      maxTime: DateTime(2019, 6, 7),
-                                              onChanged: (date) {}, onConfirm: (date) {
-                                                setState(() {
-                                                  startTime = date;
-                                                });
-                                              },
+                                              onChanged: (date) {},
+                                              onConfirm: (date) {
+                                            setState(() {
+                                              startTime = date;
+                                            });
+                                          },
                                               currentTime: startTime != null
-                                                           ? startTime
-                                                           : DateTime.now());
+                                                  ? startTime
+                                                  : DateTime.now());
                                         },
                                         child: startTime != null
-                                               ? Text(startTime.toString())
-                                               : Text("Set Start Time",
-                                            style: TextStyle(
-                                                color: textSecondaryDarkColor)),
+                                            ? Text(
+                                                startTime.hour.toString() +
+                                                    'h ' +
+                                                    startTime.minute
+                                                        .toString() +
+                                                    'm',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color:
+                                                        textSecondaryDarkColor),
+                                              )
+                                            : Text("Set Start Time",
+                                                style: TextStyle(
+                                                    color:
+                                                        textSecondaryDarkColor)),
                                       ),
                                       FlatButton(
                                         onPressed: () {},
@@ -507,9 +550,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                           "End Time",
                                           style: TextStyle(
                                               fontSize: 20,
-                                              decoration: TextDecoration.underline
+                                              decoration:
+                                                  TextDecoration.underline
 //                              fontFamily: 'Exo2',
-                                          ),
+                                              ),
                                         ),
                                       ),
                                       new GestureDetector(
@@ -518,22 +562,33 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                               showTitleActions: true,
 //                                      minTime: DateTime(2018, 3, 5),
 //                                      maxTime: DateTime(2019, 6, 7),
-                                              onChanged: (date) {}, onConfirm: (date) {
-                                                setState(() {
-                                                  endTime = date;
-                                                });
-                                              },
+                                              onChanged: (date) {},
+                                              onConfirm: (date) {
+                                            setState(() {
+                                              endTime = date;
+                                            });
+                                          },
                                               currentTime: endTime != null
-                                                           ? endTime
-                                                           : DateTime.now());
+                                                  ? endTime
+                                                  : DateTime.now());
                                         },
                                         child: endTime != null
-                                               ? Text(endTime.toString())
-                                               : Text(
-                                          "Set End Time",
-                                          style: TextStyle(
-                                              color: textSecondaryDarkColor),
-                                        ),
+                                            ? Text(
+                                                endTime.hour.toString() +
+                                                    'h ' +
+                                                    endTime.minute.toString() +
+                                                    'm',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color:
+                                                        textSecondaryDarkColor),
+                                              )
+                                            : Text(
+                                                "Set End Time",
+                                                style: TextStyle(
+                                                    color:
+                                                        textSecondaryDarkColor),
+                                              ),
                                       ),
                                     ],
                                   ),
@@ -558,7 +613,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                           fontSize: 20,
                                           decoration: TextDecoration.underline
 //                              fontFamily: 'Exo2',
-                                      ),
+                                          ),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
@@ -586,7 +641,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                           });
                                         },
                                         weekdayLabelsRow:
-                                        CalendarroWeekdayLabelsView(),
+                                            CalendarroWeekdayLabelsView(),
                                         dayTileBuilder: DefaultDayTileBuilder(),
                                         displayMode: DisplayMode.MONTHS,
                                         selectionMode: SelectionMode.MULTI,
@@ -594,8 +649,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         onTap: (date) {
                                           setState(() {
                                             workDates.indexOf(date) != -1
-                                            ? workDates.remove(date)
-                                            : workDates.add(date);
+                                                ? workDates.remove(date)
+                                                : workDates.add(date);
                                           });
                                         },
                                       ),
@@ -604,7 +659,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                 ),
                               ),
                             ),
-
 
 //
 //                            SizedBox(
@@ -800,34 +854,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
             fontSize: 24.0,
             fontWeight: FontWeight.w900,
             color: Colors.white));
-  }
-
-  Card upperBoxCard() {
-    return Card(
-        elevation: 4.0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        margin: EdgeInsets.symmetric(
-            horizontal: size.getWidthPx(20), vertical: size.getWidthPx(16)),
-        borderOnForeground: true,
-        child: Container(
-          height: size.getWidthPx(150),
-          child: Column(
-            children: <Widget>[
-              _searchWidget(),
-              leftAlignText(
-                  text: "Top Cities :",
-                  leftPadding: size.getWidthPx(16),
-                  textColor: textPrimaryColor,
-                  fontSize: 16.0),
-              HorizontalList(
-                children: <Widget>[
-                  for (int i = 0; i < citiesList.length; i++)
-                    buildChoiceChip(i, citiesList[i])
-                ],
-              ),
-            ],
-          ),
-        ));
   }
 
   BoxField _searchWidget() {
