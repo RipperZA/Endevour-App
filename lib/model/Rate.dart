@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Rate {
   String uuid;
   String name;
@@ -20,7 +18,7 @@ class Rate {
         name = json['name'],
         code = json['code'],
         description = json['description'],
-        ratePerHour = json['rate_per_hour'];
+        ratePerHour = json['rate_per_hour'].toDouble();
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,

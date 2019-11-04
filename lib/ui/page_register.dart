@@ -320,7 +320,6 @@ class _RegisterPageState extends State<RegisterPage>
         setState(() {
           _saving = false;
         });
-
         print(response);
         print(response.data);
 
@@ -968,7 +967,7 @@ class _RegisterPageState extends State<RegisterPage>
                                         autoplay: false,
                                         dotColor: Colors.black,
                                         animationCurve: Curves.linear,
-                                        dotSize: 6.0,
+                                        dotSize: 8.0,
                                         dotIncreasedColor: colorSuccessMessage,
                                         dotBgColor: Colors.transparent,
                                         dotVerticalPadding: 10.0,

@@ -17,7 +17,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<Widget> tabView = [];
   GlobalKey globalKey = new GlobalKey(debugLabel: 'btm_app_bar');
 
-  void buttonNavigation(dynamic childValue) {
+  void buttonNavigation(dynamic childValue)
+  {
     this.changeCurrentTab(childValue);
     final BottomNavBar navigationBar = globalKey.currentWidget;
 //    navigationBar.onTap(childValue);

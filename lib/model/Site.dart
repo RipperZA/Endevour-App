@@ -10,8 +10,8 @@ class Site {
   Site.fromJson(Map<String, dynamic> json)
       : uuid = json['uuid'],
         name = json['name'],
-        latitude = json['address_latitude'],
-        longitude = json['address_longitude'],
+        latitude = json['address_latitude'].toDouble(),
+        longitude = json['address_longitude'].toDouble(),
         fullAddress = json['full_address'];
 
   Map<String, dynamic> toJson() => {

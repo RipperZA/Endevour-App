@@ -66,11 +66,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
   ValueChanged _clientSite = (val) {
     print(val);
-    print(44444);
   };
 
   ValueChanged _onChanged = (val) {
-    print(2222);
+    print(val);
   };
 
   List<Site> siteList = List();
@@ -142,7 +141,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
         for (var x in rates) {
           var rate = Rate.fromJson(x);
-          print(rate.ratePerHour);
 
           if (this.mounted) {
             setState(() {
@@ -318,224 +316,300 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: <Widget>[
-                            FormBuilderTypeAhead(
-                              validators: [
-                                FormBuilderValidators.required(),
-                              ],
-                              decoration: InputDecoration(
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              color: backgroundColor,
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    FormBuilderTypeAhead(
+                                      validators: [
+                                        FormBuilderValidators.required(),
+                                      ],
+                                      decoration: InputDecoration(
 //                            enabledBorder: _underlineInputBorder,
 //                            focusedBorder: _underlineInputBorder,
 //                            labelStyle: style,
-                                labelText: "Client Site (Search by Site Name)",
-                              ),
-                              attribute: 'client_site',
-                              onChanged: (site) => {
-                                setState(() {
-                                  _currentSite = site;
-                                  _center =
-                                      LatLng(site.latitude, site.longitude);
-                                  _goToNewSite();
-                                })
-                              },
-                              itemBuilder: (context, site) {
-                                return ListTile(
-                                  title: Text(site.name),
-                                );
-                              },
-//                          initialValue: siteList[0].name,
-                              selectionToTextTransformer: (Site site) =>
-                                  site.name,
-                              suggestionsCallback: (query) {
-                                if (query.length != 0) {
-                                  var lowercaseQuery = query.toLowerCase();
-                                  return siteList.where((site) {
-                                    return site.name
-                                        .toLowerCase()
-                                        .contains(lowercaseQuery);
-                                  }).toList(growable: false)
-                                    ..sort((a, b) => a.name
-                                        .toLowerCase()
-                                        .indexOf(lowercaseQuery)
-                                        .compareTo(b.name
-                                            .toLowerCase()
-                                            .indexOf(lowercaseQuery)));
-                                } else {
-                                  return siteList;
-                                }
-                              },
-                            ),
-                            FormBuilderCustomField(
-                              attribute: "rate",
-                              validators: [
-                                FormBuilderValidators.required(),
-                              ],
-                              formField: FormField(
-                                // key: _fieldKey,
-                                enabled: true,
-//                              initialValue: rateList.first.uuid,
-                                builder: (FormFieldState<dynamic> field) {
-                                  return InputDecorator(
-                                    decoration: InputDecoration(
-                                      labelStyle: style,
-                                      labelText: "Select Rate",
-                                      contentPadding: EdgeInsets.only(
-                                          top: 10.0, bottom: 0.0),
-                                      border: InputBorder.none,
-                                      errorText: field.errorText,
-                                    ),
-                                    child: DropdownButton(
-                                      isExpanded: true,
-                                      items: rateList.map((option) {
-                                        return DropdownMenuItem(
-                                          child: Text(option.name +
-                                              '- R' +
-                                              option.ratePerHour.toString()),
-                                          value: option.uuid,
+                                        labelText: "Client Site (Search by Site Name)",
+                                      ),
+                                      attribute: 'client_site',
+                                      onChanged: (site) => {
+                                        setState(() {
+                                          _currentSite = site;
+                                          print(_currentSite.latitude);
+                                          _center = LatLng(_currentSite.latitude, _currentSite.longitude);
+                                          _goToNewSite();
+                                        })
+                                      },
+                                      itemBuilder: (context, site) {
+                                        return ListTile(
+                                          title: Text(site.name),
                                         );
-                                      }).toList(),
-                                      value: field.value,
-                                      onChanged: (value) {
-                                        field.didChange(value);
+                                      },
+//                          initialValue: siteList[0].name,
+                                      selectionToTextTransformer: (Site site) =>
+                                      site.name,
+                                      suggestionsCallback: (query) {
+                                        if (query.length != 0) {
+                                          var lowercaseQuery = query.toLowerCase();
+                                          return siteList.where((site) {
+                                            return site.name
+                                                .toLowerCase()
+                                                .contains(lowercaseQuery);
+                                          }).toList(growable: false)
+                                            ..sort((a, b) => a.name
+                                                .toLowerCase()
+                                                .indexOf(lowercaseQuery)
+                                                .compareTo(b.name
+                                                .toLowerCase()
+                                                .indexOf(lowercaseQuery)));
+                                        } else {
+                                          return siteList;
+                                        }
                                       },
                                     ),
-                                  );
-                                },
+                                  ],
+                                ),
                               ),
                             ),
-                            FormBuilderStepper(
-                              decoration: InputDecoration(
-                                labelStyle: style,
-                                labelText: "No. Of Workers",
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
                               ),
-                              attribute: "number_workers",
-                              initialValue: 1,
-                              max: 10,
-                              step: 1,
-                            ),
-
-                            FlatButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Start Time",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    decoration: TextDecoration.underline
-//                              fontFamily: 'Exo2',
+                              color: backgroundColor,
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    FormBuilderCustomField(
+                                      attribute: "rate",
+                                      validators: [
+                                        FormBuilderValidators.required(),
+                                      ],
+                                      formField: FormField(
+                                        // key: _fieldKey,
+                                        enabled: true,
+//                              initialValue: rateList.first.uuid,
+                                        builder: (FormFieldState<dynamic> field) {
+                                          return InputDecorator(
+                                            decoration: InputDecoration(
+                                              labelStyle: style,
+                                              labelText: "Select Rate",
+                                              contentPadding: EdgeInsets.only(
+                                                  top: 10.0, bottom: 0.0),
+                                              border: InputBorder.none,
+                                              errorText: field.errorText,
+                                            ),
+                                            child: DropdownButton(
+                                              isExpanded: true,
+                                              items: rateList.map((option) {
+                                                return DropdownMenuItem(
+                                                  child: Text(option.name +
+                                                              '- R' +
+                                                              option.ratePerHour.toString()),
+                                                  value: option.uuid,
+                                                );
+                                              }).toList(),
+                                              value: field.value,
+                                              onChanged: (value) {
+                                                field.didChange(value);
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
+
+                                  ],
+                                ),
                               ),
                             ),
-
-                            new GestureDetector(
-                              onTap: () {
-                                DatePicker.showTimePicker(context,
-                                    showTitleActions: true,
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              color: backgroundColor,
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    FormBuilderStepper(
+                                      decoration: InputDecoration(
+                                        labelStyle: style,
+                                        labelText: "No. Of Workers",
+                                      ),
+                                      attribute: "number_workers",
+                                      initialValue: 1,
+                                      max: 10,
+                                      step: 1,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              color: backgroundColor,
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: size.wp(100),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      FlatButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          "Start Time",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              decoration: TextDecoration.underline
+//                              fontFamily: 'Exo2',
+                                          ),
+                                        ),
+                                      ),
+                                      new GestureDetector(
+                                        onTap: () {
+                                          DatePicker.showTimePicker(context,
+                                              showTitleActions: true,
 //                                      minTime: DateTime(2018, 3, 5),
 //                                      maxTime: DateTime(2019, 6, 7),
-                                    onChanged: (date) {}, onConfirm: (date) {
-                                  setState(() {
-                                    startTime = date;
-                                  });
-                                },
-                                    currentTime: startTime != null
-                                        ? startTime
-                                        : DateTime.now());
-                              },
-                              child: startTime != null
-                                  ? Text(startTime.toString())
-                                  : Text("Set Start Time",
-                                      style: TextStyle(
-                                          color: textSecondaryDarkColor)),
-                            ),
-                            FlatButton(
-                              onPressed: () {},
-                              child: Text(
-                                "End Time",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    decoration: TextDecoration.underline
+                                              onChanged: (date) {}, onConfirm: (date) {
+                                                setState(() {
+                                                  startTime = date;
+                                                });
+                                              },
+                                              currentTime: startTime != null
+                                                           ? startTime
+                                                           : DateTime.now());
+                                        },
+                                        child: startTime != null
+                                               ? Text(startTime.toString())
+                                               : Text("Set Start Time",
+                                            style: TextStyle(
+                                                color: textSecondaryDarkColor)),
+                                      ),
+                                      FlatButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          "End Time",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              decoration: TextDecoration.underline
 //                              fontFamily: 'Exo2',
-                                    ),
-                              ),
-                            ),
-                            new GestureDetector(
-                              onTap: () {
-                                DatePicker.showTimePicker(context,
-                                    showTitleActions: true,
+                                          ),
+                                        ),
+                                      ),
+                                      new GestureDetector(
+                                        onTap: () {
+                                          DatePicker.showTimePicker(context,
+                                              showTitleActions: true,
 //                                      minTime: DateTime(2018, 3, 5),
 //                                      maxTime: DateTime(2019, 6, 7),
-                                    onChanged: (date) {}, onConfirm: (date) {
-                                  setState(() {
-                                    endTime = date;
-                                  });
-                                },
-                                    currentTime: endTime != null
-                                        ? endTime
-                                        : DateTime.now());
-                              },
-                              child: endTime != null
-                                  ? Text(endTime.toString())
-                                  : Text(
-                                      "Set End Time",
+                                              onChanged: (date) {}, onConfirm: (date) {
+                                                setState(() {
+                                                  endTime = date;
+                                                });
+                                              },
+                                              currentTime: endTime != null
+                                                           ? endTime
+                                                           : DateTime.now());
+                                        },
+                                        child: endTime != null
+                                               ? Text(endTime.toString())
+                                               : Text(
+                                          "Set End Time",
+                                          style: TextStyle(
+                                              color: textSecondaryDarkColor),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              color: backgroundColor,
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    SizedBox(height: 10),
+                                    Text(
+                                      "Select Dates For Work",
                                       style: TextStyle(
-                                          color: textSecondaryDarkColor),
-                                    ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Column(
-                              children: <Widget>[
-                                SizedBox(height: 10),
-                                Text(
-                                  "Select Dates For Work",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      decoration: TextDecoration.underline
+                                          fontSize: 20,
+                                          decoration: TextDecoration.underline
 //                              fontFamily: 'Exo2',
                                       ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  calendarMonthName,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Container(
-                                  height: 260,
-                                  child: Calendarro(
-                                    startDate: DateTime(DateTime.now().year,
-                                        DateTime.now().month, 01),
-                                    endDate: DateTime(DateTime.now().year,
-                                        DateTime.now().month + 3, 0),
-                                    selectedDate: DateTime(2019, 10, 03),
-                                    onPageSelected:
-                                        (pageStartDate, pageEndDate) {
-                                      setState(() {
-                                        calendarMonthName =
-                                            DateFormat('yyyy-MMMM')
-                                                .format(pageStartDate)
-                                                .toString();
-                                      });
-                                    },
-                                    weekdayLabelsRow:
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      calendarMonthName,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 260,
+                                      child: Calendarro(
+                                        startDate: DateTime(DateTime.now().year,
+                                            DateTime.now().month, 01),
+                                        endDate: DateTime(DateTime.now().year,
+                                            DateTime.now().month + 3, 0),
+                                        selectedDate: DateTime(2019, 10, 03),
+                                        onPageSelected:
+                                            (pageStartDate, pageEndDate) {
+                                          setState(() {
+                                            calendarMonthName =
+                                                DateFormat('yyyy-MMMM')
+                                                    .format(pageStartDate)
+                                                    .toString();
+                                          });
+                                        },
+                                        weekdayLabelsRow:
                                         CalendarroWeekdayLabelsView(),
-                                    dayTileBuilder: DefaultDayTileBuilder(),
-                                    displayMode: DisplayMode.MONTHS,
-                                    selectionMode: SelectionMode.MULTI,
+                                        dayTileBuilder: DefaultDayTileBuilder(),
+                                        displayMode: DisplayMode.MONTHS,
+                                        selectionMode: SelectionMode.MULTI,
 //                                      onTap: (date) =>
-                                    onTap: (date) {
-                                      setState(() {
-                                        workDates.indexOf(date) != -1
+                                        onTap: (date) {
+                                          setState(() {
+                                            workDates.indexOf(date) != -1
                                             ? workDates.remove(date)
                                             : workDates.add(date);
-                                      });
-                                    },
-                                  ),
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
+
+
+//
+//                            SizedBox(
+//                              height: 20,
+//                            ),
 //                            FormBuilderDateRangePicker(
 //                              attribute: "date_range",
 //                              firstDate: DateTime(2019),

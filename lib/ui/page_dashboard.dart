@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ui_collections/model/models.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
-import 'package:flutter_ui_collections/ui/page_create_new_job.dart';
-import 'package:flutter_ui_collections/ui/page_home.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 
@@ -28,18 +25,6 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-//    premiumList
-//    ..add(Property(propertyName:"Omkar Lotus", propertyLocation:"Ahmedabad ", image:"feature_1.jpg", propertyPrice:"26.5 Cr"))
-//    ..add(Property(propertyName:"Sandesh Heights", propertyLocation:"Baroda ", image:"feature_2.jpg", propertyPrice:"11.5 Cr"))
-//    ..add(Property(propertyName:"Sangath Heights", propertyLocation:"Pune ", image:"feature_3.jpg", propertyPrice:"19.0 Cr"))
-//    ..add(Property(propertyName:"Adani HighRise", propertyLocation:"Mumbai ", image:"hall_1.jpg", propertyPrice:"22.5 Cr"))
-//    ..add(Property(propertyName:"N.G Tower", propertyLocation:"Gandhinagar ", image:"hall_2.jpeg", propertyPrice:"7.5 Cr"))
-//    ..add(Property(propertyName:"Vishwas CityRise", propertyLocation:"Pune ", image:"hall_1.jpg", propertyPrice:"17.5 Cr"))
-//    ..add(Property(propertyName:"Gift City", propertyLocation:"Ahmedabad ", image:"hall_2.jpeg", propertyPrice:"13.5 Cr"))
-//    ..add(Property(propertyName:"Velone City", propertyLocation:"Mumbai ", image:"feature_1.jpg", propertyPrice:"11.5 Cr"))
-//    ..add(Property(propertyName:"PabelBay", propertyLocation:"Ahmedabad ", image:"hall_1.jpg", propertyPrice:"33.1 Cr"))
-//    ..add(Property(propertyName:"Sapath Hexa Tower", propertyLocation:"Ahmedabad", image:"feature_3.jpg", propertyPrice:"15.6 Cr"));
   }
 
   @override
@@ -87,22 +72,22 @@ class _DashboardPageState extends State<DashboardPage> {
               child: Column(
                 children: <Widget>[
                   titleWidget(),
-                  SizedBox(height: size.getWidthPx(100)),
+                  SizedBox(height: size.getWidthPx(70)),
                 ],
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('feature_2.jpg', 'Profile', 2),
-                propertyCard('feature_1.jpg', 'History', 0),
+                propertyCard('icons/new_job.png', 'New Job', 1),
+                propertyCard('icons/profile.png', 'History', 0),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('feature_3.jpg', 'Open Jobs', 3),
-                propertyCard('hall_1.jpg', 'New Job', 1),
+                propertyCard('icons/open_jobs.png', 'Pending Jobs', 2),
+                propertyCard('icons/imgforgot.png', 'Settings', 3),
               ],
             ),
           ],
@@ -167,8 +152,7 @@ class _DashboardPageState extends State<DashboardPage> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           borderOnForeground: true,
           child: Container(
-              height: size.getWidthPx(120),
-              width: size.getWidthPx(150),
+              width: size.getWidthPx(110),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[

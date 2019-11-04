@@ -63,7 +63,7 @@ class _BottomNavBarWorkerState extends State<BottomNavBarWorker>
         BottomNavigationBarItem(
           backgroundColor: Colors.grey.shade50,
           icon: Icon(Icons.settings),
-          title: Text('Setting', style: TextStyle(fontFamily: 'Exo2')),
+          title: Text('Settings', style: TextStyle(fontFamily: 'Exo2')),
         ),
       ],
     );
