@@ -25,8 +25,8 @@ class Job {
         workerName = json['worker_name'],
         workerCell = json['worker_cell'],
         hours = json['hours'],
-        payTotalDay = json['pay_total_day'],
-        payPartialDay = json['pay_partial_day'];
+        payTotalDay = json['pay_total_day'].toDouble(),
+        payPartialDay = json['pay_partial_day'].toDouble();
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,

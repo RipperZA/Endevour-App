@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ui_collections/model/Job.dart';
 import 'package:flutter_ui_collections/model/Work.dart';
+import 'package:flutter_ui_collections/model/WorkAreaManager.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
 import 'package:flutter_ui_collections/ui/page_pending_job_details.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
@@ -25,8 +26,8 @@ class _PendingJobPageState extends State<PendingJobPage> {
   Screen size;
   Job jobDetails;
 
-  List<Work> workList = List();
-  List<Work> _searchResult = [];
+  List<WorkAreaManager> workList = List();
+  List<WorkAreaManager> _searchResult = [];
 
   TextEditingController controller = new TextEditingController();
 
@@ -47,7 +48,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
         var availableWork = response.data['data']['pendingWork'];
 
         for (var x in availableWork) {
-          var work = Work.fromJson(x);
+          var work = WorkAreaManager.fromJson(x);
 
           if (this.mounted) {
             setState(() {
@@ -195,8 +196,8 @@ class _PendingJobPageState extends State<PendingJobPage> {
     text = text.toLowerCase();
 
     workList.forEach((work) {
-      if (work.name.toLowerCase().contains(text) ||
-          work.area.toLowerCase().contains(text)) _searchResult.add(work);
+      if (work.work. name.toLowerCase().contains(text) ||
+          work.work.area.toLowerCase().contains(text)) _searchResult.add(work);
     });
 
     setState(() {
@@ -296,7 +297,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
-                                              workList[i].uuid.toString());
+                                              workList[i].work.uuid.toString());
 
                                           if (jobDetails != null) {
                                             Navigator.push(
@@ -309,13 +310,13 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                           }
                                         },
                                         leading: CircleAvatar(
-                                          child: Text(workList[i].name[0]),
+                                          child: Text(workList[i].work.name[0]),
                                           backgroundColor: themeColour,
                                           foregroundColor: backgroundColor,
                                         ),
-                                        title: new Text(_searchResult[i].name +
+                                        title: new Text(_searchResult[i].work.name +
                                             ' ' +
-                                            _searchResult[i].area),
+                                            _searchResult[i].work.area),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -334,7 +335,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${_searchResult[i].startDate}'),
+                                                          ' ${_searchResult[i].work.startDate}'),
                                                 ],
                                               ),
                                             ),
@@ -352,7 +353,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${_searchResult[i].endDate}'),
+                                                          ' ${_searchResult[i].work.endDate}'),
                                                 ],
                                               ),
                                             ),
@@ -413,7 +414,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
-                                              workList[index].uuid.toString());
+                                              workList[index].work.uuid.toString());
 
                                           if (jobDetails != null) {
                                             Navigator.push(
@@ -426,13 +427,13 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                           }
                                         },
                                         leading: CircleAvatar(
-                                          child: Text(workList[index].name[0]),
+                                          child: Text(workList[index].work.name[0]),
                                           backgroundColor: themeColour,
                                           foregroundColor: backgroundColor,
                                         ),
-                                        title: new Text(workList[index].name +
+                                        title: new Text(workList[index].work.name +
                                             ' ' +
-                                            workList[index].area),
+                                            workList[index].work.area),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -451,7 +452,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${workList[index].startDate}'),
+                                                          ' ${workList[index].work.startDate}'),
                                                 ],
                                               ),
                                             ),
@@ -469,7 +470,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${workList[index].endDate}'),
+                                                          ' ${workList[index].work.endDate}'),
                                                 ],
                                               ),
                                             ),

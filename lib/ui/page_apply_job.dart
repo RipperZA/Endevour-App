@@ -82,6 +82,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
             fontSize: 16.0);
       }
     } on Error catch (e) {
+
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
@@ -127,6 +128,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
       setState(() {
         _saving = false;
       });
+
 
       try {
         Fluttertoast.showToast(
