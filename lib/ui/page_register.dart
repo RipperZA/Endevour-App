@@ -1,30 +1,19 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:async';
-import 'dart:math';
+import 'dart:io';
+
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix1;
-import 'package:flutter_ui_collections/utils/utils.dart' as prefix0;
-import 'package:image_picker/image_picker.dart';
-import 'package:dio/dio.dart';
-import 'package:path/path.dart' as Path;
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:random_string/random_string.dart';
-
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_ui_collections/ui/page_register.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
-
-import 'page_forgotpass.dart';
-import 'page_home.dart';
-import 'page_signup.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:path/path.dart' as Path;
+import 'package:random_string/random_string.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key key, this.title}) : super(key: key);
@@ -46,6 +35,8 @@ class _RegisterPageState extends State<RegisterPage>
   var _isEmailValid = false;
   var _isPhoneNumberValid = false;
   var uploadUrl = Constants.urlApplicationUpload;
+  bool _saving = false;
+
   AnimationController _animationController;
 
   static const String africanCorporateCleaningUrl =
@@ -153,11 +144,6 @@ class _RegisterPageState extends State<RegisterPage>
       });
     }
   }
-
-  static const TextStyle linkStyle = const TextStyle(
-    color: Colors.blue,
-    decoration: TextDecoration.underline,
-  );
 
 //  Future showDialogPhaseTwo() async {
 //    showDialog(
@@ -293,7 +279,10 @@ class _RegisterPageState extends State<RegisterPage>
 
   uploadDocuments(BuildContext context) async {
     try {
-      if (_selfieImage != null && //
+      setState(() {
+        _saving = true;
+      });
+      if (_selfieImage != null &&
           _idDocumentImage != null &&
           _cvImages.length > 0) {
         var batch = randomAlphaNumeric(15);
@@ -325,10 +314,13 @@ class _RegisterPageState extends State<RegisterPage>
             data: formData,
             options: Options(
                 method: 'POST',
-                responseType: ResponseType.plain // or ResponseType.JSON
+                responseType: ResponseType.json // or ResponseType.JSON
                 ));
 
-//        if (i == _cvImages.length - 1) {
+        setState(() {
+          _saving = false;
+        });
+
         print(response);
         print(response.data);
 
@@ -339,11 +331,16 @@ class _RegisterPageState extends State<RegisterPage>
             // return object of type Dialog
             return AlertDialog(
               title: new Text("Success!"),
-              content: new Text(json.decode(response.data)['success']),
+              content: new Text(response.data['success']),
               actions: <Widget>[
                 // usually buttons at the bottom of the dialog
-                new FlatButton(
-                  child: new Text("Close"),
+                new RaisedButton.icon(
+                  icon: Icon(Icons.close),
+                  textColor: Colors.white,
+                  color: Colors.green,
+                  label: new Text("Close"),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0)),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -356,37 +353,82 @@ class _RegisterPageState extends State<RegisterPage>
         }, onError: (err) {
           Navigator.pop(context);
         });
-//        }
 
         setState(() {
 //          _cvImages = [];
         });
       }
-    } catch (e) {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          // return object of type Dialog
-          return AlertDialog(
-            title: new Text("Error!"),
-            content:
-                new Text(json.decode(e.response.toString())['responseMessage']),
-            actions: <Widget>[
-              // usually buttons at the bottom of the dialog
-              new FlatButton(
-                child: new Text("Close"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+    } on DioError catch (e) {
+      try {
+        setState(() {
+          _saving = false;
+        });
 
-      return e;
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Error!"),
+              content: new Text(e.response.data['responseMessage'].toString()),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new RaisedButton.icon(
+                  icon: Icon(Icons.close),
+                  textColor: Colors.white,
+                  color: colorErrorMessage,
+                  label: new Text("Close"),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+
+//        Fluttertoast.showToast(
+//            msg: e.response.data['responseMessage'],
+//            toastLength: Toast.LENGTH_LONG,
+//            gravity: ToastGravity.TOP,
+//            timeInSecForIos: 1,
+//            backgroundColor: colorErrorMessage,
+//            textColor: Colors.white,
+//            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on Error catch (e) {
+      setState(() {
+        _saving = false;
+      });
+      Fluttertoast.showToast(
+          msg: Constants.standardErrorMessage,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
+  }
+
+  AppBar commonAppBar() {
+    return AppBar(
+      title: Text("Registration"),
+      backgroundColor: themeColour,
+      brightness: Brightness.light,
+    );
   }
 
   Widget scaffoldPhaseOne() {
@@ -495,7 +537,7 @@ class _RegisterPageState extends State<RegisterPage>
       style: style,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "10 Digit Number",
+          hintText: "10 Digit Cell Number",
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
@@ -590,10 +632,7 @@ class _RegisterPageState extends State<RegisterPage>
     );
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeColour,
-        title: Text("Registration"),
-      ),
+      appBar: commonAppBar(),
       body: AnnotatedRegion(
           value: SystemUiOverlayStyle(
               statusBarColor: backgroundColor,
@@ -699,6 +738,7 @@ class _RegisterPageState extends State<RegisterPage>
                       tooltip: 'Proceed to next step',
                       icon: Icon(Icons.arrow_forward),
                       label: Text('Step #2'),
+                      backgroundColor: colorSuccessMessage,
                     ),
                   ),
                 ],
@@ -797,9 +837,7 @@ class _RegisterPageState extends State<RegisterPage>
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Registration"),
-      ),
+      appBar: commonAppBar(),
       body: SingleChildScrollView(
         child: Center(
           child: Container(
@@ -877,6 +915,7 @@ class _RegisterPageState extends State<RegisterPage>
                       tooltip: 'Proceed to next step',
                       icon: Icon(Icons.arrow_forward),
                       label: Text('Step #3'),
+                      backgroundColor: colorSuccessMessage,
                     ),
                   ),
                 ],
@@ -894,62 +933,74 @@ class _RegisterPageState extends State<RegisterPage>
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Registration"),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
+      appBar: commonAppBar(),
+      body: ModalProgressHUD(
+        child: Stack(children: <Widget>[
+          AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: backgroundColor,
+                statusBarBrightness: Brightness.dark,
+                statusBarIconBrightness: Brightness.dark,
+                systemNavigationBarIconBrightness: Brightness.dark,
+                systemNavigationBarColor: backgroundColor,
+                systemNavigationBarDividerColor: textSecondary54),
+            child: SingleChildScrollView(
+              child: Center(
+                child: Container(
 //            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: 0.0),
-                    heading,
-                    SizedBox(height: 15.0),
-                    Center(
-                      child: _cvImages.length > 0
-                          ? SizedBox(
-                              height: 350.0,
-                              child: Carousel(
-                                  boxFit: BoxFit.cover,
-                                  borderRadius: true,
-                                  autoplay: false,
-                                  dotColor: Colors.black,
-                                  animationCurve: Curves.linear,
-                                  dotSize: 6.0,
-                                  dotIncreasedColor: Colors.blue,
-                                  dotBgColor: Colors.transparent,
-                                  dotVerticalPadding: 10.0,
-                                  dotPosition: DotPosition.bottomCenter,
-                                  showIndicator: true,
-                                  indicatorBgPadding: 7.0,
-                                  images: _cvImages.map((i) {
-                                    return Builder(
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 5.0),
-                                            child: Image.file(i));
-                                      },
-                                    );
-                                  }).toList()),
-                            )
-                          : Text(''),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(height: 0.0),
+                          heading,
+                          SizedBox(height: 15.0),
+                          Center(
+                            child: _cvImages.length > 0
+                                ? SizedBox(
+                                    height: 350.0,
+                                    child: Carousel(
+                                        boxFit: BoxFit.cover,
+                                        borderRadius: true,
+                                        autoplay: false,
+                                        dotColor: Colors.black,
+                                        animationCurve: Curves.linear,
+                                        dotSize: 6.0,
+                                        dotIncreasedColor: colorSuccessMessage,
+                                        dotBgColor: Colors.transparent,
+                                        dotVerticalPadding: 10.0,
+                                        dotPosition: DotPosition.bottomCenter,
+                                        showIndicator: true,
+                                        indicatorBgPadding: 7.0,
+                                        images: _cvImages.map((i) {
+                                          return Builder(
+                                            builder: (BuildContext context) {
+                                              return Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 5.0),
+                                                  child: Image.file(i));
+                                            },
+                                          );
+                                        }).toList()),
+                                  )
+                                : Text(''),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+        ]),
+        inAsyncCall: _saving,
       ),
       floatingActionButton: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -1050,14 +1101,12 @@ class _RegisterPageState extends State<RegisterPage>
                       builder: (BuildContext context) {
                         // return object of type Dialog
                         return AlertDialog(
-                          title: new Text("Please Confirm Upload"),
+                          title: new Text("Please Confirm Choice"),
                           content: new Text(
-                              'Are you sure you would like to upload your Application?'),
+                              'Are you sure you would like to upload your application?'),
                           actions: <Widget>[
                             Column(
-                              crossAxisAlignment:
-                                  prefix1.CrossAxisAlignment.end,
-//                              mainAxisAlignment: prefix1.MainAxisAlignment.end,
+                              mainAxisAlignment: prefix1.MainAxisAlignment.end,
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
