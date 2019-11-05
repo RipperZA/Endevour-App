@@ -130,6 +130,9 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
         _saving = false;
       });
       if (response.statusCode == 200) {
+        setState(() {
+          job.verifiedAtWork = DateTime.now().toString();
+        });
         await showDialog(
           barrierDismissible: false,
           context: context,
@@ -200,6 +203,9 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
         _saving = false;
       });
       if (response.statusCode == 200) {
+        setState(() {
+          job.verifiedLeftWork = DateTime.now().toString();
+        });
         await showDialog(
           barrierDismissible: false,
           context: context,
@@ -639,7 +645,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: () async {
+        onPressed: job.arrivedAtWork != null && job.verifiedAtWork == null ? () async {
           await showDialog(
             barrierDismissible: false,
             context: context,
@@ -695,7 +701,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
               );
             },
           );
-        },
+        } : null,
       ),
     );
   }
@@ -721,7 +727,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: () async {
+        onPressed: job.arrivedAtWork != null && job.verifiedAtWork != null && job.leftWorkAt != null && job.verifiedLeftWork == null ? () async {
           await showDialog(
             barrierDismissible: false,
             context: context,
@@ -777,7 +783,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
               );
             },
           );
-        },
+        } : null,
       ),
     );
   }

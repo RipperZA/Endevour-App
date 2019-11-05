@@ -17,8 +17,8 @@ class AuthService {
       FormData formData = new FormData(); // just like JS
 //      formData.add("email", email);
 //      formData.add("password", password);
-//      formData.add("email", 'area@gmail.com');
-      formData.add("email", 'worker@gmail.com');
+      formData.add("email", 'area@gmail.com');
+//      formData.add("email", 'worker@gmail.com');
 //      formData.add("email", 'alexspy1@gmail.com');
       formData.add("password", 'Secret');
 //      formData.add("password", 'secret');

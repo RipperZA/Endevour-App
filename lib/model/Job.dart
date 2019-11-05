@@ -9,6 +9,10 @@ class Job {
   int hours;
   double payTotalDay;
   double payPartialDay;
+  String arrivedAtWork;
+  String verifiedAtWork;
+  String leftWorkAt;
+  String verifiedLeftWork;
 
   Job(
       {this.uuid,
@@ -26,7 +30,11 @@ class Job {
         workerCell = json['worker_cell'],
         hours = json['hours'],
         payTotalDay = json['pay_total_day'].toDouble(),
-        payPartialDay = json['pay_partial_day'].toDouble();
+        payPartialDay = json['pay_partial_day'].toDouble(),
+        arrivedAtWork = json['arrived_at_work_at'],
+        verifiedAtWork = json['verified_at_work'],
+        leftWorkAt = json['left_work_at'],
+        verifiedLeftWork = json['verified_left_work'];
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,

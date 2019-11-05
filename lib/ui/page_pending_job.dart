@@ -107,6 +107,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.json));
 
+
       setState(() {
         _saving = false;
       });
@@ -115,12 +116,9 @@ class _PendingJobPageState extends State<PendingJobPage> {
 
         var job = Job.fromJson(jobInformation);
 
-        print(job.site.name);
-
         if (this.mounted) {
           setState(() {
             this.jobDetails = job;
-            print(job.workerName);
           });
         }
       }

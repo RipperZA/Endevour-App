@@ -10,7 +10,7 @@ class WorkAreaManager {
 
   WorkAreaManager.fromJson(Map<String, dynamic> json)
       :
-        work = Work.fromJson(json['work']),
+        work = Work.fromJson(json),
         worker = Worker.fromJson(json['worker']);
 
   Map<String, dynamic> toJson() => {
