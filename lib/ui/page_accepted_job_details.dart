@@ -227,6 +227,9 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
             _saving = false;
           });
           if (response.statusCode == 200) {
+            setState(() {
+              job.arrivedAtWork = DateTime.now().toString();
+            });
             await showDialog(
               barrierDismissible: false,
               context: context,
@@ -392,6 +395,9 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
             _saving = false;
           });
           if (response.statusCode == 200) {
+            setState(() {
+              job.leftWorkAt = DateTime.now().toString();
+            });
             await showDialog(
               barrierDismissible: false,
               context: context,
@@ -467,6 +473,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
       appBar: AppBar(
         backgroundColor: themeColour,
         title: Text("Accepted Job Details"),
+        brightness: Brightness.light,
       ),
       backgroundColor: backgroundColor,
       body: ModalProgressHUD(
@@ -802,63 +809,69 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: () async {
-          await showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              // return object of type Dialog
-              return AlertDialog(
-                title: new Text("Please Confirm!"),
-                content: new Text("Are you sure you want to sign in to work?"),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_down,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorErrorMessage,
-                      label: new Text(
-                        "No!",
-                        style: TextStyle(
+        onPressed: job.arrivedAtWork == null &&
+                job.verifiedAtWork == null &&
+                job.leftWorkAt == null &&
+                job.verifiedLeftWork == null
+            ? () async {
+                await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
+                      title: new Text("Please Confirm!"),
+                      content:
+                          new Text("Are you sure you want to sign in to work?"),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_down,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorErrorMessage,
+                            label: new Text(
+                              "No!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      }),
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_up,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorSuccessMessage,
-                      label: new Text(
-                        "Yes!",
-                        style: TextStyle(
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }),
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_up,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorSuccessMessage,
+                            label: new Text(
+                              "Yes!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        await arrivedAtWork();
-                      }),
-                ],
-              );
-            },
-          );
-        },
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              await arrivedAtWork();
+                            }),
+                      ],
+                    );
+                  },
+                );
+              }
+            : null,
       ),
     );
   }
@@ -884,63 +897,69 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: () async {
-          await showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              // return object of type Dialog
-              return AlertDialog(
-                title: new Text("Please Confirm!"),
-                content: new Text("Are you sure you want to sign out of work?"),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_down,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorErrorMessage,
-                      label: new Text(
-                        "No!",
-                        style: TextStyle(
+        onPressed: job.arrivedAtWork != null &&
+                job.verifiedAtWork != null &&
+                job.leftWorkAt == null &&
+                job.verifiedLeftWork == null
+            ? () async {
+                await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
+                      title: new Text("Please Confirm!"),
+                      content: new Text(
+                          "Are you sure you want to sign out of work?"),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_down,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorErrorMessage,
+                            label: new Text(
+                              "No!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      }),
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_up,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorSuccessMessage,
-                      label: new Text(
-                        "Yes!",
-                        style: TextStyle(
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }),
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_up,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorSuccessMessage,
+                            label: new Text(
+                              "Yes!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        await leftWork();
-                      }),
-                ],
-              );
-            },
-          );
-        },
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              await leftWork();
+                            }),
+                      ],
+                    );
+                  },
+                );
+              }
+            : null,
       ),
     );
   }

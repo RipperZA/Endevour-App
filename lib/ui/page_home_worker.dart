@@ -42,7 +42,7 @@ class _HomePageWorkerState extends State<HomePageWorker>
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
           body: bodyView(currentTab),
           bottomNavigationBar: BottomNavBarWorker(
