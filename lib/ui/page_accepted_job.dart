@@ -115,6 +115,7 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
 
         var job = Job.fromJson(jobInformation);
 
+
         print(job.site.name);
 
         if (this.mounted) {
