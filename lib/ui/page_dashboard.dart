@@ -52,7 +52,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   updatePassword() async {
     try {
-      bool _result = await appAuth.updatePassword(this.passwordController.text);
+      bool _result = await appAuth.updatePassword(this.passwordController.text,context);
 
       if (_result) {}
     } catch (e) {
@@ -100,7 +100,7 @@ class _DashboardPageState extends State<DashboardPage> {
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
               controller: passwordController,
-              obscureText: false,
+              obscureText: true,
               decoration: InputDecoration(
                 icon: Icon(Icons.lock),
                 labelText: 'Password',

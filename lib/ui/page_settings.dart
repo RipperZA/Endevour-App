@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ui_collections/services/auth_service.dart';
+import 'package:flutter_ui_collections/services/user_service.dart';
 import 'package:flutter_ui_collections/ui/page_login.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
@@ -47,8 +48,6 @@ class _SettingPageState extends State<SettingPage> {
             child: Column(
               children: <Widget>[
                 accountSection(),
-                pushNotificationSection(),
-                getHelpSection(),
               ],
             ),
           ),
@@ -86,17 +85,6 @@ class _SettingPageState extends State<SettingPage> {
             onTap: () {},
           ),
         ),
-        Container(
-          child: TileRow(
-            label: "Log out",
-            disableDivider: false,
-            onTap: () async {
-              await appAuth.logout();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
-            },
-          ),
-        )
       ],
     );
   }
@@ -113,31 +101,26 @@ class _SettingPageState extends State<SettingPage> {
           child: TileRow(
             label: "User Name",
             disabled: true,
-            rowValue: "harsh719",
+            rowValue: UserDetails.name,
             disableDivider: false,
             onTap: () {},
           ),
         ),
-        Container(
-          child: SwitchRow(
-            label: "Private Account",
-            disableDivider: false,
-            value: isPrivateAccount,
-            onSwitchChange: (switchStatus) {
-              setState(() {
-                switchStatus
-                    ? isPrivateAccount = true
-                    : isPrivateAccount = false;
-              });
-            },
-            onTap: () {},
-          ),
-        ),
+//        Container(
+//          child: TileRow(
+//            label: "Change Password",
+//            disableDivider: false,
+//            onTap: () {},
+//          ),
+//        )
         Container(
           child: TileRow(
-            label: "Change Password",
+            label: "Log out",
             disableDivider: false,
-            onTap: () {},
+            onTap: () async {
+              await appAuth.logout(context);
+
+            },
           ),
         )
       ],

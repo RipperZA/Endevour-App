@@ -10,7 +10,6 @@ import 'package:flutter_ui_collections/widgets/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-import 'page_forgotpass.dart';
 import 'page_home.dart';
 
 AuthService appAuth = new AuthService();
@@ -336,22 +335,22 @@ class _LoginPageState extends State<LoginPage> {
                 _emailWidget(),
                 SizedBox(height: size.getWidthPx(8)),
                 _passwordWidget(),
-                GestureDetector(
-                    onTap: () {
-                      //Navigate to Forgot Password Screen...
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PageForgotPassword()));
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(right: size.getWidthPx(24)),
-                      child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text("Forgot Password?",
-                              style: TextStyle(
-                                  fontFamily: 'Exo2', fontSize: 16.0))),
-                    )),
+//                GestureDetector(
+//                    onTap: () {
+//                      //Navigate to Forgot Password Screen...
+//                      Navigator.push(
+//                          context,
+//                          MaterialPageRoute(
+//                              builder: (context) => PageForgotPassword()));
+//                    },
+//                    child: Padding(
+//                      padding: EdgeInsets.only(right: size.getWidthPx(24)),
+//                      child: Align(
+//                          alignment: Alignment.centerRight,
+//                          child: Text("Forgot Password?",
+//                              style: TextStyle(
+//                                  fontFamily: 'Exo2', fontSize: 16.0))),
+//                    )),
                 SizedBox(height: size.getWidthPx(8)),
                 _loginButtonWidget(),
                 Text(

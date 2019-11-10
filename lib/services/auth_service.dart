@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ui_collections/ui/page_home.dart';
 import 'package:flutter_ui_collections/ui/page_home_worker.dart';
+import 'package:flutter_ui_collections/ui/page_login.dart';
 import 'package:flutter_ui_collections/utils/Constants.dart';
 import 'package:flutter_ui_collections/utils/colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,13 +20,8 @@ class AuthService {
     try {
       Response response;
       FormData formData = new FormData(); // just like JS
-//      formData.add("email", email);
-//      formData.add("password", password);
-      formData.add("email", 'area@gmail.com');
-//      formData.add("email", 'worker@gmail.com');
-//      formData.add("email", 'alexspy1@gmail.com');
-//      formData.add("password", 'qwerty');
-      formData.add("password", 'Secret');
+      formData.add("email", email);
+      formData.add("password", password);
 
       Dio dio = new Dio();
       response = await dio.post(loginUrl,
@@ -150,7 +146,7 @@ class AuthService {
     }
   }
 
-  Future<bool> updatePassword(password) async {
+  Future<bool> updatePassword(password, context) async {
     try {
       Response response;
       FormData formData = new FormData(); // just like JS
@@ -175,7 +171,9 @@ class AuthService {
             textColor: Colors.white,
             fontSize: 16.0);
         UserDetails.verified = response.data['verified'];
-        return true;
+        await setItemsInStorage();
+
+        this.logout(context);
       }
 
       return false;
@@ -231,33 +229,33 @@ class AuthService {
 
           return false;
         } catch (e) {
-          Fluttertoast.showToast(
-              msg: "Session Expired. Please Login Again",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.TOP,
-              timeInSecForIos: 1,
-              backgroundColor: colorErrorMessage,
-              textColor: Colors.white,
-              fontSize: 16.0);
+//          Fluttertoast.showToast(
+//              msg: "Session Expired. Please Login Again",
+//              toastLength: Toast.LENGTH_LONG,
+//              gravity: ToastGravity.TOP,
+//              timeInSecForIos: 1,
+//              backgroundColor: colorErrorMessage,
+//              textColor: Colors.white,
+//              fontSize: 16.0);
           return false;
         }
       }
       return false;
     } on DioError catch (e) {
-      Fluttertoast.showToast(
-          msg: "Session Expired. Please Login Again",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
+//      Fluttertoast.showToast(
+//          msg: "Session Expired. Please Login Again",
+//          toastLength: Toast.LENGTH_LONG,
+//          gravity: ToastGravity.TOP,
+//          timeInSecForIos: 1,
+//          backgroundColor: colorErrorMessage,
+//          textColor: Colors.white,
+//          fontSize: 16.0);
 
       return false;
     }
   }
 
-  Future<bool> logout() async {
+  Future<bool> logout(context) async {
     try {
       Response response;
 
@@ -286,8 +284,10 @@ class AuthService {
         UserDetails.surname = '';
         UserDetails.verified = false;
 
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+
         await setItemsInStorage();
-        return true;
       }
 
       return false;

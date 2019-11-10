@@ -56,7 +56,7 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
 
   updatePassword() async {
     try {
-      bool _result = await appAuth.updatePassword(this.passwordController.text);
+      bool _result = await appAuth.updatePassword(this.passwordController.text,context);
 
       if (_result) {
       }
@@ -105,7 +105,7 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
               controller: passwordController,
-              obscureText: false,
+              obscureText: true,
               decoration: InputDecoration(
                 icon: Icon(Icons.lock),
                 labelText: 'Password',
