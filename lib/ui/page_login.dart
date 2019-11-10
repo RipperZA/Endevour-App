@@ -53,6 +53,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     OneSignal.shared.init(Constants.oneSignalAppKey);
 
+    appAuth.ping(context);
+
     emailController.addListener(validEmail);
     passwordController.addListener(validPassword);
   }

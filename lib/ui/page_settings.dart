@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ui_collections/services/auth_service.dart';
 import 'package:flutter_ui_collections/ui/page_login.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
+
+AuthService appAuth = new AuthService();
 
 class SettingPage extends StatefulWidget {
   @override
@@ -88,11 +91,17 @@ class _SettingPageState extends State<SettingPage> {
           child: TileRow(
             label: "Log out",
             disableDivider: false,
-            onTap: () {
+            onTap: () async {
 
+              var result = await appAuth.logout();
+              print(result);
+              
               //todo add delete JWT token logic here etc
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => LoginPage()));
+              if (result)
+                {
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => LoginPage()));
+                }
             },
           ),
         )

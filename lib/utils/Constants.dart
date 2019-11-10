@@ -10,10 +10,11 @@ class Constants {
   static String urlLogin = urlBase + 'login';
   static String urlUpdatePassword = urlBase + 'auth/updatePassword';
   static String urlPing = urlBase + 'auth/ping';
+  static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
+  static String urlLogout = urlBase + 'auth/logout';
   static String urlApplicationUpload = urlBase + 'applications';
   static String urlGetAreaManagerSites = urlBase + 'area_managers/getSitesApi';
   static String urlGetRates = urlBase + 'rates/getRatesApi';
-  static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
 
   static String urlNewJobUpload = urlBase + 'work';
   static String urlGetAvailableWork = urlBase + 'work/getAvailableWork';
@@ -37,6 +38,12 @@ class Constants {
 
   static String isOnBoard = "IS_ONBOARD";
   static String isLoggedIn = "IS_LOGGED_IN";
+  static String storageUserPermissions = "USER_PERMISSIONS";
+  static String storageUserRoles = "USER_ROLES";
+  static String storageUserToken = "USER_TOKEN";
+  static String storageUserName = "USER_NAME";
+  static String storageUserSurname = "USER_SURNAME";
+  static String storageUserVerified = "USER_VERIFIED";
 
   //Validations REGEX
   static final String PATTERN_EMAIL =
