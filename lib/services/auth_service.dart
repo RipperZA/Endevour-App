@@ -287,9 +287,7 @@ class AuthService {
         UserDetails.verified = false;
 
         await setItemsInStorage();
-        print(33);
-
-//        return true;
+        return true;
       }
 
       return false;

@@ -21,7 +21,6 @@ class _SettingPageState extends State<SettingPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -92,16 +91,9 @@ class _SettingPageState extends State<SettingPage> {
             label: "Log out",
             disableDivider: false,
             onTap: () async {
-
-              var result = await appAuth.logout();
-              print(result);
-              
-              //todo add delete JWT token logic here etc
-              if (result)
-                {
-                  Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => LoginPage()));
-                }
+              await appAuth.logout();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => LoginPage()));
             },
           ),
         )
