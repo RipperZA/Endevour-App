@@ -51,6 +51,9 @@ class Constants {
   static const String standardErrorMessage =
       "Something Went Wrong. Please Try Again. If the problem continues please contact support";
 
+  static const String oneSignalAppKey =
+      "28fe38a2-d375-4d9f-9b9b-c14eafabfa02";
+
   static bool isNullEmptyOrFalse(Object o) =>
       o == null || false == o || "" == o;
 

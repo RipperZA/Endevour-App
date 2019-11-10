@@ -231,8 +231,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
     this.getSites();
     this.getRates();
-
-//    OneSignal.shared.init("28fe38a2-d375-4d9f-9b9b-c14eafabfa02");
   }
 
   Widget build(BuildContext context) {
