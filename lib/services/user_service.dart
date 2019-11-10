@@ -4,4 +4,5 @@ class UserDetails {
   static String token = '';
   static String name = '';
   static String surname = '';
+  static bool verified = false;
 }

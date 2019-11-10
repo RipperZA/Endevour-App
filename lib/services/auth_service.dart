@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ui_collections/utils/Constants.dart';
 import 'package:flutter_ui_collections/utils/colors.dart';
-import 'user_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+
+import 'user_service.dart';
 
 class AuthService {
   var loginUrl = Constants.urlLogin;
@@ -17,10 +18,10 @@ class AuthService {
       FormData formData = new FormData(); // just like JS
 //      formData.add("email", email);
 //      formData.add("password", password);
-//      formData.add("email", 'area@gmail.com');
-      formData.add("email", 'worker@gmail.com');
+      formData.add("email", 'area@gmail.com');
+//      formData.add("email", 'worker@gmail.com');
 //      formData.add("email", 'alexspy1@gmail.com');
-      formData.add("password", 'Secret');
+      formData.add("password", 'qwerty');
 //      formData.add("password", 'secret');
 
       print(loginUrl);
@@ -39,9 +40,7 @@ class AuthService {
         UserDetails.token = response.data['token'];
         UserDetails.name = response.data['name'];
         UserDetails.surname = response.data['surname'];
-
-//        print(UserDetails.userPermissions);
-//        print(UserDetails.userRoles);
+        UserDetails.verified = response.data['verified'];
 
         this.updateUserPushIdAndToken();
 
@@ -109,6 +108,49 @@ class AuthService {
       return false;
     } on DioError catch (e) {
       print(e.response.data['msg']);
+      Fluttertoast.showToast(
+          msg: e.response.data['msg'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+
+      return false;
+    }
+  }
+
+  Future<bool> updatePassword(password) async {
+    try {
+      Response response;
+      FormData formData = new FormData(); // just like JS
+      formData.add("password", password.toString());
+
+      Dio dio = new Dio();
+      response = await dio.post(Constants.urlUpdatePassword,
+          data: formData,
+          options: Options(
+              method: 'POST',
+              headers: {'Authorization': 'Bearer ' + UserDetails.token},
+              responseType: ResponseType.json // or ResponseType.JSON
+              ));
+
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: response.data['msg'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorSuccessMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        UserDetails.verified = response.data['verified'];
+        return true;
+      }
+
+      return false;
+    } on DioError catch (e) {
       Fluttertoast.showToast(
           msg: e.response.data['msg'],
           toastLength: Toast.LENGTH_LONG,

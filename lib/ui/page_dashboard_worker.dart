@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ui_collections/services/auth_service.dart';
 import 'package:flutter_ui_collections/services/user_service.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+AuthService appAuth = new AuthService();
 
 class DashboardPageWorker extends StatefulWidget {
   final Function(dynamic a) buttonNavigation;
 
-  DashboardPageWorker({Key key, @required this.buttonNavigation}) : super(key: key);
+  DashboardPageWorker({Key key, @required this.buttonNavigation})
+      : super(key: key);
 
   @override
   _DashboardPageWorkerState createState() => _DashboardPageWorkerState();
@@ -16,15 +21,125 @@ class DashboardPageWorker extends StatefulWidget {
 class _DashboardPageWorkerState extends State<DashboardPageWorker> {
   Screen size;
   int _selectedIndex = 1;
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController passwordController = new TextEditingController();
+  var _isPasswordValid = false;
 
   buttonNavigation(index) {
     widget.buttonNavigation(index);
   }
 
   @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    if (this.mounted) {
+      if (UserDetails.verified == false) {
+        WidgetsBinding.instance.scheduleFrameCallback((_) async {
+          await showDialog<String>(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) => _buildAboutDialog(context));
+        });
+      }
+    }
+    passwordController.addListener(validPassword);
+  }
+
+  updatePassword() async {
+    try {
+      bool _result = await appAuth.updatePassword(this.passwordController.text);
+
+      if (_result) {
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      print(e);
+    }
+  }
+
+  validPassword() {
+    if (passwordController.text.length >= 4) {
+      setState(() {
+        _isPasswordValid = true;
+      });
+    } else {
+      setState(() {
+        _isPasswordValid = false;
+      });
+    }
+  }
+
+  _buildAboutDialog(BuildContext context) {
+    String validatePassword(String value) {
+      if (value.length < 5)
+        return 'Password must be more than 5 charaters';
+      else
+        return null;
+    }
+
+    return AlertDialog(
+      title: const Text('Please Update Your Password'),
+      content: SingleChildScrollView(
+        child: new Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+              autovalidate: true,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              controller: passwordController,
+              obscureText: false,
+              decoration: InputDecoration(
+                icon: Icon(Icons.lock),
+                labelText: 'Password',
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: FlatButton(
+                onPressed: _isPasswordValid == true
+                    ? () {
+                        print(passwordController.text);
+
+                        this.updatePassword();
+                          Navigator.of(context).pop();
+                      }
+                    : null,
+                disabledColor: disabledButtonColour,
+                textColor: textPrimaryLightColor,
+                color: themeColour,
+                child: Text(
+                  'Submit',
+                  style: TextStyle(fontSize: 18),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[],
+    );
   }
 
   @override
