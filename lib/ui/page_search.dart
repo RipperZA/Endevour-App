@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ui_collections/model/models.dart';
-import 'package:flutter_ui_collections/utils/utils.dart';
-import 'package:flutter_ui_collections/widgets/widgets.dart';
+import 'package:endevour/model/models.dart';
+import 'package:endevour/utils/utils.dart';
+import 'package:endevour/widgets/widgets.dart';
 
 class SearchPage extends StatefulWidget {
   @override

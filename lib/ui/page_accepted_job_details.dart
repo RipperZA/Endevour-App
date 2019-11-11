@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ui_collections/model/Job.dart';
-import 'package:flutter_ui_collections/services/user_service.dart';
-import 'package:flutter_ui_collections/ui/page_home_worker.dart';
-import 'package:flutter_ui_collections/utils/utils.dart';
-import 'package:flutter_ui_collections/widgets/utils_widget.dart';
+import 'package:endevour/model/Job.dart';
+import 'package:endevour/services/user_service.dart';
+import 'package:endevour/ui/page_home_worker.dart';
+import 'package:endevour/utils/utils.dart';
+import 'package:endevour/widgets/utils_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';

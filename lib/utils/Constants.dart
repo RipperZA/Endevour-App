@@ -2,9 +2,9 @@ import 'dart:ui';
 
 class Constants {
   //URLs
-  static String urlBase = 'http://192.168.1.105:8000/api/';
-//  static String urlBase = 'https://endevour.co.za/api/';
+  static String urlBase = 'https://endevour.co.za/api/';
 
+//  static String urlBase = 'http://192.168.1.105:8000/api/';
 //  static String urlBase = 'http://10.2.2.106:8000/api/';
 //  static String urlBase = 'http://10.0.0.161:8000/api/';
   static String urlLogin = urlBase + 'login';
@@ -58,8 +58,7 @@ class Constants {
   static const String standardErrorMessage =
       "Something Went Wrong. Please Try Again. If the problem continues please contact support";
 
-  static const String oneSignalAppKey =
-      "28fe38a2-d375-4d9f-9b9b-c14eafabfa02";
+  static const String oneSignalAppKey = "28fe38a2-d375-4d9f-9b9b-c14eafabfa02";
 
   static bool isNullEmptyOrFalse(Object o) =>
       o == null || false == o || "" == o;

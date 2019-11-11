@@ -8,6 +8,9 @@
 .buildlog/
 .history
 .svn/
+#My Own Stuff To Ignore
+key.properties
+key.jks
 
 # IntelliJ related
 *.iml

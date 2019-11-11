@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_ui_collections/utils/utils.dart';
+import 'package:endevour/utils/utils.dart';
 
 import '../LocalBindings.dart';
 import 'page_home.dart';

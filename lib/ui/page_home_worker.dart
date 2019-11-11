@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ui_collections/ui/page_accepted_job.dart';
-import 'package:flutter_ui_collections/ui/page_apply_job.dart';
-import 'package:flutter_ui_collections/ui/page_dashboard_worker.dart';
-import 'package:flutter_ui_collections/widgets/bottom_navigationBar_worker.dart';
+import 'package:endevour/ui/page_accepted_job.dart';
+import 'package:endevour/ui/page_apply_job.dart';
+import 'package:endevour/ui/page_dashboard_worker.dart';
+import 'package:endevour/widgets/bottom_navigationBar_worker.dart';
 
 import 'page_settings.dart';
 

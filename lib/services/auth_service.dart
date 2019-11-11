@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ui_collections/ui/page_home.dart';
-import 'package:flutter_ui_collections/ui/page_home_worker.dart';
-import 'package:flutter_ui_collections/ui/page_login.dart';
-import 'package:flutter_ui_collections/utils/Constants.dart';
-import 'package:flutter_ui_collections/utils/colors.dart';
+import 'package:endevour/ui/page_home.dart';
+import 'package:endevour/ui/page_home_worker.dart';
+import 'package:endevour/ui/page_login.dart';
+import 'package:endevour/utils/Constants.dart';
+import 'package:endevour/utils/colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';

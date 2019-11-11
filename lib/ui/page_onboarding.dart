@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ui_collections/ui/page_login.dart';
-import 'package:flutter_ui_collections/ui/page_register.dart';
-import 'package:flutter_ui_collections/utils/Constants.dart';
-import 'package:flutter_ui_collections/widgets/dots_indicator.dart';
-import 'package:flutter_ui_collections/utils/utils.dart';
+import 'package:endevour/ui/page_login.dart';
+import 'package:endevour/ui/page_register.dart';
+import 'package:endevour/utils/Constants.dart';
+import 'package:endevour/widgets/dots_indicator.dart';
+import 'package:endevour/utils/utils.dart';
 import '../LocalBindings.dart';
 import 'intro_page.dart';
 

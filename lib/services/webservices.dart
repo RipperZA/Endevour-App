@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_ui_collections/model/models.dart';
-import 'package:flutter_ui_collections/services/services.dart';
-import 'package:flutter_ui_collections/utils/utils.dart';
+import 'package:endevour/model/models.dart';
+import 'package:endevour/services/services.dart';
+import 'package:endevour/utils/utils.dart';
 import 'package:http/http.dart' as http;
 
 class WebServices {

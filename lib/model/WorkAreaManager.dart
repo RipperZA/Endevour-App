@@ -1,4 +1,4 @@
-import 'package:flutter_ui_collections/model/Worker.dart';
+import 'package:endevour/model/Worker.dart';
 
 import 'Work.dart';
 
