@@ -58,10 +58,10 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     OneSignal.shared.init(Constants.oneSignalAppKey);
 
-    pingOrFingerprint(); //todo testfingerprint fix showing popup when you logout
-
     emailController.addListener(validEmail);
     passwordController.addListener(validPassword);
+
+    pingOrFingerprint();
   }
 
   Future pingOrFingerprint() async {

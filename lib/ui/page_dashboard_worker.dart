@@ -22,18 +22,9 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
   Screen size;
   int _selectedIndex = 1;
   final _formKey = GlobalKey<FormState>();
-  TextEditingController passwordController = new TextEditingController();
-  var _isPasswordValid = false;
 
   buttonNavigation(index) {
     widget.buttonNavigation(index);
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    passwordController.dispose();
-    super.dispose();
   }
 
   @override
@@ -47,99 +38,10 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
           await showDialog<String>(
               context: context,
               barrierDismissible: false,
-              builder: (BuildContext context) => _buildAboutDialog(context));
+              builder: (BuildContext context) => UpdatePasswordDialog(myContext: this.context,));
         });
       }
     }
-    passwordController.addListener(validPassword);
-  }
-
-  updatePassword() async {
-    try {
-      bool _result =
-          await appAuth.updatePassword(this.passwordController.text, context);
-      //todo fix update password submit button
-      if (_result) {}
-    } catch (e) {
-      Fluttertoast.showToast(
-          msg: e.toString(),
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      print(e);
-    }
-  }
-
-  validPassword() {
-    if (passwordController.text.length >= 4) {
-      setState(() {
-        _isPasswordValid = true;
-      });
-    } else {
-      setState(() {
-        _isPasswordValid = false;
-      });
-    }
-  }
-
-  _buildAboutDialog(BuildContext context) {
-    String validatePassword(String value) {
-      if (value.length < 5)
-        return 'Password must be more than 5 charaters';
-      else
-        return null;
-    }
-
-    return AlertDialog(
-      title: const Text('Please Update Your Password'),
-      content: SingleChildScrollView(
-        child: new Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextFormField(
-              autovalidate: true,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                icon: Icon(Icons.lock),
-                labelText: 'Password',
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: FlatButton(
-                onPressed: _isPasswordValid == true
-                    ? () {
-                        print(passwordController.text);
-
-                        this.updatePassword();
-                        Navigator.of(context).pop();
-                      }
-                    : null,
-                disabledColor: disabledButtonColour,
-                textColor: textPrimaryLightColor,
-                color: themeColour,
-                child: Text(
-                  'Submit',
-                  style: TextStyle(fontSize: 18),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-              ),
-            ),
-          ],
-        ),
-      ),
-      actions: <Widget>[],
-    );
   }
 
   @override
@@ -312,5 +214,129 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
         },
       ),
     );
+  }
+}
+
+class UpdatePasswordDialog extends StatefulWidget {
+  UpdatePasswordDialog({this.myContext});
+
+  final BuildContext myContext;
+
+  @override
+  _UpdatePasswordDialogState createState() => new _UpdatePasswordDialogState();
+}
+
+class _UpdatePasswordDialogState extends State<UpdatePasswordDialog> {
+  var _isPasswordValid = false;
+  TextEditingController passwordController = new TextEditingController(text: '');
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    passwordController.dispose();
+    super.dispose();
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    if (this.mounted) {
+      passwordController.text = null;
+      passwordController.addListener(validPassword);
+      passwordController.text = null;
+    }
+  }
+
+  updatePassword() async {
+    try {
+      bool _result = await appAuth.updatePassword(this.passwordController.text,widget.myContext);
+
+      if (_result) {}
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      print(e);
+    }
+  }
+
+  validPassword() {
+    if (passwordController.text.length >= 6) {
+      setState(() {
+        _isPasswordValid = true;
+      });
+    } else {
+      setState(() {
+        _isPasswordValid = false;
+      });
+    }
+  }
+  _buildAboutDialog(BuildContext context) {
+    String validatePassword(String value) {
+      if (value.length < 6)
+        return 'Password must be more than 6 charaters';
+      else
+        return null;
+    }
+
+    return AlertDialog(
+      title: const Text('Please Update Your Password'),
+      content: SingleChildScrollView(
+        child: new Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+              initialValue: null,
+              autovalidate: true,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              controller: passwordController,
+              obscureText: true,
+              validator: validatePassword,
+              decoration: InputDecoration(
+                icon: Icon(Icons.lock),
+                labelText: 'Password',
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: FlatButton(
+                onPressed: _isPasswordValid == true
+                           ? () {
+                  this.updatePassword();
+                  Navigator.of(context).pop();
+                }
+                           : null,
+                disabledColor: disabledButtonColour,
+                textColor: textPrimaryLightColor,
+                color: themeColour,
+                child: Text(
+                  'Submit',
+                  style: TextStyle(fontSize: 18),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildAboutDialog(context);
+
   }
 }

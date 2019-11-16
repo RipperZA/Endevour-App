@@ -371,8 +371,8 @@ class AuthService {
             textColor: Colors.white,
             fontSize: 16.0);
 
-        UserDetails.userPermissions = [];
-        UserDetails.userRoles = [];
+        UserDetails.userPermissions = [].cast<String>();
+        UserDetails.userRoles = [].cast<String>();
         UserDetails.token = '';
         UserDetails.name = '';
         UserDetails.surname = '';
@@ -385,7 +385,7 @@ class AuthService {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
 
-        await setItemsInStorage(false,null,null);
+        return true;
       }
 
       return false;
