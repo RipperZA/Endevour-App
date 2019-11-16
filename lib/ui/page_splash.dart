@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:endevour/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'page_login.dart';
 
@@ -33,6 +34,10 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future navigateFromSplash() async {
+
+    //every time the app opens up and splash screen shows. Set this to true
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(Constants.loggingIn, true);
 
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));

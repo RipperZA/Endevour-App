@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'page_home.dart';
 
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   var loginUrl = Constants.urlLogin;
   var _isEmailValid = false;
   var _isPasswordValid = false;
-  bool _loggingIn = false;
+  bool _showSpinner = false;
   var localAuth = LocalAuthentication();
   final LocalAuthenticationService _localAuth =
       locator<LocalAuthenticationService>();
@@ -66,7 +67,10 @@ class _LoginPageState extends State<LoginPage> {
   Future pingOrFingerprint() async {
     var _result = await appAuth.ping(context);
 
-    if (_result == false) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool loggingIn = await prefs.getBool(Constants.loggingIn);
+
+    if (_result == false && loggingIn) {
       this.loginFingerPrint();
     }
   }
@@ -85,11 +89,11 @@ class _LoginPageState extends State<LoginPage> {
               context, MaterialPageRoute(builder: (context) => HomePage()));
       }
       setState(() {
-        _loggingIn = false;
+        _showSpinner = false;
       });
     } catch (e) {
       setState(() {
-        _loggingIn = false;
+        _showSpinner = false;
       });
       print(e);
       return e;
@@ -112,12 +116,12 @@ class _LoginPageState extends State<LoginPage> {
                 context, MaterialPageRoute(builder: (context) => HomePage()));
         }
         setState(() {
-          _loggingIn = false;
+          _showSpinner = false;
         });
       }
     } catch (e) {
       setState(() {
-        _loggingIn = false;
+        _showSpinner = false;
       });
       print(e);
       return e;
@@ -202,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ]),
-          inAsyncCall: _loggingIn,
+          inAsyncCall: _showSpinner,
         ));
   }
 
@@ -309,7 +313,7 @@ class _LoginPageState extends State<LoginPage> {
         color: colorCurve,
         onPressed: () {
           setState(() {
-            _loggingIn = true;
+            _showSpinner = true;
           });
           login();
         },

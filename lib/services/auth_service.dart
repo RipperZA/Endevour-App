@@ -360,7 +360,8 @@ class AuthService {
               responseType: ResponseType.json // or ResponseType.JSON
               ));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200)
+      {
         await Fluttertoast.showToast(
             msg: response.data['msg'],
             toastLength: Toast.LENGTH_LONG,
@@ -376,6 +377,10 @@ class AuthService {
         UserDetails.name = '';
         UserDetails.surname = '';
         UserDetails.verified = false;
+
+        //when logging out, prevent the fingerprint pop from showing
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(Constants.loggingIn, false);
 
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginPage()));

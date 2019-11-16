@@ -39,6 +39,7 @@ class Constants {
 
   static String isOnBoard = "IS_ONBOARD";
   static String isLoggedIn = "IS_LOGGED_IN";
+  static String loggingIn = "LOGGING_IN"; //the app is being opened
   static String storageUserPermissions = "USER_PERMISSIONS";
   static String storageUserRoles = "USER_ROLES";
   static String storageUserToken = "USER_TOKEN";
