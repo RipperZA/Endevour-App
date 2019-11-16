@@ -176,6 +176,7 @@ class AuthService {
     await prefs.setString(Constants.storageUserName, UserDetails.name);
     await prefs.setString(Constants.storageUserSurname, UserDetails.surname);
     await prefs.setBool(Constants.storageUserVerified, UserDetails.verified);
+    await prefs.setBool(Constants.loggedInOnce, true);
 
     if(updateCredentials == true)
       {

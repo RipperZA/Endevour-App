@@ -69,8 +69,9 @@ class _LoginPageState extends State<LoginPage> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool loggingIn = await prefs.getBool(Constants.loggingIn);
+    bool loggedInOnce = await prefs.getBool(Constants.loggedInOnce);
 
-    if (_result == false && loggingIn) {
+    if (_result == false && loggingIn && loggedInOnce != null && loggedInOnce) {
       this.loginFingerPrint();
     }
   }

@@ -4,8 +4,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT"/><!--    Todo testfingerprint-->
-
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -17,10 +16,7 @@
             android:name="io.flutter.app.FlutterApplication"
             android:label="endevour"
             android:icon="@mipmap/ic_launcher"
-            android:allowBackup="false"
-            android:fullBackupContent="false"
             android:theme="@style/Theme.AppCompat.Light"
-
     >
 
         <meta-data
