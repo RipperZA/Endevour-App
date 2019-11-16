@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   validPassword() {
-    if (passwordController.text.length >= 3) {
+    if (passwordController.text.length >= 5) {
       setState(() {
         _isPasswordValid = true;
       });
@@ -272,8 +272,8 @@ class _LoginPageState extends State<LoginPage> {
 //
   TextFormField _passwordWidget() {
     String validatePassword(String value) {
-      if (value.length > 0 && value.length < 3)
-        return 'Password must be more than 2 charaters';
+      if (value.length > 0 && value.length < 5)
+        return 'Password must be more than 4 charaters';
       else
         return null;
     }
@@ -312,12 +312,12 @@ class _LoginPageState extends State<LoginPage> {
               fontFamily: 'Exo2', color: Colors.white, fontSize: 20.0),
         ),
         color: colorCurve,
-        onPressed: () {
+        onPressed: _isPasswordValid ? () {
           setState(() {
             _showSpinner = true;
           });
           login();
-        },
+        } : null,
       ),
     );
   }
