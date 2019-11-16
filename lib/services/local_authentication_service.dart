@@ -15,7 +15,7 @@ class LocalAuthenticationService {
 //    if (_isProtectionEnabled) {
     try {
       isAuthenticated = await _auth.authenticateWithBiometrics(
-        localizedReason: 'authenticate to access',
+        localizedReason: 'Use Fingerprint Login For Easy Access',
         useErrorDialogs: true,
         stickyAuth: true,
       );
