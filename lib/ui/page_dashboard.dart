@@ -53,7 +53,7 @@ class _DashboardPageState extends State<DashboardPage> {
   updatePassword() async {
     try {
       bool _result = await appAuth.updatePassword(this.passwordController.text,context);
-
+      //todo fix update password submit button
       if (_result) {}
     } catch (e) {
       Fluttertoast.showToast(

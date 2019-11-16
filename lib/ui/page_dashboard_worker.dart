@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:endevour/services/auth_service.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 AuthService appAuth = new AuthService();
@@ -56,10 +56,10 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
 
   updatePassword() async {
     try {
-      bool _result = await appAuth.updatePassword(this.passwordController.text,context);
-
-      if (_result) {
-      }
+      bool _result =
+          await appAuth.updatePassword(this.passwordController.text, context);
+      //todo fix update password submit button
+      if (_result) {}
     } catch (e) {
       Fluttertoast.showToast(
           msg: e.toString(),
@@ -121,7 +121,7 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
                         print(passwordController.text);
 
                         this.updatePassword();
-                          Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       }
                     : null,
                 disabledColor: disabledButtonColour,

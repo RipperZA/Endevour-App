@@ -26,7 +26,7 @@ dependencies:
   flutter_staggered_grid_view:
   connectivity: ^0.4.5+3
   http:
-  flutter_secure_storage:
+  flutter_secure_storage: 3.2.1+1
   image_picker: ^0.6.1
   dio: ^2.1.16
   carousel_pro: ^1.0.0
@@ -42,6 +42,8 @@ dependencies:
   calendarro: ^1.1.1
   flutter_datetime_picker: ^1.2.6
   location: ^2.3.5
+  local_auth: ^0.6.0+1
+  get_it: ^1.0.3+2
   shared_preferences: ^0.5.4+3
 
 

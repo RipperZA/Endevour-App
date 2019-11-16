@@ -1,20 +1,25 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:endevour/LocalBindings.dart';
+import 'package:endevour/services/service_locator.dart';
 import 'package:endevour/ui/page_home.dart';
 import 'package:endevour/ui/page_home_worker.dart';
 import 'package:endevour/ui/page_login.dart';
 import 'package:endevour/utils/Constants.dart';
 import 'package:endevour/utils/colors.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'local_authentication_service.dart';
 import 'user_service.dart';
 
 class AuthService {
   var loginUrl = Constants.urlLogin;
+  final LocalAuthenticationService _localAuth =
+      locator<LocalAuthenticationService>();
 
   Future<bool> login(email, password) async {
     try {
@@ -24,6 +29,7 @@ class AuthService {
       formData.add("password", password);
 
       Dio dio = new Dio();
+      dio.options.connectTimeout = 10000; //5s
       response = await dio.post(loginUrl,
           data: formData,
           options: Options(
@@ -35,13 +41,12 @@ class AuthService {
         UserDetails.userPermissions =
             response.data['permissions'].cast<String>();
         UserDetails.userRoles = response.data['roles'].cast<String>();
-        ;
         UserDetails.token = response.data['token'];
         UserDetails.name = response.data['name'];
         UserDetails.surname = response.data['surname'];
         UserDetails.verified = response.data['verified'];
 
-        await setItemsInStorage();
+        await setItemsInStorage(true,email,password);
 
         this.updateUserPushIdAndToken();
 
@@ -50,35 +55,117 @@ class AuthService {
 
       return false;
     } on DioError catch (e) {
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['msg'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return false;
+      }
+      return false;
+    } on Error catch (e) {
       Fluttertoast.showToast(
-          msg: e.response.data['msg'],
+          msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
           timeInSecForIos: 1,
           backgroundColor: colorErrorMessage,
           textColor: Colors.white,
           fontSize: 16.0);
-//     await showDialog(
-//          context: context,
-//          builder: (_) => new AlertDialog(
-//                title: new Text("Error!"),
-//                content: new Text(json.decode(e.response.data)['msg']),
-//                actions: <Widget>[
-//                  // usually buttons at the bottom of the dialog
-//                  new FlatButton(
-//                    child: new Text("Close"),
-//                    onPressed: ()  {
-//                      Navigator.of(context).pop();
-//                    },
-//                  ),
-//                ],
-//              ));
 
       return false;
     }
   }
 
-  Future<void> setItemsInStorage() async {
+  Future<bool> loginFingerPrint() async {
+    try {
+      Response response;
+      FormData formData = new FormData(); // just like JS
+
+      var email = await LocalStorage.sharedInstance
+          .readValue(Constants.storageEmail);
+      var pass = await LocalStorage.sharedInstance
+          .readValue(Constants.storagePassword);
+
+      formData.add("email", email);
+      formData.add("password", pass);
+
+      Dio dio = new Dio();
+      dio.options.connectTimeout = 10000; //5s
+      response = await dio.post(loginUrl,
+          data: formData,
+          options: Options(
+              method: 'POST',
+              responseType: ResponseType.json // or ResponseType.JSON
+              ));
+
+      if (response.statusCode == 200)
+      {
+        UserDetails.userPermissions = response.data['permissions'].cast<String>();
+        UserDetails.userRoles = response.data['roles'].cast<String>();
+        UserDetails.token = response.data['token'];
+        UserDetails.name = response.data['name'];
+        UserDetails.surname = response.data['surname'];
+        UserDetails.verified = response.data['verified'];
+
+        await setItemsInStorage(true,email,pass);
+
+        this.updateUserPushIdAndToken();
+
+        return true;
+      }
+
+      return false;
+    } on DioError catch (e) {
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['msg'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return false;
+      }
+      return false;
+    } on Error catch (e) {
+      Fluttertoast.showToast(
+          msg: Constants.standardErrorMessage,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+
+      return false;
+    }
+  }
+
+  Future<void> setItemsInStorage(bool updateCredentials,String email, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.setStringList(
@@ -89,6 +176,12 @@ class AuthService {
     await prefs.setString(Constants.storageUserName, UserDetails.name);
     await prefs.setString(Constants.storageUserSurname, UserDetails.surname);
     await prefs.setBool(Constants.storageUserVerified, UserDetails.verified);
+
+    if(updateCredentials == true)
+      {
+        LocalStorage.sharedInstance.writeValue(key: Constants.storageEmail, value: email);
+        LocalStorage.sharedInstance.writeValue(key: Constants.storagePassword, value: password);
+      }
   }
 
   Future<void> getItemsFromStorage() async {
@@ -108,9 +201,6 @@ class AuthService {
       var playerId = status.subscriptionStatus.userId;
       var playerToken = status.subscriptionStatus.pushToken;
 
-      print(playerId);
-      print(playerToken);
-
       Response response;
       FormData formData = new FormData(); // just like JS
       formData.add("push_id", playerId);
@@ -125,14 +215,14 @@ class AuthService {
               responseType: ResponseType.json // or ResponseType.JSON
               ));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200)
+      {
         print(response.data);
         return true;
       }
 
       return false;
     } on DioError catch (e) {
-      print(e.response.data['msg']);
       Fluttertoast.showToast(
           msg: e.response.data['msg'],
           toastLength: Toast.LENGTH_LONG,
@@ -171,7 +261,10 @@ class AuthService {
             textColor: Colors.white,
             fontSize: 16.0);
         UserDetails.verified = response.data['verified'];
-        await setItemsInStorage();
+
+        var email = LocalStorage.sharedInstance.readValue(Constants.storageEmail).toString();
+
+        await setItemsInStorage(true,email,password);
 
         this.logout(context);
       }
@@ -287,7 +380,7 @@ class AuthService {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
 
-        await setItemsInStorage();
+        await setItemsInStorage(false,null,null);
       }
 
       return false;

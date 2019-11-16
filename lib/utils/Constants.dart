@@ -2,9 +2,10 @@ import 'dart:ui';
 
 class Constants {
   //URLs
-  static String urlBase = 'https://endevour.co.za/api/';
+//  static String urlBase = 'https://endevour.co.za/api/';
 
-//  static String urlBase = 'http://192.168.1.105:8000/api/';
+  static String urlBase = 'http://192.168.1.102:8000/api/';
+
 //  static String urlBase = 'http://10.2.2.106:8000/api/';
 //  static String urlBase = 'http://10.0.0.161:8000/api/';
   static String urlLogin = urlBase + 'login';
@@ -42,6 +43,8 @@ class Constants {
   static String storageUserRoles = "USER_ROLES";
   static String storageUserToken = "USER_TOKEN";
   static String storageUserName = "USER_NAME";
+  static String storageEmail = "USER_EMAIL";
+  static String storagePassword = "USER_PASSWORD";
   static String storageUserSurname = "USER_SURNAME";
   static String storageUserVerified = "USER_VERIFIED";
 

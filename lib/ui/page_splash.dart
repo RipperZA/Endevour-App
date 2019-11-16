@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+
 import 'package:endevour/utils/utils.dart';
+import 'package:flutter/material.dart';
 
-import '../LocalBindings.dart';
-import 'page_home.dart';
 import 'page_login.dart';
-import 'page_onboarding.dart';
-
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -20,27 +17,25 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 2), () {
-       navigateFromSplash();
+      navigateFromSplash();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-     size = Screen(MediaQuery.of(context).size);
+    size = Screen(MediaQuery.of(context).size);
     return Scaffold(
         body: Center(
-        child: Container(
-          width: size.getWidthPx(300),
-          height: size.getWidthPx(300),
-          child: Image.asset("assets/icons/logo_splash.png")))
-    );
+            child: Container(
+                width: size.getWidthPx(300),
+                height: size.getWidthPx(300),
+                child: Image.asset("assets/icons/logo_splash.png"))));
   }
 
-  Future navigateFromSplash () async {
-    //Todo Remove this later
-    LocalStorage.sharedInstance.deleteAll();
+  Future navigateFromSplash() async {
 
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
 
 //    String isOnBoard = await LocalStorage.sharedInstance.readValue(Constants.isOnBoard);
 //

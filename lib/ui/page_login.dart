@@ -1,12 +1,15 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:endevour/services/auth_service.dart';
+import 'package:endevour/services/local_authentication_service.dart';
+import 'package:endevour/services/service_locator.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_home_worker.dart';
 import 'package:endevour/ui/page_onboarding.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -15,7 +18,6 @@ import 'page_home.dart';
 AuthService appAuth = new AuthService();
 
 class LoginPage extends StatefulWidget {
-  @override
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -26,6 +28,9 @@ class _LoginPageState extends State<LoginPage> {
   var _isEmailValid = false;
   var _isPasswordValid = false;
   bool _loggingIn = false;
+  var localAuth = LocalAuthentication();
+  final LocalAuthenticationService _localAuth =
+      locator<LocalAuthenticationService>();
 
   FocusNode _emailFocusNode = new FocusNode();
   FocusNode _passwordFocusNode = new FocusNode();
@@ -52,10 +57,18 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     OneSignal.shared.init(Constants.oneSignalAppKey);
 
-    appAuth.ping(context);
+    pingOrFingerprint(); //todo testfingerprint fix showing popup when you logout
 
     emailController.addListener(validEmail);
     passwordController.addListener(validPassword);
+  }
+
+  Future pingOrFingerprint() async {
+    var _result = await appAuth.ping(context);
+
+    if (_result == false) {
+      this.loginFingerPrint();
+    }
   }
 
   login() async {
@@ -74,6 +87,34 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _loggingIn = false;
       });
+    } catch (e) {
+      setState(() {
+        _loggingIn = false;
+      });
+      print(e);
+      return e;
+    }
+  }
+
+  loginFingerPrint() async {
+    try {
+      await _localAuth.authenticate();
+
+      if (_localAuth.isAuthenticated) {
+        bool _result = await appAuth.loginFingerPrint();
+
+        if (_result) {
+          if (UserDetails.userRoles.contains('worker'))
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => HomePageWorker()));
+          if (UserDetails.userRoles.contains('area_manager'))
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
+        }
+        setState(() {
+          _loggingIn = false;
+        });
+      }
     } catch (e) {
       setState(() {
         _loggingIn = false;
@@ -293,7 +334,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         color: colorCurve,
         onPressed: () {
-          // Going to DashBoard
+          // Going to Register Page
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => OnBoardingPage()));
         },
