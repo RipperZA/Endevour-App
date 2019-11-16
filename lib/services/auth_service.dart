@@ -262,7 +262,7 @@ class AuthService {
             fontSize: 16.0);
         UserDetails.verified = response.data['verified'];
 
-        var email = LocalStorage.sharedInstance.readValue(Constants.storageEmail).toString();
+        var email = await LocalStorage.sharedInstance.readValue(Constants.storageEmail);
 
         await setItemsInStorage(true,email,password);
 
