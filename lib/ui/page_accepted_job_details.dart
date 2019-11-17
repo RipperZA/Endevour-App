@@ -530,9 +530,9 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      followersWidget(),
-                      nameWidget(),
                       likeWidget(),
+                      nameWidget(),
+                      followersWidget(),
                     ],
                   ),
                 ],
@@ -632,7 +632,9 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
             jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
             SizedBox(height: 10),
             jobInformationRow(
-                'Partial Pay', "R ${job.payPartialDay.toString()}"),
+                'Initial Pay', "R ${job.payPartialDay.toString()}"),
+            jobInformationRow(
+                'Remaining Pay', "R ${job.payDifferenceDay.toString()}"),
           ],
         ),
       ),
@@ -1016,6 +1018,12 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                 color: colorCurve,
                 fontWeight: FontWeight.w700)),
         SizedBox(height: size.getWidthPx(4)),
+        Text("R ${job.payTotalDay}",
+            style: TextStyle(
+                fontFamily: "Exo2",
+                fontSize: 16.0,
+                color: textSecondary54,
+                fontWeight: FontWeight.w700)),
       ],
     );
   }
@@ -1023,14 +1031,14 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
   Column followersWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.payTotalDay}",
+        Text("R ${job.payDifferenceDay}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
                 color: textSecondary54,
                 fontWeight: FontWeight.w700)),
         SizedBox(height: size.getWidthPx(4)),
-        Text("Total Job Payout",
+        Text("Remaining Pay",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 14.0,

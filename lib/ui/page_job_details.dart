@@ -208,9 +208,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              followersWidget(),
-              nameWidget(),
               likeWidget(),
+              nameWidget(),
+              followersWidget(),
             ],
           ),
           Padding(
@@ -259,7 +259,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
             jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
             SizedBox(height: 10),
             jobInformationRow(
-                'Partial Pay', "R ${job.payPartialDay.toString()}"),
+                'Initial Pay', "R ${job.payPartialDay.toString()}"),
+            jobInformationRow(
+                'Remaining Pay', "R ${job.payDifferenceDay.toString()}"),
           ],
         ),
       ),
@@ -467,6 +469,12 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 color: colorCurve,
                 fontWeight: FontWeight.w700)),
         SizedBox(height: size.getWidthPx(4)),
+        Text("R ${job.payTotalDay}",
+            style: TextStyle(
+                fontFamily: "Exo2",
+                fontSize: 16.0,
+                color: textSecondary54,
+                fontWeight: FontWeight.w700)),
       ],
     );
   }
@@ -474,14 +482,14 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   Column followersWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.payTotalDay}",
+        Text("R ${job.payDifferenceDay}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
                 color: textSecondary54,
                 fontWeight: FontWeight.w700)),
         SizedBox(height: size.getWidthPx(4)),
-        Text("Total Job Payout",
+        Text("Remaining Pay",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 14.0,

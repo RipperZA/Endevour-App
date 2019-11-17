@@ -9,6 +9,7 @@ class Job {
   int hours;
   double payTotalDay;
   double payPartialDay;
+  double payDifferenceDay;
   String arrivedAtWork;
   String verifiedAtWork;
   String leftWorkAt;
@@ -31,6 +32,7 @@ class Job {
         hours = json['hours'],
         payTotalDay = json['pay_total_day'].toDouble(),
         payPartialDay = json['pay_partial_day'].toDouble(),
+        payDifferenceDay = json['pay_difference_day'].toDouble(),
         arrivedAtWork = json['arrived_at_work_at'],
         verifiedAtWork = json['verified_at_work'],
         leftWorkAt = json['left_work_at'],
@@ -45,5 +47,6 @@ class Job {
         'hours': hours,
         'payTotalDay': payTotalDay,
         'payPartialDay': payPartialDay,
+        'payDifferenceDay': payDifferenceDay,
       };
 }
