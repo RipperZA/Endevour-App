@@ -9,6 +9,7 @@ class Constants {
   static String urlPing = urlBase + 'auth/ping';
   static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
   static String urlLogout = urlBase + 'auth/logout';
+  static String urlProfile = urlBase + 'user/profile';
   static String urlApplicationUpload = urlBase + 'applications';
   static String urlGetAreaManagerSites = urlBase + 'area_managers/getSitesApi';
   static String urlGetRates = urlBase + 'rates/getRatesApi';
