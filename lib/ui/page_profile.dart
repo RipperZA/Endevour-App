@@ -4,6 +4,7 @@ import 'package:endevour/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Screen size;
   var _profileInfo;
   List<Data> profileInfoList = List();
+  bool _showSpinner = true;
 
   void initState() {
 //    getJobInformation();
@@ -23,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
-  Future<List<Data>> profileInfo() async {
+  Future<void> profileInfo() async {
     try {
       Response response;
 
@@ -41,6 +43,9 @@ class _ProfilePageState extends State<ProfilePage> {
       print(response);
 
       if (response.statusCode == 200) {
+        setState(() {
+          _showSpinner = false;
+        });
         _profileInfo = response.data['data']['profile_info'];
 
         for (var x in _profileInfo) {
@@ -61,6 +66,9 @@ class _ProfilePageState extends State<ProfilePage> {
 //      return false;
     } on DioError catch (e) {
       try {
+        setState(() {
+          _showSpinner = false;
+        });
         Fluttertoast.showToast(
             msg: e.response.data['error'],
             toastLength: Toast.LENGTH_LONG,
@@ -70,8 +78,9 @@ class _ProfilePageState extends State<ProfilePage> {
             textColor: Colors.white,
             fontSize: 16.0);
       } catch (e) {
-        print(e);
-
+        setState(() {
+          _showSpinner = false;
+        });
         Fluttertoast.showToast(
             msg: Constants.standardErrorMessage,
             toastLength: Toast.LENGTH_LONG,
@@ -82,8 +91,9 @@ class _ProfilePageState extends State<ProfilePage> {
             fontSize: 16.0);
       }
     } on Error catch (e) {
-      print(e);
-
+      setState(() {
+        _showSpinner = false;
+      });
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
@@ -106,23 +116,30 @@ class _ProfilePageState extends State<ProfilePage> {
         brightness: Brightness.light,
       ),
       backgroundColor: backgroundColor,
-      body: AnnotatedRegion(
-        value: SystemUiOverlayStyle(
-            statusBarColor: backgroundColor,
-            statusBarBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark,
-            systemNavigationBarIconBrightness: Brightness.dark,
-            systemNavigationBarColor: backgroundColor),
-        child: Container(
-          child: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
-              children: <Widget>[
-                upperPart(),
-              ],
+      body: ModalProgressHUD(
+        child: Stack(
+          children: <Widget>[
+            AnnotatedRegion(
+              value: SystemUiOverlayStyle(
+                  statusBarColor: backgroundColor,
+                  statusBarBrightness: Brightness.light,
+                  statusBarIconBrightness: Brightness.dark,
+                  systemNavigationBarIconBrightness: Brightness.light,
+                  systemNavigationBarColor: backgroundColor),
+              child: Container(
+                child: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
+                  child: Column(
+                    children: <Widget>[
+                      upperPart(),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
+        inAsyncCall: _showSpinner,
       ),
     );
   }
@@ -156,9 +173,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      likeWidget(),
+//                      likeWidget(),
                       nameWidget(),
-                      followersWidget(),
+//                      followersWidget(),
                     ],
                   ),
                 ],
@@ -181,7 +198,7 @@ class _ProfilePageState extends State<ProfilePage> {
               elevation: 5,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: <Widget>[jobInformationWidget()],
+                children: <Widget>[profileDataWidget()],
               ),
             ),
           ),
@@ -190,27 +207,51 @@ class _ProfilePageState extends State<ProfilePage> {
     ]);
   }
 
-  Padding jobInformationWidget() {
+  Padding profileDataWidget() {
     Widget projectWidget() {
-      return ListView.builder(
+      return ListView.separated(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: profileInfoList.length,
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(
+            height: 30,
+          );
+        },
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(profileInfoList[index].keyName +" "+profileInfoList[index].value) ,
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                  child: Text(profileInfoList[index].keyName + ":",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: textSecondary54,
+                          fontWeight: FontWeight.w800))),
+              Container(
+                  child: Text(profileInfoList[index].value,
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          color: textSecondary54,
+                          fontWeight: FontWeight.w500))),
+//                      likeWidget(),
+//                      followersWidget(),
+            ],
           );
         },
       );
     }
+
     return Padding(
       padding: EdgeInsets.all(8),
       child: Align(
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
-            profileInfoList.length >= 1 ? projectWidget() : Text('Fetching')
-
+            profileInfoList.length >= 1
+                ? projectWidget()
+                : Text('Fetching Information')
           ],
         ),
       ),
@@ -280,7 +321,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Align(
       alignment: Alignment.center,
       child: Container(
-        margin: EdgeInsets.only(top: size.getWidthPx(60)),
+        margin: EdgeInsets.only(top: size.getWidthPx(10)),
         child: CircleAvatar(
           foregroundColor: backgroundColor,
           maxRadius: size.getWidthPx(50),
@@ -327,12 +368,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: colorCurve,
                 fontWeight: FontWeight.w700)),
         SizedBox(height: size.getWidthPx(4)),
-        Text("Photographer",
-            style: TextStyle(
-                fontFamily: "Exo2",
-                fontSize: 14.0,
-                color: textSecondary54,
-                fontWeight: FontWeight.w500))
+//        Text("Photographer",
+//            style: TextStyle(
+//                fontFamily: "Exo2",
+//                fontSize: 14.0,
+//                color: textSecondary54,
+//                fontWeight: FontWeight.w500))
       ],
     );
   }
