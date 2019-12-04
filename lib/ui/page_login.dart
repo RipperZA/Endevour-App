@@ -3,7 +3,7 @@ import 'package:endevour/services/local_authentication_service.dart';
 import 'package:endevour/services/service_locator.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_home_worker.dart';
-import 'package:endevour/ui/page_onboarding.dart';
+import 'package:endevour/ui/page_register.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -221,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
               text: 'Register Now!',
               recognizer: TapGestureRecognizer()
                 ..onTap = () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => OnBoardingPage())),
+                    MaterialPageRoute(builder: (context) => RegisterPage())),
             )
           ],
           style: TextStyle(
@@ -312,12 +312,14 @@ class _LoginPageState extends State<LoginPage> {
               fontFamily: 'Exo2', color: Colors.white, fontSize: 20.0),
         ),
         color: colorCurve,
-        onPressed: _isPasswordValid ? () {
-          setState(() {
-            _showSpinner = true;
-          });
-          login();
-        } : null,
+        onPressed: _isPasswordValid
+            ? () {
+                setState(() {
+                  _showSpinner = true;
+                });
+                login();
+              }
+            : null,
       ),
     );
   }
@@ -340,8 +342,8 @@ class _LoginPageState extends State<LoginPage> {
         color: colorCurve,
         onPressed: () {
           // Going to Register Page
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => OnBoardingPage()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => RegisterPage()));
         },
       ),
     );

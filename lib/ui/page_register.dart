@@ -212,7 +212,8 @@ class _RegisterPageState extends State<RegisterPage>
             'Thank you for showing an interest! In 3 easy steps you\'ll be registered.\n\n'
             '1) Complete Personal Details and take a selfie.\n\n'
             '2) Upload your Smart ID or ID Document.\n\n'
-            '3) Upload your CV.\n\n',
+            '3) Upload your CV.\n\n'
+            '4) If a mistake is made while registering, just start again.\n\n',
         style: const TextStyle(color: Colors.black87),
       ),
     );

@@ -223,32 +223,6 @@ class _DashboardPageState extends State<DashboardPage> {
               ))),
     );
   }
-
-  Padding buildChoiceChip(index, chipName) {
-    return Padding(
-      padding: EdgeInsets.only(left: size.getWidthPx(8)),
-      child: ChoiceChip(
-        backgroundColor: backgroundColor,
-        selectedColor: colorCurve,
-        labelStyle: TextStyle(
-            fontFamily: 'Exo2',
-            color:
-                (_selectedIndex == index) ? backgroundColor : textPrimaryColor),
-        elevation: 4.0,
-        padding: EdgeInsets.symmetric(
-            vertical: size.getWidthPx(4), horizontal: size.getWidthPx(12)),
-        selected: (_selectedIndex == index) ? true : false,
-        label: Text(chipName),
-        onSelected: (selected) {
-          if (selected) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          }
-        },
-      ),
-    );
-  }
 }
 
 class UpdatePasswordDialog extends StatefulWidget {

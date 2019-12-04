@@ -4,10 +4,6 @@ import 'package:calendarro/calendarro.dart';
 import 'package:calendarro/default_day_tile_builder.dart';
 import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:endevour/model/Rate.dart';
 import 'package:endevour/model/Site.dart';
 import 'package:endevour/model/models.dart';
@@ -15,6 +11,9 @@ import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_home.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -74,6 +73,65 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
   List<Site> siteList = List();
   List<Rate> rateList = List();
+
+  TimeOfDay _startTimeInitial = new TimeOfDay(hour: 07, minute: 00);
+  TimeOfDay _endTimeInitial = new TimeOfDay(hour: 16, minute: 30);
+
+  Future<Null> _selectStartTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+        context: context,
+        initialTime: _startTimeInitial,
+        builder: (BuildContext context, Widget child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            child: child,
+          );
+        });
+
+    if (picked != null && picked != _startTimeInitial) {
+      setState(() {
+        _startTimeInitial = picked;
+        if (picked.minute < 10) {
+          startTime =
+              picked.hour.toString() + ":" + "0" + picked.minute.toString();
+        } else {
+          startTime = picked.hour.toString() + ":" + picked.minute.toString();
+        }
+      });
+    } else {
+      setState(() {
+        _startTimeInitial = _startTimeInitial;
+      });
+    }
+  }
+
+  Future<Null> _selectEndTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+        context: context,
+        initialTime: _endTimeInitial,
+        builder: (BuildContext context, Widget child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            child: child,
+          );
+        });
+
+    if (picked != null && picked != _endTimeInitial) {
+      setState(() {
+        _endTimeInitial = picked;
+        if (picked.minute < 10) {
+          endTime =
+              picked.hour.toString() + ":" + "0" + picked.minute.toString();
+        } else {
+          endTime = picked.hour.toString() + ":" + picked.minute.toString();
+        }
+      });
+    } else {
+      setState(() {
+        _endTimeInitial = _endTimeInitial;
+      });
+    }
+  }
 
   getSites() async {
     try {
@@ -277,12 +335,13 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                 context, MaterialPageRoute(builder: (context) => HomePage()));
           });
         } on DioError catch (e) {
+
           setState(() {
             _saving = false;
           });
           try {
             Fluttertoast.showToast(
-                msg: e.response.data['error'],
+                msg: e.response.data['error'] ?? e.response.data['message'],
                 toastLength: Toast.LENGTH_LONG,
                 gravity: ToastGravity.TOP,
                 timeInSecForIos: 1,
@@ -510,28 +569,12 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         ),
                                       ),
                                       new GestureDetector(
-                                        onTap: () {
-                                          DatePicker.showTimePicker(context,
-                                              showTitleActions: true,
-//                                      minTime: DateTime(2018, 3, 5),
-//                                      maxTime: DateTime(2019, 6, 7),
-                                              onChanged: (date) {},
-                                              onConfirm: (date) {
-                                            setState(() {
-                                              startTime = date;
-                                            });
-                                          },
-                                              currentTime: startTime != null
-                                                  ? startTime
-                                                  : DateTime.now());
+                                        onTap: () async {
+                                          _selectStartTime(context);
                                         },
                                         child: startTime != null
                                             ? Text(
-                                                startTime.hour.toString() +
-                                                    'h ' +
-                                                    startTime.minute
-                                                        .toString() +
-                                                    'm',
+                                                startTime,
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     color:
@@ -555,27 +598,12 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         ),
                                       ),
                                       new GestureDetector(
-                                        onTap: () {
-                                          DatePicker.showTimePicker(context,
-                                              showTitleActions: true,
-//                                      minTime: DateTime(2018, 3, 5),
-//                                      maxTime: DateTime(2019, 6, 7),
-                                              onChanged: (date) {},
-                                              onConfirm: (date) {
-                                            setState(() {
-                                              endTime = date;
-                                            });
-                                          },
-                                              currentTime: endTime != null
-                                                  ? endTime
-                                                  : DateTime.now());
+                                        onTap: () async {
+                                          _selectEndTime(context);
                                         },
                                         child: endTime != null
                                             ? Text(
-                                                endTime.hour.toString() +
-                                                    'h ' +
-                                                    endTime.minute.toString() +
-                                                    'm',
+                                                endTime,
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     color:
@@ -920,31 +948,5 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                     fontWeight: FontWeight.w800),
               ],
             )));
-  }
-
-  Padding buildChoiceChip(index, chipName) {
-    return Padding(
-      padding: EdgeInsets.only(left: size.getWidthPx(8)),
-      child: ChoiceChip(
-        backgroundColor: backgroundColor,
-        selectedColor: colorCurve,
-        labelStyle: TextStyle(
-//            fontFamily: 'Exo2',
-            color:
-                (_selectedIndex == index) ? backgroundColor : textPrimaryColor),
-        elevation: 4.0,
-        padding: EdgeInsets.symmetric(
-            vertical: size.getWidthPx(4), horizontal: size.getWidthPx(12)),
-        selected: (_selectedIndex == index) ? true : false,
-        label: Text(chipName),
-        onSelected: (selected) {
-          if (selected) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          }
-        },
-      ),
-    );
   }
 }

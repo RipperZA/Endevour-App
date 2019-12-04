@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:endevour/ui/page_create_new_job.dart';
 import 'package:endevour/ui/page_dashboard.dart';
 import 'package:endevour/ui/page_pending_job.dart';
 import 'package:endevour/widgets/bottom_navigationBar.dart';
+import 'package:flutter/material.dart';
 
 import 'page_settings.dart';
 
@@ -17,8 +17,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<Widget> tabView = [];
   GlobalKey globalKey = new GlobalKey(debugLabel: 'btm_app_bar');
 
-  void buttonNavigation(dynamic childValue)
-  {
+  void buttonNavigation(dynamic childValue) {
     this.changeCurrentTab(childValue);
     final BottomNavBar navigationBar = globalKey.currentWidget;
 //    navigationBar.onTap(childValue);
