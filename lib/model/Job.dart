@@ -6,7 +6,7 @@ class Job {
   String areaManagerName;
   String workerName;
   String workerCell;
-  int hours;
+  double hours;
   double payTotalDay;
   double payPartialDay;
   double payDifferenceDay;
@@ -29,7 +29,7 @@ class Job {
         areaManagerName = json['area_manager_name'],
         workerName = json['worker_name'],
         workerCell = json['worker_cell'],
-        hours = json['hours'],
+        hours = json['hours'].toDouble(),
         payTotalDay = json['pay_total_day'].toDouble(),
         payPartialDay = json['pay_partial_day'].toDouble(),
         payDifferenceDay = json['pay_difference_day'].toDouble(),
