@@ -338,7 +338,7 @@ class _RegisterPageState extends State<RegisterPage>
                   icon: Icon(Icons.close),
                   textColor: Colors.white,
                   color: Colors.green,
-                  label: new Text("Close"),
+                  label: new Text("Okay! Got it."),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0)),
                   onPressed: () {
