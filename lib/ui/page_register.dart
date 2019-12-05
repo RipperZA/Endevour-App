@@ -3,12 +3,11 @@ import 'dart:io';
 
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix1;
-import 'package:flutter/services.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -170,36 +169,44 @@ class _RegisterPageState extends State<RegisterPage>
 
   _buildAboutDialog(BuildContext context) {
     return AlertDialog(
-      title: const Text('How To Get Started'),
-      content: new Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildAboutText(),
-          FlatButton(
-            onPressed: () async {
-              Navigator.of(context).pop();
+      title: Center(
+          child: const Text(
+        'How To Get Started',
+        style: TextStyle(fontSize: 26),
+      )),
+      content: SingleChildScrollView(
+        child: new Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildAboutText(),
+            FlatButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
 //            await showDialogPhaseTwo().then((onValue) {
 //              Navigator.pop(context);
 //            }, onError: (err) {
 //              Navigator.pop(context);
 //            });
-            },
-            textColor: Theme.of(context).primaryColor,
-            child: RaisedButton(
-                textColor: Colors.white,
-                color: themeColour,
-                child: Text(
-                  'Okay! Go To Step #1',
-                  style: TextStyle(fontSize: 18),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                }),
-          ),
-        ],
+              },
+              textColor: Theme.of(context).primaryColor,
+              child: Center(
+                child: RaisedButton(
+                    textColor: Colors.white,
+                    color: themeColour,
+                    child: Text(
+                      'Okay! Go To Step #1',
+                      style: TextStyle(fontSize: 22),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+              ),
+            ),
+          ],
+        ),
       ),
       actions: <Widget>[],
     );
@@ -330,12 +337,20 @@ class _RegisterPageState extends State<RegisterPage>
           builder: (BuildContext context) {
             // return object of type Dialog
             return AlertDialog(
-              title: new Text("Success!"),
-              content: new Text(response.data['success']),
+              title: Center(
+                child: Text(
+                  "Success!",
+                  style: TextStyle(fontSize: 26),
+                ),
+              ),
+              content: Text(
+                response.data['success'],
+                style: TextStyle(fontSize: 18),
+              ),
               actions: <Widget>[
                 // usually buttons at the bottom of the dialog
                 new RaisedButton.icon(
-                  icon: Icon(Icons.close),
+                  icon: Icon(Icons.thumb_up),
                   textColor: Colors.white,
                   color: Colors.green,
                   label: new Text("Okay! Got it."),
@@ -561,8 +576,16 @@ class _RegisterPageState extends State<RegisterPage>
                   builder: (BuildContext context) {
                     // return object of type Dialog
                     return AlertDialog(
-                        title: new Text(
-                            "Step #1 nearly done! \n\nLet\'s get your photo taken! Head and shoulders only please! Use your camera or gallery."),
+                        title: Center(
+                          child: Text(
+                            "Step #1 nearly done!",
+                            style: TextStyle(fontSize: 26),
+                          ),
+                        ),
+                        content: Text(
+                          "Let\'s get your photo taken! Head and shoulders only please! Use your camera or gallery.",
+                          style: TextStyle(fontSize: 18),
+                        ),
                         actions: [
                           Center(
                             child: Column(
@@ -770,8 +793,16 @@ class _RegisterPageState extends State<RegisterPage>
             builder: (BuildContext context) {
               // return object of type Dialog
               return AlertDialog(
-                title: new Text(
-                    "Step #2 nearly done! \n\nLet\'s get your ID uploaded! Use your camera or gallery to select your ID."),
+                title: Center(
+                  child: Text(
+                    "Step #2 nearly done!",
+                    style: TextStyle(fontSize: 26),
+                  ),
+                ),
+                content: Text(
+                  "Let\'s get your ID uploaded! Use your camera or gallery to select your ID.",
+                  style: TextStyle(fontSize: 18),
+                ),
                 actions: [
                   Center(
                       child: Column(children: <Widget>[
@@ -1101,12 +1132,19 @@ class _RegisterPageState extends State<RegisterPage>
                       builder: (BuildContext context) {
                         // return object of type Dialog
                         return AlertDialog(
-                          title: new Text("Please Confirm Choice"),
-                          content: new Text(
-                              'Are you sure you would like to upload your application?'),
+                          title: Center(
+                            child: Text(
+                              "Please Confirm Choice!",
+                              style: TextStyle(fontSize: 26),
+                            ),
+                          ),
+                          content: Text(
+                            "Are you sure you would like to upload your application?",
+                            style: TextStyle(fontSize: 18),
+                          ),
                           actions: <Widget>[
                             Column(
-                              mainAxisAlignment: prefix1.MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
