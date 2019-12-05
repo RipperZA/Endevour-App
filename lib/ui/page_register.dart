@@ -196,7 +196,7 @@ class _RegisterPageState extends State<RegisterPage>
                     color: themeColour,
                     child: Text(
                       'Okay! Go To Step #1',
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(fontSize: 16),
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0)),
