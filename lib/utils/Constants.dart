@@ -5,6 +5,7 @@ class Constants {
   static String urlBase = 'https://endevour.co.za/api/';
 
   static String urlLogin = urlBase + 'login';
+  static String urlResetPassword = urlBase + 'password/email';
   static String urlUpdatePassword = urlBase + 'auth/updatePassword';
   static String urlPing = urlBase + 'auth/ping';
   static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';

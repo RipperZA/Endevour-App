@@ -2,6 +2,7 @@ import 'package:endevour/services/auth_service.dart';
 import 'package:endevour/services/local_authentication_service.dart';
 import 'package:endevour/services/service_locator.dart';
 import 'package:endevour/services/user_service.dart';
+import 'package:endevour/ui/page_forgotpass.dart';
 import 'package:endevour/ui/page_home_worker.dart';
 import 'package:endevour/ui/page_register.dart';
 import 'package:endevour/utils/utils.dart';
@@ -383,22 +384,26 @@ class _LoginPageState extends State<LoginPage> {
                 _emailWidget(),
                 SizedBox(height: size.getWidthPx(8)),
                 _passwordWidget(),
-//                GestureDetector(
-//                    onTap: () {
-//                      //Navigate to Forgot Password Screen...
-//                      Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                              builder: (context) => PageForgotPassword()));
-//                    },
-//                    child: Padding(
-//                      padding: EdgeInsets.only(right: size.getWidthPx(24)),
-//                      child: Align(
-//                          alignment: Alignment.centerRight,
-//                          child: Text("Forgot Password?",
-//                              style: TextStyle(
-//                                  fontFamily: 'Exo2', fontSize: 16.0))),
-//                    )),
+                SizedBox(height: size.getWidthPx(8)),
+                GestureDetector(
+                    onTap: () {
+                      //Navigate to Forgot Password Screen...
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PageForgotPassword()));
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(right: size.getWidthPx(24)),
+                      child: Align(
+                          alignment: Alignment.centerRight,
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyle(color: Colors.deepOrange),
+                              text: 'Forgot Password?',
+                            ),
+                          )),
+                    )),
                 SizedBox(height: size.getWidthPx(8)),
                 _loginButtonWidget(),
                 Text(
