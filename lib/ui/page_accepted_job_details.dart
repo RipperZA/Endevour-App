@@ -747,7 +747,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                     return AlertDialog(
                       title: new Text("Please Confirm!"),
                       content:
-                          new Text("Are you sure you want to sign in to work?"),
+                          new Text("Are you sure you want to sign in to work and are within 100 meters of the work site?"),
                       actions: <Widget>[
                         // usually buttons at the bottom of the dialog
                         RaisedButton.icon(
@@ -835,7 +835,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                     return AlertDialog(
                       title: new Text("Please Confirm!"),
                       content: new Text(
-                          "Are you sure you want to sign out of work?"),
+                          "Are you sure you want to sign out of work and are within 100 meters of the work site?"),
                       actions: <Widget>[
                         // usually buttons at the bottom of the dialog
                         RaisedButton.icon(
