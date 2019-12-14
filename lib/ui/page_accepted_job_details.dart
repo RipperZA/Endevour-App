@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:endevour/model/Job.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_home_worker.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/utils_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -586,87 +586,10 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
               ),
             ),
           ),
-          Container(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              color: backgroundColor,
-              elevation: 5,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  centreAlignText(
-                      text: "Information:",
-                      padding: size.getWidthPx(16),
-                      textColor: textPrimaryColor,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                      underline: true),
-                  jobInformationWidget()
-                ],
-              ),
-            ),
-          ),
+          jobInformationWidget(job, size)
         ],
       )
     ]);
-  }
-
-  Padding jobInformationWidget() {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: Align(
-        alignment: Alignment.center,
-        child: Column(
-          children: <Widget>[
-            jobInformationRow(
-                'Area Manager', job.areaManagerName),
-            SizedBox(height: 10),
-            jobInformationRow('Site', job.site.name),
-            SizedBox(height: 10),
-            jobInformationRow('Address', job.site.fullAddress.toString()),
-            SizedBox(height: 10),
-            jobInformationRow('Hours', job.hours.toString()),
-            SizedBox(height: 10),
-            jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
-            SizedBox(height: 10),
-            jobInformationRow(
-                'Initial Pay', "R ${job.payPartialDay.toString()}"),
-            jobInformationRow(
-                'Remaining Pay', "R ${job.payDifferenceDay.toString()}"),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Row jobInformationRow(jobLabel, jobProperty) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Flexible(
-          child: Column(
-            children: <Widget>[
-              Text(jobLabel + ': ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Exo2',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: textPrimaryColor)),
-              Text(jobProperty,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Exo2',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: textPrimaryColor))
-            ],
-          ),
-        ),
-      ],
-    );
   }
 
   GestureDetector followerAvatarWidget(String assetIcon, VoidCallback onTap) {
