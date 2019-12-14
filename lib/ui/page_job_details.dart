@@ -197,37 +197,50 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
 //      ),
       Column(
         children: <Widget>[
-          profileWidget(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              likeWidget(),
-              nameWidget(),
-              followersWidget(),
-            ],
-          ),
           Padding(
-            padding: EdgeInsets.only(
-                top: size.getWidthPx(8),
-                left: size.getWidthPx(20),
-                right: size.getWidthPx(20)),
-            child: Container(height: size.getWidthPx(4), color: colorCurve),
+            padding: EdgeInsets.all(8),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              color: backgroundColor,
+              elevation: 5,
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      profileWidget(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          likeWidget(),
+                          nameWidget(),
+                          followersWidget(),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: size.getWidthPx(8),
+                            left: size.getWidthPx(20),
+                            right: size.getWidthPx(20)),
+                        child: Container(
+                            height: size.getWidthPx(4), color: colorCurve),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          buttonWidgetAccept(),
+                          buttonWidgetNavigate(),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buttonWidgetAccept(),
-              buttonWidgetNavigate(),
-            ],
-          ),
-          centreAlignText(
-              text: "Job Information:",
-              padding: size.getWidthPx(16),
-              textColor: textPrimaryColor,
-              fontSize: 24.0,
-              fontWeight: null,
-              underline: true),
-          jobInformationWidget(job)
+          jobInformationWidget(job, size)
         ],
       )
     ]);

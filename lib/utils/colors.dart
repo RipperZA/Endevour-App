@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 Color themeColour = Colors.deepPurple;
 Color colorCurve = Colors.deepPurple;
@@ -17,6 +16,7 @@ Color textPrimaryDarkColor = Colors.black;
 Color textSecondaryLightColor = Colors.black87;
 Color textSecondary54 = Colors.black54;
 Color textSecondaryDarkColor = Colors.blue;
+Color hyperlinkColor = Colors.blue.shade300;
 Color hintTextColor = Colors.white30;
 Color bucketDialogueUserColor = Colors.red;
 Color disabledTextColour = Colors.black54;

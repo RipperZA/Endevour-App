@@ -1,5 +1,6 @@
 import 'package:endevour/model/Job.dart';
 import 'package:endevour/utils/colors.dart';
+import 'package:endevour/utils/responsive_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,7 +55,7 @@ Padding rightAlignText({text, rightPadding, textColor, fontSize, fontWeight}) {
   );
 }
 
-Padding jobInformationWidget(Job job) {
+Padding jobInformationWidget(Job job, Screen size) {
   return Padding(
     padding: EdgeInsets.all(8),
     child: Card(
@@ -68,6 +69,16 @@ Padding jobInformationWidget(Job job) {
         child: Container(
           child: Column(
             children: <Widget>[
+              centreAlignText(
+                  text: "Job Information",
+                  padding: size.getWidthPx(16),
+                  textColor: textPrimaryColor,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w900,
+                  underline: true),
+              SizedBox(
+                height: 15,
+              ),
               jobInformationRow('Start Date', job.startDate),
               SizedBox(
                 height: 10,
@@ -113,8 +124,8 @@ Row jobInformationRow(jobLabel, jobProperty) {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'Exo2',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                     color: textPrimaryColor,
                     decoration: TextDecoration.underline)),
             SizedBox(
@@ -124,8 +135,8 @@ Row jobInformationRow(jobLabel, jobProperty) {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'Exo2',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
                     color: textPrimaryColor))
           ],
         ),
@@ -151,15 +162,15 @@ Row jobInformationRowCellNumber(jobLabel, jobProperty, number) {
                         text: jobLabel + "  ",
                         style: TextStyle(
                             fontFamily: 'Exo2',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
                             color: textPrimaryColor,
                             decoration: TextDecoration.underline)),
                   ],
                 ),
               ),
               GestureDetector(
-                child: Icon(Icons.phone),
+                child: Icon(Icons.phone,size: 20,color: hyperlinkColor,),
                 onTap: () {
                   _launchNumber(number);
                 },
@@ -172,8 +183,8 @@ Row jobInformationRowCellNumber(jobLabel, jobProperty, number) {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'Exo2',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
                     color: textPrimaryColor))
           ],
         ),
