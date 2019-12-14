@@ -624,7 +624,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: () async {
+        onPressed: job.verifiedLeftWork == null ? () async {
           await showDialog(
             barrierDismissible: false,
             context: context,
@@ -680,7 +680,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
               );
             },
           );
-        },
+        } : null,
       ),
     );
   }
