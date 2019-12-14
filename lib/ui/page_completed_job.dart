@@ -1,28 +1,25 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:endevour/model/Job.dart';
 import 'package:endevour/model/Work.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_accepted_job_details.dart';
 import 'package:endevour/utils/utils.dart';
-import 'package:endevour/widgets/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AcceptedJobPage extends StatefulWidget {
+class CompletedJobPage extends StatefulWidget {
   final ValueChanged<int> changeCurrentTab;
 
-  AcceptedJobPage({Key key, this.changeCurrentTab}) : super(key: key);
+  CompletedJobPage({Key key, this.changeCurrentTab}) : super(key: key);
 
   @override
-  _AcceptedJobPageState createState() => _AcceptedJobPageState();
+  _CompletedJobPageState createState() => _CompletedJobPageState();
 }
 
-class _AcceptedJobPageState extends State<AcceptedJobPage> {
+class _CompletedJobPageState extends State<CompletedJobPage> {
   bool _saving = false;
   Screen size;
   Job jobDetails;
@@ -32,19 +29,19 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
 
   TextEditingController controller = new TextEditingController();
 
-  getAcceptedWork() async {
+  getCompletedWork() async {
     try {
       Response response;
 
       Dio dio = new Dio();
-      response = await dio.get(Constants.urlAcceptedJobs,
+      response = await dio.get(Constants.urlCompletedJobs,
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.json));
 
       if (response.statusCode == 200) {
-        var availableWork = response.data['data']['acceptedWork'];
+        var availableWork = response.data['data']['completedWork'];
 
         for (var x in availableWork) {
           var work = Work.fromJson(x);
@@ -159,7 +156,7 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
 
   @override
   void initState() {
-    getAcceptedWork();
+    getCompletedWork();
     super.initState();
   }
 
@@ -207,7 +204,7 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
     size = Screen(MediaQuery.of(context).size);
 
     Text titleWidget() {
-      return Text("Accepted Jobs",
+      return Text("Completed Jobs",
           style: TextStyle(
               fontFamily: 'Exo2',
               fontSize: 24.0,
@@ -215,38 +212,12 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
               color: Colors.white));
     }
 
-    Widget upperPart() {
-      return Stack(
-        children: <Widget>[
-          ClipPath(
-            clipper: UpperClipper(),
-            child: Container(
-              height: size.getWidthPx(110),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [colorCurve, colorCurveSecondary],
-                ),
-              ),
-            ),
-          ),
-          Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: size.getWidthPx(36)),
-                child: Column(
-                  children: <Widget>[
-                    Center(child: titleWidget()),
-                    SizedBox(height: size.getWidthPx(10)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
-    }
-
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: themeColour,
+        title: Text("Completed Job History"),
+        brightness: Brightness.light,
+      ),
       backgroundColor: backgroundColor,
       body: ModalProgressHUD(
         child: Stack(children: <Widget>[
@@ -261,7 +232,6 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
               child: Container(
                 child: Column(
                   children: <Widget>[
-                    upperPart(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
@@ -385,7 +355,7 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                                     builder: (context) =>
                                                         AcceptedJobDetailsPage(
                                                           jobDetails:
-                                                          jobDetails,
+                                                              jobDetails,
                                                         )));
                                           }
                                         },

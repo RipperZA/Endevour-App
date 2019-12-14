@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:endevour/services/user_service.dart';
+import 'package:endevour/ui/page_completed_job.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -202,6 +203,27 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
+          RaisedButton(
+            elevation: 8.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(22.0)),
+            padding: EdgeInsets.all(size.getWidthPx(10)),
+            child: Text(
+              'View Job History',
+              style: TextStyle(
+                  fontFamily: 'Exo2', color: Colors.white, fontSize: 14.0),
+            ),
+            color: colorCurve,
+            onPressed: ()
+            {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CompletedJobPage(
+                          )));
+            },
+          )
         ],
       )
     ]);

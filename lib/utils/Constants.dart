@@ -24,6 +24,7 @@ class Constants {
   static String urlArrivedAtWork = urlBase + 'work/arrived/';
   static String urlLeftWork = urlBase + 'work/left/';
   static String urlAcceptedJobs = urlBase + 'work/acceptedWork';
+  static String urlCompletedJobs = urlBase + 'work/completedWork';
   static String urlPendingJobs = urlBase + 'work/pendingWork';
   static String urlVerifyArrivedAtWork = urlBase + 'work/verifiedArrived/';
   static String urlVerifyLeftWork = urlBase + 'work/verifiedLeft/';
