@@ -621,9 +621,9 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
         child: Column(
           children: <Widget>[
             jobInformationRow(
-                'Area Manager', job.areaManagerName.toLowerCase()),
+                'Area Manager', job.areaManagerName),
             SizedBox(height: 10),
-            jobInformationRow('Site', job.site.name.toLowerCase()),
+            jobInformationRow('Site', job.site.name),
             SizedBox(height: 10),
             jobInformationRow('Address', job.site.fullAddress.toString()),
             SizedBox(height: 10),

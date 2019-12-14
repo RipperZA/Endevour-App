@@ -116,8 +116,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
 
         var job = Job.fromJson(jobInformation);
 
-        print(job.site.name);
-
         if (this.mounted) {
           setState(() {
             this.jobDetails = job;

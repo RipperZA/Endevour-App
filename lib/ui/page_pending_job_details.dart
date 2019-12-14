@@ -448,18 +448,18 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
         child: Column(
           children: <Widget>[
             !Constants.isNullEmptyFalseOrZero(job.workerName)
-                ? jobInformationRow('Worker Name', job.workerName.toLowerCase())
+                ? jobInformationRow('Worker Name', job.workerName)
                 : Container(width: 0, height: 0),
             !Constants.isNullEmptyFalseOrZero(job.workerName)
                 ? SizedBox(height: 10)
                 : Container(width: 0, height: 0),
             !Constants.isNullEmptyFalseOrZero(job.workerCell)
-                ? jobInformationRow('Worker Cell', job.workerCell.toLowerCase())
+                ? jobInformationRow('Worker Cell', job.workerCell)
                 : Container(width: 0, height: 0),
             !Constants.isNullEmptyFalseOrZero(job.workerCell)
                 ? SizedBox(height: 10)
                 : Container(width: 0, height: 0),
-            jobInformationRow('Site', job.site.name.toLowerCase()),
+            jobInformationRow('Site', job.site.name),
             SizedBox(height: 10),
             jobInformationRow('Address', job.site.fullAddress.toString()),
             SizedBox(height: 10),

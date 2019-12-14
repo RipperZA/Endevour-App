@@ -4,6 +4,7 @@ class Job {
   String uuid;
   Site site;
   String areaManagerName;
+  String areaManagerNumber;
   String workerName;
   String workerCell;
   double hours;
@@ -14,6 +15,8 @@ class Job {
   String verifiedAtWork;
   String leftWorkAt;
   String verifiedLeftWork;
+  String startDate;
+  String endDate;
 
   Job(
       {this.uuid,
@@ -27,6 +30,7 @@ class Job {
       : uuid = json['uuid'],
         site = Site.fromJson(json['site']),
         areaManagerName = json['area_manager_name'],
+        areaManagerNumber = json['area_manager_number'],
         workerName = json['worker_name'],
         workerCell = json['worker_cell'],
         hours = json['hours'].toDouble(),
@@ -36,7 +40,9 @@ class Job {
         arrivedAtWork = json['arrived_at_work_at'],
         verifiedAtWork = json['verified_at_work'],
         leftWorkAt = json['left_work_at'],
-        verifiedLeftWork = json['verified_left_work'];
+        verifiedLeftWork = json['verified_left_work'],
+        startDate = json['start_date'],
+        endDate = json['end_date'];
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,

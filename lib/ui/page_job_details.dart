@@ -1,18 +1,11 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:endevour/model/Job.dart';
-import 'package:endevour/model/Work.dart';
 import 'package:endevour/services/user_service.dart';
-import 'package:endevour/ui/page_apply_job.dart';
-import 'package:endevour/ui/page_dashboard.dart';
 import 'package:endevour/ui/page_home_worker.dart';
-import 'package:endevour/ui/photo_list.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/utils_widget.dart';
-import 'package:endevour/widgets/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -234,77 +227,10 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               fontSize: 24.0,
               fontWeight: null,
               underline: true),
-          jobInformationWidget()
+          jobInformationWidget(job)
         ],
       )
     ]);
-  }
-
-  Padding jobInformationWidget() {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: Align(
-        alignment: Alignment.center,
-        child: Column(
-          children: <Widget>[
-            jobInformationRow(
-                'Area Manager', job.areaManagerName.toLowerCase()),
-            SizedBox(height: 10),
-            jobInformationRow('Site', job.site.name.toLowerCase()),
-            SizedBox(height: 10),
-            jobInformationRow('Address', job.site.fullAddress.toString()),
-            SizedBox(height: 10),
-            jobInformationRow('Hours', job.hours.toString()),
-            SizedBox(height: 10),
-            jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
-            SizedBox(height: 10),
-            jobInformationRow(
-                'Initial Pay', "R ${job.payPartialDay.toString()}"),
-            jobInformationRow(
-                'Remaining Pay', "R ${job.payDifferenceDay.toString()}"),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Row jobInformationRow(jobLabel, jobProperty) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Flexible(
-          child: Column(
-            children: <Widget>[
-              Text(jobLabel + ': ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Exo2',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: textPrimaryColor)),
-              Text(jobProperty,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Exo2',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: textPrimaryColor))
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  GestureDetector followerAvatarWidget(String assetIcon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: CircleAvatar(
-        maxRadius: size.getWidthPx(24),
-        backgroundColor: Colors.transparent,
-        child: Image.asset(assetIcon),
-      ),
-    );
   }
 
   Container buttonWidgetAccept() {
@@ -411,7 +337,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         ),
         disabledColor: disabledButtonColour,
         onPressed: () {
-            _launchURL(job.site.latitude, job.site.longitude);
+          _launchURL(job.site.latitude, job.site.longitude);
         },
       ),
     );
