@@ -203,6 +203,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
+
+          UserDetails.userRoles.contains('worker') ?
           RaisedButton(
             elevation: 8.0,
             shape: RoundedRectangleBorder(
@@ -223,7 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           CompletedJobPage(
                           )));
             },
-          )
+          ): Container()
         ],
       )
     ]);
