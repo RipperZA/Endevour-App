@@ -98,14 +98,14 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 propertyCard('icons/available_jobs.png', 'Available Jobs', 1),
-                profileCard('icons/profile.png', 'Profile'),
+                profileCard('icons/history.png', 'Profile'),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('icons/open_jobs.png', 'Open Jobs', 2),
-                propertyCard('icons/imgforgot.png', 'Settings', 3),
+                propertyCard('icons/open_job.png', 'Open Jobs', 2),
+                propertyCard('icons/imgforgot1.png', 'Settings', 3),
               ],
             ),
           ],

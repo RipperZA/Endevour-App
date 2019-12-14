@@ -210,3 +210,23 @@ _launchNumber(number) async {
     throw 'Could not launch $url';
   }
 }
+
+Align jobDetailsAvatar(size) {
+  return Align(
+    alignment: Alignment.center,
+    child: Container(
+      margin: EdgeInsets.only(top: size.getWidthPx(10)),
+      child: CircleAvatar(
+        foregroundColor: backgroundColor,
+        maxRadius: size.getWidthPx(50),
+        backgroundColor: backgroundColor,
+        child: CircleAvatar(
+          maxRadius: size.getWidthPx(48),
+          foregroundColor: backgroundColor,
+          backgroundColor: backgroundColor,
+          child: Image.asset("assets/icons/job_details.png"),
+        ),
+      ),
+    ),
+  );
+}

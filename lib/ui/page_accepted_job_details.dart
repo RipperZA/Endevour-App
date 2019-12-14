@@ -526,7 +526,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  profileWidget(),
+                  jobDetailsAvatar(size),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -889,26 +889,6 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
     );
   }
 
-  Align profileWidget() {
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-        margin: EdgeInsets.only(top: size.getWidthPx(10)),
-        child: CircleAvatar(
-          foregroundColor: backgroundColor,
-          maxRadius: size.getWidthPx(50),
-          backgroundColor: Colors.white,
-          child: CircleAvatar(
-            maxRadius: size.getWidthPx(48),
-            foregroundColor: colorCurve,
-            child: Image.asset("assets/icons/icn_coming_soon.png"),
-//            backgroundImage: NetworkImage(
-//                'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4'),
-          ),
-        ),
-      ),
-    );
-  }
 
   Column likeWidget() {
     return Column(

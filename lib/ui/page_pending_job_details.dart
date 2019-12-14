@@ -353,7 +353,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  profileWidget(),
+                  jobDetailsAvatar(size),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -786,28 +786,6 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
             },
           );
         } : null,
-      ),
-    );
-  }
-
-  Align profileWidget() {
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-        margin: EdgeInsets.only(top: size.getWidthPx(2)),
-        child: CircleAvatar(
-          foregroundColor: backgroundColor,
-          backgroundColor: backgroundColor,
-          maxRadius: size.getWidthPx(50),
-          child: CircleAvatar(
-            maxRadius: size.getWidthPx(48),
-            foregroundColor: backgroundColor,
-            backgroundColor: backgroundColor,
-            child: Image.asset("assets/icons/job_details.png"),
-//            backgroundImage: NetworkImage(
-//                'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4'),
-          ),
-        ),
       ),
     );
   }
