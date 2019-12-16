@@ -47,8 +47,9 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
         var availableWork = response.data['data']['availableWork'];
 
         for (var x in availableWork) {
-          var work = Work.fromJson(x);
-          print(work.name);
+//          var work = Work.fromJson(x);
+
+           WorkList work = WorkList.fromJson(x);
 
           if (this.mounted) {
             setState(() {
