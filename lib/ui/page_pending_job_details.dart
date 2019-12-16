@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:endevour/ui/page_pending_job.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:endevour/model/Job.dart';
@@ -348,7 +349,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              color: backgroundColor,
+//              color: backgroundColor,
               elevation: 5,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -378,7 +379,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              color: backgroundColor,
+//              color: backgroundColor,
               elevation: 5,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -418,7 +419,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              color: backgroundColor,
+//              color: backgroundColor,
               elevation: 5,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -454,7 +455,8 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
                 ? SizedBox(height: 10)
                 : Container(width: 0, height: 0),
             !Constants.isNullEmptyFalseOrZero(job.workerCell)
-                ? jobInformationRow('Worker Cell', job.workerCell)
+                ?
+            jobInformationRowCellNumber('Worker Cell', job.workerCell, job.workerCell)
                 : Container(width: 0, height: 0),
             !Constants.isNullEmptyFalseOrZero(job.workerCell)
                 ? SizedBox(height: 10)

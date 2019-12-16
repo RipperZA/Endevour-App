@@ -1,13 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:endevour/model/Job.dart';
-import 'package:endevour/model/Work.dart';
 import 'package:endevour/model/WorkAreaManager.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_pending_job_details.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,6 +32,9 @@ class _PendingJobPageState extends State<PendingJobPage> {
 
   getCreatedWork() async {
     try {
+      this.workList = List();
+      this._searchResult = [];
+
       Response response;
 
       print(Constants.urlPendingJobs);
@@ -54,6 +56,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
             setState(() {
               this.workList.add(work);
             });
+            this.onSearchTextChanged(controller.text);
           }
         }
       }
@@ -106,7 +109,6 @@ class _PendingJobPageState extends State<PendingJobPage> {
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.json));
-
 
       setState(() {
         _saving = false;
@@ -194,7 +196,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
     text = text.toLowerCase();
 
     workList.forEach((work) {
-      if (work.work. name.toLowerCase().contains(text) ||
+      if (work.work.name.toLowerCase().contains(text) ||
           work.work.area.toLowerCase().contains(text)) _searchResult.add(work);
     });
 
@@ -304,7 +306,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                                     builder: (context) =>
                                                         PendingJobDetailsPage(
                                                             jobDetails:
-                                                                jobDetails)));
+                                                                jobDetails))).then((value) async {await this.getCreatedWork();});
                                           }
                                         },
                                         leading: CircleAvatar(
@@ -312,9 +314,10 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                           backgroundColor: themeColour,
                                           foregroundColor: backgroundColor,
                                         ),
-                                        title: new Text(_searchResult[i].work.name +
-                                            ' ' +
-                                            _searchResult[i].work.area),
+                                        title: new Text(
+                                            _searchResult[i].work.name +
+                                                ' ' +
+                                                _searchResult[i].work.area),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -412,26 +415,32 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
-                                              workList[index].work.uuid.toString());
+                                              workList[index]
+                                                  .work
+                                                  .uuid
+                                                  .toString());
 
                                           if (jobDetails != null) {
                                             Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PendingJobDetailsPage(
-                                                            jobDetails:
-                                                                jobDetails)));
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PendingJobDetailsPage(
+                                                                jobDetails:
+                                                                    jobDetails)))
+                                                .then((value) async {await this.getCreatedWork();});
                                           }
                                         },
                                         leading: CircleAvatar(
-                                          child: Text(workList[index].work.name[0]),
+                                          child: Text(
+                                              workList[index].work.name[0]),
                                           backgroundColor: themeColour,
                                           foregroundColor: backgroundColor,
                                         ),
-                                        title: new Text(workList[index].work.name +
-                                            ' ' +
-                                            workList[index].work.area),
+                                        title: new Text(
+                                            workList[index].work.name +
+                                                ' ' +
+                                                workList[index].work.area),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
