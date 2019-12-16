@@ -90,7 +90,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
     }
   }
 
-  getJobInformation(uuid) async {
+  getJobInformation(batch) async {
     try {
       setState(() {
         _saving = true;
@@ -98,7 +98,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
       Response response;
 
       Dio dio = new Dio();
-      response = await dio.get(Constants.urlGetJobDetails + uuid,
+      response = await dio.get(Constants.urlGetJobDetails + batch,
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},

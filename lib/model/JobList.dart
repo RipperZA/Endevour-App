@@ -42,10 +42,10 @@ class JobList {
           json['end_date'],
           json['site_name'],
           json['area'],
-          json['total_pay'],
-          json['total_partial_pay'],
-          json['total_difference_pay'],
-          json['total_hours'],
+          json['total_pay'].toDouble(),
+          json['total_partial_pay'].toDouble(),
+          json['total_difference_pay'].toDouble(),
+          json['total_hours'].toDouble(),
           json['num_days'].toInt(),
           json['items']
               .map((workJson) => Job.fromJson(workJson))
