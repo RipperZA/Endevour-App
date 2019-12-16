@@ -8,6 +8,7 @@ class Work {
   double longitude;
   String startDate;
   String endDate;
+  String batch;
 //  Worker worker;
 
   Work(
@@ -18,6 +19,7 @@ class Work {
       this.longitude,
       this.startDate,
       this.endDate,
+      this.batch,
 //      this.worker
       });
 
@@ -28,7 +30,8 @@ class Work {
         latitude = json['address_latitude'].toDouble(),
         longitude = json['address_longitude'].toDouble(),
         startDate = json['start_date'],
-        endDate = json['end_date'];
+        endDate = json['end_date'],
+        batch = json['batch'];
 //        worker = Worker.fromJson(json['worker']);
 
   Map<String, dynamic> toJson() => {

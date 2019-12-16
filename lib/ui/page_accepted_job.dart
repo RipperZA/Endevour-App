@@ -101,7 +101,7 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
       Response response;
 
       Dio dio = new Dio();
-      response = await dio.get(Constants.urlGetJobDetails + uuid,
+      response = await dio.get(Constants.urlGetJobDetailsSingle + uuid,
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
@@ -113,7 +113,8 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
       if (response.statusCode == 200) {
         var jobInformation = response.data['data']['jobInformation'];
 
-        var job = Job.fromJson(jobInformation);
+        Job job = Job.fromJson(jobInformation);
+
 
         if (this.mounted) {
           setState(() {

@@ -1,4 +1,5 @@
 import 'package:endevour/model/Job.dart';
+import 'package:endevour/model/JobList.dart';
 import 'package:endevour/utils/colors.dart';
 import 'package:endevour/utils/responsive_screen.dart';
 import 'package:flutter/material.dart';
@@ -55,14 +56,14 @@ Padding rightAlignText({text, rightPadding, textColor, fontSize, fontWeight}) {
   );
 }
 
-Padding jobInformationWidget(Job job, Screen size) {
+Padding jobInformationWidget(JobList job, Screen size) {
   return Padding(
     padding: EdgeInsets.all(8),
     child: Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      color: backgroundColor,
+//      color: backgroundColor,
       elevation: 5,
       child: Align(
         alignment: Alignment.center,
@@ -70,7 +71,67 @@ Padding jobInformationWidget(Job job, Screen size) {
           child: Column(
             children: <Widget>[
               centreAlignText(
-                  text: "Job Information",
+                  text: "Job Overview",
+                  padding: size.getWidthPx(16),
+                  textColor: textPrimaryColor,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w900,
+                  underline: true),
+              SizedBox(
+                height: 15,
+              ),
+              jobInformationRow('Start Date', job.work.first.startDate),
+              SizedBox(
+                height: 10,
+              ),
+              jobInformationRow('End Date', job.work.last.endDate),
+              SizedBox(
+                height: 10,
+              ),
+              jobInformationRowCellNumber(
+                  'Area Manager',
+                  job.work.first.areaManagerName +
+                      " (${job.work.first.areaManagerNumber.toString()})",
+                  job.work.first.areaManagerNumber),
+              SizedBox(height: 10),
+              jobInformationRow('Site', job.siteName),
+              SizedBox(height: 10),
+              jobInformationRow('Address', job.work.first.site.fullAddress.toString()),
+              SizedBox(height: 10),
+              jobInformationRow('Work Duration', job.numDays.toString() + ' Day(s)'),
+              SizedBox(height: 10),
+              jobInformationRow('Total Hours', job.totalHours.toString()),
+              SizedBox(height: 10),
+              jobInformationRow('Total Pay', "R ${job.totalPay.toString()}"),
+              SizedBox(height: 10),
+              jobInformationRow(
+                  'Initial Pay', "R ${job.totalPartialPay.toString()}"),
+              jobInformationRow(
+                  'Remaining Pay', "R ${job.totalDifferencePay.toString()}"),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Padding jobInformationWidgetSingle(Job job, Screen size) {
+  return Padding(
+    padding: EdgeInsets.all(8),
+    child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+//      color: backgroundColor,
+      elevation: 5,
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              centreAlignText(
+                  text: "Job Overview",
                   padding: size.getWidthPx(16),
                   textColor: textPrimaryColor,
                   fontSize: 24.0,
@@ -97,7 +158,7 @@ Padding jobInformationWidget(Job job, Screen size) {
               SizedBox(height: 10),
               jobInformationRow('Address', job.site.fullAddress.toString()),
               SizedBox(height: 10),
-              jobInformationRow('Hours', job.hours.toString()),
+              jobInformationRow('Total Hours', job.hours.toString()),
               SizedBox(height: 10),
               jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
               SizedBox(height: 10),

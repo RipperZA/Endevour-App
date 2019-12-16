@@ -1,15 +1,12 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
+import 'package:endevour/model/JobList.dart';
 import 'package:endevour/model/WorkList.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:endevour/model/Job.dart';
-import 'package:endevour/model/Work.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_job_details.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,7 +23,7 @@ class ApplyJobPage extends StatefulWidget {
 class _ApplyJobPageState extends State<ApplyJobPage> {
   bool _saving = false;
   Screen size;
-  Job jobDetails;
+  JobList jobDetails;
 
   List<WorkList> workList = List();
   List<WorkList> _searchResult = [];
@@ -48,9 +45,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
         var availableWork = response.data['data']['availableWork'];
 
         for (var x in availableWork) {
-//          var work = Work.fromJson(x);
-
-           WorkList work = WorkList.fromJson(x);
+          WorkList work = WorkList.fromJson(x);
 
           if (this.mounted) {
             setState(() {
@@ -84,8 +79,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
             fontSize: 16.0);
       }
     } on Error catch (e) {
-
-
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
@@ -117,7 +110,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
       if (response.statusCode == 200) {
         var jobInformation = response.data['data']['jobInformation'];
 
-        var job = Job.fromJson(jobInformation);
+        JobList job = JobList.fromJson(jobInformation);
 
         if (this.mounted) {
           setState(() {
@@ -129,7 +122,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
       setState(() {
         _saving = false;
       });
-
 
       try {
         Fluttertoast.showToast(
@@ -151,6 +143,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
             fontSize: 16.0);
       }
     } on Error catch (e) {
+
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
@@ -198,8 +191,8 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
     text = text.toLowerCase();
 
     workList.forEach((work) {
-      if (work.batch.toLowerCase().contains(text) ||
-          work.batch.toLowerCase().contains(text)) _searchResult.add(work);
+      if (work.siteName.toLowerCase().contains(text) ||
+          work.area.toLowerCase().contains(text)) _searchResult.add(work);
     });
 
     setState(() {
@@ -296,6 +289,10 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                       height: 5,
                                     ),
                                     new Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
@@ -312,13 +309,20 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                           }
                                         },
                                         leading: CircleAvatar(
-                                          child: Text(workList[index].batch[0]),
+                                          child: Text(
+                                              _searchResult[index].siteName[0]),
                                           backgroundColor: themeColour,
                                           foregroundColor: backgroundColor,
                                         ),
-                                        title: new Text(_searchResult[index].batch +
-                                            ' ' +
-                                            _searchResult[index].numDays.toString()),
+                                        title: new Text(
+                                          _searchResult[index].siteName +
+                                              ' ' +
+                                              _searchResult[index].area,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        ),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -327,17 +331,53 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                               text: TextSpan(
                                                 text: '',
                                                 style:
-                                                DefaultTextStyle.of(context)
-                                                    .style,
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
                                                 children: <TextSpan>[
                                                   TextSpan(
                                                       text: 'Num Days:',
                                                       style: TextStyle(
                                                           fontWeight:
-                                                          FontWeight.bold)),
+                                                              FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                      ' ${workList[index].numDays}'),
+                                                          ' ${_searchResult[index].numDays} days'),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Total Hours:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${_searchResult[index].totalHours}'),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Total Pay:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' R ${_searchResult[index].totalPay}'),
                                                 ],
                                               ),
                                             ),
@@ -395,6 +435,10 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                       height: 5,
                                     ),
                                     new Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
@@ -412,14 +456,15 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                           }
                                         },
                                         leading: CircleAvatar(
-                                          child: Text(workList[index].batch[0]),
+                                          child:
+                                              Text(workList[index].siteName[0]),
                                           backgroundColor: themeColour,
                                           foregroundColor: backgroundColor,
                                         ),
                                         title: new Text(
-                                          workList[index].numDays.toString() +
+                                          workList[index].siteName +
                                               ' ' +
-                                              workList[index].batch,
+                                              workList[index].area,
                                           style: TextStyle(
                                               fontSize: 18,
                                               decoration:
@@ -433,17 +478,53 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                               text: TextSpan(
                                                 text: '',
                                                 style:
-                                                DefaultTextStyle.of(context)
-                                                    .style,
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
                                                 children: <TextSpan>[
                                                   TextSpan(
                                                       text: 'Num Days:',
                                                       style: TextStyle(
                                                           fontWeight:
-                                                          FontWeight.bold)),
+                                                              FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                      ' ${workList[index].numDays}'),
+                                                          ' ${workList[index].numDays} days'),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Total Hours:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' ${workList[index].totalHours}'),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Total Pay:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                          ' R ${workList[index].totalPay}'),
                                                 ],
                                               ),
                                             ),

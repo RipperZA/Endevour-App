@@ -18,6 +18,7 @@ class Constants {
   static String urlNewJobUpload = urlBase + 'work';
   static String urlGetAvailableWork = urlBase + 'work/getAvailableWork';
   static String urlGetJobDetails = urlBase + 'work/';
+  static String urlGetJobDetailsSingle = urlBase + 'workSingle/';
   static String urlGetJobDetailsAreaManager = urlBase + 'workAreaManager/';
   static String urlAcceptJob = urlBase + 'work/accept/';
   static String urlCancelJob = urlBase + 'work/cancel/';

@@ -98,7 +98,7 @@ class _CompletedJobPageState extends State<CompletedJobPage> {
       Response response;
 
       Dio dio = new Dio();
-      response = await dio.get(Constants.urlGetJobDetails + uuid,
+      response = await dio.get(Constants.urlGetJobDetailsSingle + uuid,
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},

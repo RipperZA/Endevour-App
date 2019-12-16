@@ -24,7 +24,7 @@ class AcceptedJobDetailsPage extends StatefulWidget {
 class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
   Screen size;
 
-  Job job = Job();
+  Job job;
   bool _saving = false;
   LocationData currentLocation;
   var location = new Location();
@@ -521,7 +521,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              color: backgroundColor,
+//              color: backgroundColor,
               elevation: 5,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -551,7 +551,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              color: backgroundColor,
+//              color: backgroundColor,
               elevation: 5,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -586,7 +586,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
               ),
             ),
           ),
-          jobInformationWidget(job, size)
+          jobInformationWidgetSingle(job, size)
         ],
       )
     ]);
@@ -624,63 +624,66 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: job.verifiedLeftWork == null ? () async {
-          await showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              // return object of type Dialog
-              return AlertDialog(
-                title: new Text("Please Confirm!"),
-                content: new Text("Are you sure you want to cancel this job?"),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_down,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorErrorMessage,
-                      label: new Text(
-                        "No!",
-                        style: TextStyle(
+        onPressed: job.verifiedLeftWork == null
+            ? () async {
+                await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
+                      title: new Text("Please Confirm!"),
+                      content:
+                          new Text("Are you sure you want to cancel this job?"),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_down,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorErrorMessage,
+                            label: new Text(
+                              "No!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      }),
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_up,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorSuccessMessage,
-                      label: new Text(
-                        "Yes!",
-                        style: TextStyle(
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }),
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_up,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorSuccessMessage,
+                            label: new Text(
+                              "Yes!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        cancelJob();
-                      }),
-                ],
-              );
-            },
-          );
-        } : null,
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              cancelJob();
+                            }),
+                      ],
+                    );
+                  },
+                );
+              }
+            : null,
       ),
     );
   }
@@ -746,8 +749,8 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                     // return object of type Dialog
                     return AlertDialog(
                       title: new Text("Please Confirm!"),
-                      content:
-                          new Text("Are you sure you want to sign in to work and are within 100 meters of the work site?"),
+                      content: new Text(
+                          "Are you sure you want to sign in to work and are within 100 meters of the work site?"),
                       actions: <Widget>[
                         // usually buttons at the bottom of the dialog
                         RaisedButton.icon(
@@ -888,7 +891,6 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
       ),
     );
   }
-
 
   Column likeWidget() {
     return Column(

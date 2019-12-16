@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:endevour/model/Job.dart';
+import 'package:endevour/model/JobList.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_home_worker.dart';
 import 'package:endevour/utils/utils.dart';
@@ -14,7 +14,7 @@ class JobDetailsPage extends StatefulWidget {
   const JobDetailsPage({Key key, @required this.jobDetails}) : super(key: key);
 
 //  final String jobUuid;
-  final Job jobDetails;
+  final JobList jobDetails;
 
   _JobDetailsPageState createState() => _JobDetailsPageState();
 }
@@ -22,7 +22,7 @@ class JobDetailsPage extends StatefulWidget {
 class _JobDetailsPageState extends State<JobDetailsPage> {
   Screen size;
 
-  Job job;
+  JobList job;
   bool _saving = false;
 
   void initState() {
@@ -38,12 +38,10 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         _saving = true;
       });
 
-      print(Constants.urlAcceptJob + job.uuid);
-
       Response response;
 
       Dio dio = new Dio();
-      response = await dio.get(Constants.urlAcceptJob + job.uuid,
+      response = await dio.get(Constants.urlAcceptJob + job.batch,
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
@@ -203,7 +201,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              color: backgroundColor,
+//              color: backgroundColor,
               elevation: 5,
               child: Align(
                 alignment: Alignment.center,
@@ -240,7 +238,143 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               ),
             ),
           ),
-          jobInformationWidget(job, size)
+//
+          jobInformationWidget(job, size),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              height: size.getWidthPx(300),
+              child: ListView.separated(
+                  itemCount: job.work.length,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                      height: 10,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    return Card(
+//                          color: backgroundColor,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: new ListTile(
+                        leading: CircleAvatar(
+                          child: Text((index + 1).toString()),
+                          backgroundColor: themeColour,
+                          foregroundColor: backgroundColor,
+                        ),
+                        title: new Text(
+                          'Day ' + (index + 1).toString(),
+                          style: TextStyle(
+                              fontSize: 18,
+                              decoration: TextDecoration.underline),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Total Hours:',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(text: ' ${job.work[index].hours}'),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Total Pay:',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                      text:
+                                          ' R ${job.work[index].payTotalDay}'),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Initial Pay Day ' +
+                                          (index + 1).toString() +
+                                          ':',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                      text:
+                                          ' R ${job.work[index].payPartialDay}'),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Work Done Pay Day ' +
+                                          (index + 1).toString() +
+                                          ':',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                      text:
+                                          ' R ${job.work[index].payDifferenceDay}'),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Start:',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                      text: ' ${job.work[index].startDate}'),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'End:',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(text: ' ${job.work[index].endDate}'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      margin: const EdgeInsets.all(0.0),
+                    );
+                  }),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          )
         ],
       )
     ]);
@@ -350,7 +484,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         ),
         disabledColor: disabledButtonColour,
         onPressed: () {
-          _launchURL(job.site.latitude, job.site.longitude);
+          _launchURL(
+              job.work.first.site.latitude, job.work.first.site.longitude);
         },
       ),
     );
@@ -359,7 +494,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   Column likeWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.payPartialDay}",
+        Text("R ${job.totalPartialPay}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
@@ -379,7 +514,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   Column nameWidget() {
     return Column(
       children: <Widget>[
-        Text(job.site.name,
+        Text(job.siteName,
 //        Text('asdada',
             style: TextStyle(
                 fontFamily: "Exo2",
@@ -387,7 +522,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 color: colorCurve,
                 fontWeight: FontWeight.w700)),
         SizedBox(height: size.getWidthPx(4)),
-        Text("R ${job.payTotalDay}",
+        Text("R ${job.totalPay}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
@@ -400,7 +535,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   Column followersWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.payDifferenceDay}",
+        Text("R ${job.totalDifferencePay}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
