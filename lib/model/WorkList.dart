@@ -1,36 +1,52 @@
 import 'Work.dart';
 
 class WorkList {
-  List work;
-  int numItems;
   String batch;
+  String startDate;
+  String endDate;
+  String siteName;
+  String area;
+  double totalPay;
+  double totalHours;
+  int numDays;
+  List<Work> work;
 
-  WorkList(this.numItems, this.batch, [this.work]);
+  WorkList(this.batch, this.startDate, this.endDate, this.siteName, this.area,
+      this.totalPay, this.totalHours, this.numDays, [this.work]);
 
-  WorkList.fromJson(Map<String, dynamic> json)
-      : numItems = json['num_items'],
-        batch = json['batch'],
-        work =
-            json['items'].map((workJson) => Work.fromJson(workJson)).toList();
-
-//  {
-//
-//    if (json['items'] != null) {
+  factory WorkList.fromJson(Map<String, dynamic> json) {
+    if (json['items'] != null) {
 //      var workObjsJson = json['items'] as List;
-//
-//      List _works = workObjsJson.map((workJson) => Work.fromJson(workJson)).toList();
-//
-//
-//      return WorkList(
-//          json['num_items'],
-//          _works
-//      );
-//    } else {
-//      return WorkList(
-//        json['num_items'],
-//      );
-//    }
-//  }
+//      List _works =
+//          workObjsJson.map((workJson) => Work.fromJson(workJson)).toList();
+
+      return WorkList(
+          json['batch'],
+          json['start_date'],
+          json['end_date'],
+          json['site_name'],
+          json['area'],
+          json['total_pay'],
+          json['total_hours'],
+          json['num_days'],
+          json['items']
+              .map((workJson) => Work.fromJson(workJson))
+              .toList()
+              .cast<Work>());
+    } else {
+      return WorkList(
+          json['batch'],
+          json['start_date'],
+          json['end_date'],
+          json['site_name'],
+          json['area'],
+          json['total_pay'],
+          json['total_hours'],
+          json['num_days'],
+//           List<Work>()
+      );
+    }
+  }
 
   Work getElement(id) {
     return this.work.first;

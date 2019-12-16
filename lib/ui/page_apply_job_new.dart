@@ -52,9 +52,6 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
 
            WorkList work = WorkList.fromJson(x);
 
-           print(work.batch);
-
-
           if (this.mounted) {
             setState(() {
               this.workList.add(work);
@@ -292,7 +289,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                           ? new ListView.builder(
                               itemCount: _searchResult.length,
                               shrinkWrap: true,
-                              itemBuilder: (context, i) {
+                              itemBuilder: (context, index) {
                                 return Column(
                                   children: <Widget>[
                                     SizedBox(
@@ -302,7 +299,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
-                                              workList[i].batch.toString());
+                                              workList[index].batch.toString());
                                           if (jobDetails != null) {
                                             Navigator.push(
                                                 context,
@@ -315,17 +312,35 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                           }
                                         },
                                         leading: CircleAvatar(
-                                          child: Text(workList[i].batch[0]),
+                                          child: Text(workList[index].batch[0]),
                                           backgroundColor: themeColour,
                                           foregroundColor: backgroundColor,
                                         ),
-                                        title: new Text(_searchResult[i].batch +
+                                        title: new Text(_searchResult[index].batch +
                                             ' ' +
-                                            _searchResult[i].numItems.toString()),
+                                            _searchResult[index].numDays.toString()),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
+                                                DefaultTextStyle.of(context)
+                                                    .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Num Days:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                      ' ${workList[index].numDays}'),
+                                                ],
+                                              ),
+                                            ),
                                             RichText(
                                               text: TextSpan(
                                                 text: '',
@@ -340,7 +355,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${_searchResult[i].getElement(2).startDate}'),
+                                                          ' ${_searchResult[index].startDate}'),
                                                 ],
                                               ),
                                             ),
@@ -358,7 +373,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${_searchResult[i].getElement(2).endDate}'),
+                                                          ' ${_searchResult[index].endDate}'),
                                                 ],
                                               ),
                                             ),
@@ -402,7 +417,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                           foregroundColor: backgroundColor,
                                         ),
                                         title: new Text(
-                                          workList[index].numItems.toString() +
+                                          workList[index].numDays.toString() +
                                               ' ' +
                                               workList[index].batch,
                                           style: TextStyle(
@@ -418,6 +433,24 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                               text: TextSpan(
                                                 text: '',
                                                 style:
+                                                DefaultTextStyle.of(context)
+                                                    .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Num Days:',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight.bold)),
+                                                  TextSpan(
+                                                      text:
+                                                      ' ${workList[index].numDays}'),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style:
                                                     DefaultTextStyle.of(context)
                                                         .style,
                                                 children: <TextSpan>[
@@ -428,7 +461,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${workList[index].getElement(0).startDate}'),
+                                                          ' ${workList[index].startDate}'),
                                                 ],
                                               ),
                                             ),
@@ -446,7 +479,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${workList[index].getElement(3).endDate}'),
+                                                          ' ${workList[index].endDate}'),
                                                 ],
                                               ),
                                             ),
