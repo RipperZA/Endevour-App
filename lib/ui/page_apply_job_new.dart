@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:endevour/model/WorkList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:endevour/model/Job.dart';
@@ -27,8 +28,8 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
   Screen size;
   Job jobDetails;
 
-  List<Work> workList = List();
-  List<Work> _searchResult = [];
+  List<WorkList> workList = List();
+  List<WorkList> _searchResult = [];
 
   TextEditingController controller = new TextEditingController();
 
@@ -47,7 +48,12 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
         var availableWork = response.data['data']['availableWork'];
 
         for (var x in availableWork) {
-          var work = Work.fromJson(x);
+//          var work = Work.fromJson(x);
+
+           WorkList work = WorkList.fromJson(x);
+
+           print(work.batch);
+
 
           if (this.mounted) {
             setState(() {
@@ -81,6 +87,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
             fontSize: 16.0);
       }
     } on Error catch (e) {
+
 
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
@@ -194,8 +201,8 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
     text = text.toLowerCase();
 
     workList.forEach((work) {
-      if (work.name.toLowerCase().contains(text) ||
-          work.area.toLowerCase().contains(text)) _searchResult.add(work);
+      if (work.batch.toLowerCase().contains(text) ||
+          work.batch.toLowerCase().contains(text)) _searchResult.add(work);
     });
 
     setState(() {
@@ -295,7 +302,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
-                                              workList[i].uuid.toString());
+                                              workList[i].batch.toString());
                                           if (jobDetails != null) {
                                             Navigator.push(
                                                 context,
@@ -308,13 +315,13 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                           }
                                         },
                                         leading: CircleAvatar(
-                                          child: Text(workList[i].name[0]),
+                                          child: Text(workList[i].batch[0]),
                                           backgroundColor: themeColour,
                                           foregroundColor: backgroundColor,
                                         ),
-                                        title: new Text(_searchResult[i].name +
+                                        title: new Text(_searchResult[i].batch +
                                             ' ' +
-                                            _searchResult[i].area),
+                                            _searchResult[i].numItems.toString()),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -333,7 +340,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${_searchResult[i].startDate}'),
+                                                          ' ${_searchResult[i].getElement(2).startDate}'),
                                                 ],
                                               ),
                                             ),
@@ -351,7 +358,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${_searchResult[i].endDate}'),
+                                                          ' ${_searchResult[i].getElement(2).endDate}'),
                                                 ],
                                               ),
                                             ),
@@ -376,7 +383,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
-                                              workList[index].uuid.toString());
+                                              workList[index].batch.toString());
 
                                           if (jobDetails != null) {
                                             Navigator.push(
@@ -390,14 +397,14 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                           }
                                         },
                                         leading: CircleAvatar(
-                                          child: Text(workList[index].name[0]),
+                                          child: Text(workList[index].batch[0]),
                                           backgroundColor: themeColour,
                                           foregroundColor: backgroundColor,
                                         ),
                                         title: new Text(
-                                          workList[index].name +
+                                          workList[index].numItems.toString() +
                                               ' ' +
-                                              workList[index].area,
+                                              workList[index].batch,
                                           style: TextStyle(
                                               fontSize: 18,
                                               decoration:
@@ -421,7 +428,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${workList[index].startDate}'),
+                                                          ' ${workList[index].getElement(0).startDate}'),
                                                 ],
                                               ),
                                             ),
@@ -439,7 +446,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${workList[index].endDate}'),
+                                                          ' ${workList[index].getElement(3).endDate}'),
                                                 ],
                                               ),
                                             ),

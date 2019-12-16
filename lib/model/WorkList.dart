@@ -3,12 +3,16 @@ import 'Work.dart';
 class WorkList {
   List work;
   int numItems;
+  String batch;
 
-  WorkList(this.numItems,[this.work]);
+  WorkList(this.numItems, this.batch, [this.work]);
 
-  WorkList.fromJson(Map<String, dynamic> json):
-        numItems= json['num_items'],
-        work = json['items'].map((workJson) => Work.fromJson(workJson)).toList();
+  WorkList.fromJson(Map<String, dynamic> json)
+      : numItems = json['num_items'],
+        batch = json['batch'],
+        work =
+            json['items'].map((workJson) => Work.fromJson(workJson)).toList();
+
 //  {
 //
 //    if (json['items'] != null) {
@@ -28,8 +32,7 @@ class WorkList {
 //    }
 //  }
 
-  Work getElement(id)
-  {
+  Work getElement(id) {
     return this.work.first;
   }
 
