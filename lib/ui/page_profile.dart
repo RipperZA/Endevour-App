@@ -349,11 +349,12 @@ class _ProfilePageState extends State<ProfilePage> {
         child: CircleAvatar(
           foregroundColor: backgroundColor,
           maxRadius: size.getWidthPx(50),
-          backgroundColor: Colors.white,
+          backgroundColor: backgroundColor,
           child: CircleAvatar(
-            maxRadius: size.getWidthPx(48),
+            maxRadius: size.getWidthPx(50),
             foregroundColor: colorCurve,
-            child: Image.asset("assets/icons/icn_coming_soon.png"),
+            backgroundColor: backgroundColor,
+            child: Image.asset("assets/icons/profile_info.png"),
 //            backgroundImage: NetworkImage(
 //                'https://avatars3.githubusercontent.com/u/17440971?s=400&u=b0d8df93a2e45812e577358cd66849e9d7cf0f90&v=4'),
           ),

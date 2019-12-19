@@ -98,7 +98,7 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 propertyCard('icons/available_jobs.png', 'Available Jobs', 1),
-                profileCard('icons/history.png', 'Profile'),
+                profileCard('icons/profile.png', 'Profile'),
               ],
             ),
             Row(
