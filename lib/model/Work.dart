@@ -9,6 +9,10 @@ class Work {
   String batch;
   int current_day;
   int total_days;
+  String arrivedAtWork;
+  String verifiedAtWork;
+  String leftWorkAt;
+  String verifiedLeftWork;
 
 //  Worker worker;
 
@@ -36,7 +40,11 @@ class Work {
         endDate = json['end_date'],
         batch = json['batch'],
         current_day = json['current_day'],
-        total_days = json['total_days'];
+        total_days = json['total_days'],
+        arrivedAtWork = json['arrived_at_work_at'],
+        verifiedAtWork = json['verified_at_work'],
+        leftWorkAt = json['left_work_at'],
+        verifiedLeftWork = json['verified_left_work'];
 
 //        worker = Worker.fromJson(json['worker']);
 

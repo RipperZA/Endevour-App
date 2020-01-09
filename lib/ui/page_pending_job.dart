@@ -412,6 +412,9 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                       height: 5,
                                     ),
                                     new Card(
+                                      color:  ( workList[index].work.arrivedAtWork != null && workList[index].work.verifiedAtWork == null ) ||
+                                              ( workList[index].work.leftWorkAt != null && workList[index].work.verifiedLeftWork == null ) ?
+                                                                                                                            colorLightGreen : colorLightRed,
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
