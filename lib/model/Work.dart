@@ -1,5 +1,3 @@
-import 'package:endevour/model/Worker.dart';
-
 class Work {
   String uuid;
   String name;
@@ -9,6 +7,9 @@ class Work {
   String startDate;
   String endDate;
   String batch;
+  int current_day;
+  int total_days;
+
 //  Worker worker;
 
   Work(
@@ -20,6 +21,8 @@ class Work {
       this.startDate,
       this.endDate,
       this.batch,
+      this.current_day,
+      this.total_days,
 //      this.worker
       });
 
@@ -31,7 +34,10 @@ class Work {
         longitude = json['address_longitude'].toDouble(),
         startDate = json['start_date'],
         endDate = json['end_date'],
-        batch = json['batch'];
+        batch = json['batch'],
+        current_day = json['current_day'],
+        total_days = json['total_days'];
+
 //        worker = Worker.fromJson(json['worker']);
 
   Map<String, dynamic> toJson() => {
