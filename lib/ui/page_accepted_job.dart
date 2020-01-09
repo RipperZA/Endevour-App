@@ -285,7 +285,7 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                 return Column(
                                   children: <Widget>[
                                     SizedBox(
-                                      height: 5,
+                                      height: 3,
                                     ),
                                     new Card(
                                       shape: RoundedRectangleBorder(
@@ -293,10 +293,12 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                             BorderRadius.circular(20.0),
                                       ),
                                       child: ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
                                           itemCount:
                                               _searchResult[index].work.length,
                                           shrinkWrap: true,
-                                          itemBuilder: (contexta, position) {
+                                          itemBuilder: (context, position) {
                                             return ListTile(
                                               onTap: () async {
                                                 await getJobInformation(
@@ -400,6 +402,9 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                           }),
                                       margin: const EdgeInsets.all(0.0),
                                     ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
                                   ],
                                 );
                               },
@@ -410,7 +415,7 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                 return Column(
                                   children: <Widget>[
                                     SizedBox(
-                                      height: 5,
+                                      height: 3,
                                     ),
                                     new Card(
                                       shape: RoundedRectangleBorder(
@@ -418,10 +423,12 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                             BorderRadius.circular(20.0),
                                       ),
                                       child: ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
                                           itemCount:
                                               workList[index].work.length,
                                           shrinkWrap: true,
-                                          itemBuilder: (contexta, position) {
+                                          itemBuilder: (context, position) {
                                             return ListTile(
                                               onTap: () async {
                                                 await getJobInformation(
@@ -504,26 +511,28 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                                     text: TextSpan(
                                                       text: '',
                                                       style:
-                                                      DefaultTextStyle.of(
-                                                          context)
-                                                          .style,
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
                                                       children: <TextSpan>[
                                                         TextSpan(
                                                             text:
-                                                            'Day ${workList[index].work[position].current_day} of ${workList[index].work[position].total_days}',
+                                                                'Day ${workList[index].work[position].current_day} of ${workList[index].work[position].total_days}',
                                                             style: TextStyle(
                                                                 fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
+                                                                    FontWeight
+                                                                        .bold)),
                                                       ],
                                                     ),
                                                   ),
-
                                                 ],
                                               ),
                                             );
                                           }),
                                       margin: const EdgeInsets.all(0.0),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
                                     ),
                                   ],
                                 );
