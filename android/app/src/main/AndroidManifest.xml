@@ -21,7 +21,7 @@
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyDWJDRCn8rtaYCWHj-anqOy-MHFgEHp5eg"
+                android:value="AIzaSyCpZSjupaylWcp4XmhsmUfn3HdQPRd5_XQ"
         />
 
         <!--    Todo testfingerprint appcompat.light-->
