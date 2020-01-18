@@ -1,6 +1,3 @@
-
-
-
 class Property{
   String id;
   String propertyName;

@@ -88,7 +88,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
           );
         });
 
-    if (picked != null && picked != _startTimeInitial) {
+    if (picked != null) {
       setState(() {
         _startTimeInitial = picked;
         if (picked.minute < 10) {
@@ -116,7 +116,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
           );
         });
 
-    if (picked != null && picked != _endTimeInitial) {
+    if (picked != null) {
       setState(() {
         _endTimeInitial = picked;
         if (picked.minute < 10) {
@@ -578,7 +578,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     color:
-                                                        textSecondaryDarkColor),
+                                                    themeColour),
                                               )
                                             : Text("Set Start Time",
                                                 style: TextStyle(
@@ -607,7 +607,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     color:
-                                                        textSecondaryDarkColor),
+                                                    themeColour),
                                               )
                                             : Text(
                                                 "Set End Time",
@@ -658,7 +658,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                             DateTime.now().month + 3, 0),
                                         selectedDate: DateTime(2019, 10, 03),
                                         onPageSelected:
-                                            (pageStartDate, pageEndDate) {
+                                            (pageStartDate, pageEndDate)
+                                        {
                                           setState(() {
                                             calendarMonthName =
                                                 DateFormat('yyyy-MMMM')
@@ -668,6 +669,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         },
                                         weekdayLabelsRow:
                                             CalendarroWeekdayLabelsView(),
+                                        //NB I changed the default_day_tile.dart in calendarro to match the theme colour when choosing a day on calendar.
+                                        //default was Colors.blue and there was no other way to change it currently.
+                                        // remember to change it again if you change calendarro version
+                                        // todo: remember to add 'package:endevour/utils/utils.dart' in default_day_tile.dart be able to find the variable 'themeColour'
                                         dayTileBuilder: DefaultDayTileBuilder(),
                                         displayMode: DisplayMode.MONTHS,
                                         selectionMode: SelectionMode.MULTI,

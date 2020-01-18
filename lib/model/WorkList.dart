@@ -26,8 +26,8 @@ class WorkList {
           json['end_date'],
           json['site_name'],
           json['area'],
-          json['total_pay'],
-          json['total_hours'],
+          json['total_pay'].toDouble(),
+          json['total_hours'].toDouble(),
           json['num_days'],
           json['items']
               .map((workJson) => Work.fromJson(workJson))
