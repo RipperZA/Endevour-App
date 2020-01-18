@@ -243,8 +243,10 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
-              height: size.getWidthPx(300),
+//              height: size.getWidthPx(300),
               child: ListView.separated(
+                  physics:
+                  NeverScrollableScrollPhysics(),
                   itemCount: job.work.length,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -284,7 +286,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       text: 'Total Hours:',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
-                                  TextSpan(text: ' ${job.work[index].hours}'),
+                                  TextSpan(text: ' ${job.work[index].hours.toStringAsFixed(2)}'),
                                 ],
                               ),
                             ),

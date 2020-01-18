@@ -286,7 +286,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                 return Column(
                                   children: <Widget>[
                                     SizedBox(
-                                      height: 5,
+                                      height: 3,
                                     ),
                                     new Card(
                                       shape: RoundedRectangleBorder(
@@ -359,7 +359,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${_searchResult[index].totalHours}'),
+                                                          ' ${_searchResult[index].totalHours.toStringAsFixed(2)}'),
                                                 ],
                                               ),
                                             ),
@@ -422,6 +422,9 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                       ),
                                       margin: const EdgeInsets.all(0.0),
                                     ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                   ],
                                 );
                               },
@@ -432,7 +435,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                 return Column(
                                   children: <Widget>[
                                     SizedBox(
-                                      height: 5,
+                                      height: 3,
                                     ),
                                     new Card(
                                       shape: RoundedRectangleBorder(
@@ -506,7 +509,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' ${workList[index].totalHours}'),
+                                                          ' ${workList[index].totalHours.toStringAsFixed(2)}'),
                                                 ],
                                               ),
                                             ),
@@ -568,6 +571,9 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                         ),
                                       ),
                                       margin: const EdgeInsets.all(0.0),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
                                     ),
                                   ],
                                 );
