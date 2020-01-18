@@ -291,9 +291,17 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                 return Column(
                                   children: <Widget>[
                                     SizedBox(
-                                      height: 5,
+                                      height: 3,
                                     ),
                                     new Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(20.0),
+                                      ),
+                                      color:  ( workList[i].work.arrivedAtWork != null && workList[i].work.verifiedAtWork == null ) ||
+                                              ( workList[i].work.leftWorkAt != null && workList[i].work.verifiedLeftWork == null ) ?
+                                              colorLightGreen : null,
+
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
@@ -399,6 +407,9 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                       ),
                                       margin: const EdgeInsets.all(0.0),
                                     ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
                                   ],
                                 );
                               },
@@ -409,9 +420,13 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                 return Column(
                                   children: <Widget>[
                                     SizedBox(
-                                      height: 5,
+                                      height: 3,
                                     ),
                                     new Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(20.0),
+                                      ),
                                       color:  ( workList[index].work.arrivedAtWork != null && workList[index].work.verifiedAtWork == null ) ||
                                               ( workList[index].work.leftWorkAt != null && workList[index].work.verifiedLeftWork == null ) ?
                                                                                                                             colorLightGreen : null,
@@ -524,6 +539,9 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                         ),
                                       ),
                                       margin: const EdgeInsets.all(0.0),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
                                     ),
                                   ],
                                 );
