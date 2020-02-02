@@ -1,5 +1,6 @@
 import 'package:endevour/services/auth_service.dart';
 import 'package:endevour/services/user_service.dart';
+import 'package:endevour/ui/page_created_job.dart';
 import 'package:endevour/ui/page_profile.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
@@ -104,7 +105,13 @@ class _DashboardPageState extends State<DashboardPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                createdJobsCard('icons/pending_job.png', 'Created Jobs'),
                 propertyCard('icons/pending_job.png', 'Pending Jobs', 2),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
                 propertyCard('icons/imgforgot1.png', 'Settings', 3),
               ],
             ),
@@ -162,6 +169,40 @@ class _DashboardPageState extends State<DashboardPage> {
         this.buttonNavigation(page),
 //        Navigator.push(context,
 //            MaterialPageRoute(builder: (context) => CreateNewJobPage()))
+      },
+      child: Card(
+          elevation: 4.0,
+          margin: EdgeInsets.all(8),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          borderOnForeground: true,
+          child: Container(
+              width: size.getWidthPx(110),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          topRight: Radius.circular(12.0)),
+                      child:
+                          Image.asset('assets/$imageName', fit: BoxFit.fill)),
+                  SizedBox(height: size.getWidthPx(8)),
+                  centerAlignText(
+                      text: "$cardTitle",
+                      centerPadding: size.getWidthPx(8),
+                      textColor: colorCurve,
+                      fontSize: 14.0),
+                ],
+              ))),
+    );
+  }
+
+  GestureDetector createdJobsCard(String imageName, String cardTitle) {
+    return GestureDetector(
+      onTap: () => {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => CreatedJobPage()))
       },
       child: Card(
           elevation: 4.0,
