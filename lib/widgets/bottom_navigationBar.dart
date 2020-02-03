@@ -122,7 +122,7 @@ class _BottomNavBarState extends State<BottomNavBar>
           icon: new Stack(
             children: <Widget>[
               new Icon(Icons.watch_later),
-              new Positioned(
+              notificationArray!=null && notificationArray['pending_work_count'] != 0 ? new Positioned(
                 right: 0,
                 child: new Container(
                   padding: EdgeInsets.all(1),
@@ -135,15 +135,15 @@ class _BottomNavBarState extends State<BottomNavBar>
                     minHeight: 12,
                   ),
                   child: new Text(
-                    notificationArray!=null? '${notificationArray['pending_work_count']}':'',
+                    '${notificationArray['pending_work_count']}',
                     style: new TextStyle(
                       color: Colors.white,
-                      fontSize: 11,
+                      fontSize:   11,
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-              )
+              ): SizedBox()
             ],
           ),          title: Text('Pending Jobs', style: TextStyle(fontFamily: 'Exo2')),
         ),
