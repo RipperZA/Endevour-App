@@ -466,6 +466,8 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
             SizedBox(height: 10),
             jobInformationRow('Hours', job.hours.toString()),
             SizedBox(height: 10),
+            jobInformationRow('Lunch Duration (Minutes)', job.lunchDuration.toString()),
+            SizedBox(height: 10),
             jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
             SizedBox(height: 10),
             jobInformationRow(

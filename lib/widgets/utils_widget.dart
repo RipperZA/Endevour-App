@@ -102,6 +102,8 @@ Padding jobInformationWidget(JobList job, Screen size) {
               SizedBox(height: 10),
               jobInformationRow('Total Hours', job.totalHours.toStringAsFixed(2)),
               SizedBox(height: 10),
+              jobInformationRow('Total Lunch (Minutes)', job.totalLunchDuration.toStringAsFixed(0)),
+              SizedBox(height: 10),
               jobInformationRow('Total Pay', "R ${job.totalPay.toStringAsFixed(2)}"),
               SizedBox(height: 10),
               jobInformationRow(
@@ -159,6 +161,8 @@ Padding jobInformationWidgetSingle(Job job, Screen size) {
               jobInformationRow('Address', job.site.fullAddress.toString()),
               SizedBox(height: 10),
               jobInformationRow('Total Hours', job.hours.toString()),
+              SizedBox(height: 10),
+              jobInformationRow('Total Lunch Duration (Minutes)', job.lunchDuration.toString()),
               SizedBox(height: 10),
               jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
               SizedBox(height: 10),

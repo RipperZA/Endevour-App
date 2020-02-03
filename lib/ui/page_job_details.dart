@@ -296,6 +296,19 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                 style: DefaultTextStyle.of(context).style,
                                 children: <TextSpan>[
                                   TextSpan(
+                                      text: 'Total Lunch Duration (Minutes):',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(text: ' ${job.work[index].lunchDuration.toStringAsFixed(0)}'),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  TextSpan(
                                       text: 'Total Pay:',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),

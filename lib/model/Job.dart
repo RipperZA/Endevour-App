@@ -17,6 +17,7 @@ class Job {
   String verifiedLeftWork;
   String startDate;
   String endDate;
+  int lunchDuration;
 
   Job(
       {this.uuid,
@@ -24,7 +25,7 @@ class Job {
       this.areaManagerName,
       this.hours,
       this.payTotalDay,
-      this.payPartialDay});
+      this.payPartialDay,this.lunchDuration});
 
   Job.fromJson(Map<String, dynamic> json)
       : uuid = json['uuid'],
@@ -42,7 +43,8 @@ class Job {
         leftWorkAt = json['left_work_at'],
         verifiedLeftWork = json['verified_left_work'],
         startDate = json['start_date'],
-        endDate = json['end_date'];
+        endDate = json['end_date'],
+        lunchDuration = json['lunch_duration'];
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
@@ -54,5 +56,6 @@ class Job {
         'payTotalDay': payTotalDay,
         'payPartialDay': payPartialDay,
         'payDifferenceDay': payDifferenceDay,
+        'lunchDuration': lunchDuration,
       };
 }

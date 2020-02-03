@@ -11,6 +11,7 @@ class JobList {
   double totalDifferencePay;
   double totalHours;
   int numDays;
+  int totalLunchDuration;
   List<Job> work;
 
   JobList(
@@ -24,6 +25,7 @@ class JobList {
       this.totalDifferencePay,
       this.totalHours,
       this.numDays,
+      this.totalLunchDuration,
       [this.work]);
 
   factory JobList.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class JobList {
           json['total_difference_pay'].toDouble(),
           json['total_hours'].toDouble(),
           json['num_days'].toInt(),
+          json['total_lunch_duration'].toInt(),
           json['items']
               .map((workJson) => Job.fromJson(workJson))
               .toList()
@@ -63,6 +66,7 @@ class JobList {
         json['total_difference_pay'],
         json['total_hours'],
         json['num_days'],
+        json['total_lunch_duration'],
 //          List<Job>()
       );
     }
