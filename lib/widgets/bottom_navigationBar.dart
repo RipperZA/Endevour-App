@@ -136,7 +136,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                     '${notificationArray['pending_work_count']}',
                     style: new TextStyle(
                       color: Colors.white,
-                      fontSize:   13,
+                      fontSize:   14,
                     ),
                     textAlign: TextAlign.center,
                   ),
