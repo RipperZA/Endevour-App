@@ -30,8 +30,6 @@ class _BottomNavBarState extends State<BottomNavBar>
     try {
       Response response;
 
-      print(222);
-
       Dio dio = new Dio();
       response = await dio.get(Constants.urlGetNotificationCount,
           options: Options(
@@ -138,7 +136,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                     '${notificationArray['pending_work_count']}',
                     style: new TextStyle(
                       color: Colors.white,
-                      fontSize:   11,
+                      fontSize:   13,
                     ),
                     textAlign: TextAlign.center,
                   ),

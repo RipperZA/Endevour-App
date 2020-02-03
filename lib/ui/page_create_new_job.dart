@@ -335,7 +335,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                 context, MaterialPageRoute(builder: (context) => HomePage()));
           });
         } on DioError catch (e) {
-
           setState(() {
             _saving = false;
           });
@@ -400,15 +399,23 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                           children: <Widget>[
                             Card(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              color: backgroundColor,
-                              elevation: 5,
+
+                              elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
+                                    Text(
+                                      'Select Client Site',
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                          decoration:
+                                          TextDecoration.underline),
+                                    ),
                                     FormBuilderTypeAhead(
                                       validators: [
                                         FormBuilderValidators.required(),
@@ -464,15 +471,23 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                             ),
                             Card(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              color: backgroundColor,
-                              elevation: 5,
+
+                              elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
+                                    Text(
+                                      'Select Work Rate',
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                          decoration:
+                                          TextDecoration.underline),
+                                    ),
                                     FormBuilderCustomField(
                                       attribute: "rate",
                                       validators: [
@@ -519,15 +534,23 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                             ),
                             Card(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              color: backgroundColor,
-                              elevation: 5,
+
+                              elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
+                                    Text(
+                                      'Select # Of Workers',
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                          decoration:
+                                          TextDecoration.underline),
+                                    ),
                                     FormBuilderStepper(
                                       decoration: InputDecoration(
                                         labelStyle: style,
@@ -545,10 +568,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                             ),
                             Card(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              color: backgroundColor,
-                              elevation: 5,
+
+                              elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: SizedBox(
@@ -556,65 +579,83 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      FlatButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "Start Time",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              decoration:
-                                                  TextDecoration.underline
+                                      Text(
+                                        'Select Work Hours',
+                                        style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          FlatButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              "Start - ",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  decoration:
+                                                      TextDecoration.none
 //                              fontFamily: 'Exo2',
-                                              ),
-                                        ),
+                                                  ),
+                                            ),
+                                          ),
+                                          new GestureDetector(
+                                            onTap: () async {
+                                              _selectStartTime(context);
+                                            },
+                                            child: startTime != null
+                                                ? Text(
+                                                    startTime,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: themeColour),
+                                                  )
+                                                : Text("Set Start Time",
+                                                    style: TextStyle(
+                                                        color: themeColour,
+                                                        fontSize: 18)),
+                                          ),
+                                        ],
                                       ),
-                                      new GestureDetector(
-                                        onTap: () async {
-                                          _selectStartTime(context);
-                                        },
-                                        child: startTime != null
-                                            ? Text(
-                                                startTime,
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color:
-                                                    themeColour),
-                                              )
-                                            : Text("Set Start Time",
-                                                style: TextStyle(
-                                                    color:
-                                                        textSecondaryDarkColor)),
-                                      ),
-                                      FlatButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "End Time",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              decoration:
-                                                  TextDecoration.underline
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          FlatButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              "End - ",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  decoration:
+                                                      TextDecoration.none
 //                              fontFamily: 'Exo2',
-                                              ),
-                                        ),
-                                      ),
-                                      new GestureDetector(
-                                        onTap: () async {
-                                          _selectEndTime(context);
-                                        },
-                                        child: endTime != null
-                                            ? Text(
-                                                endTime,
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color:
-                                                    themeColour),
-                                              )
-                                            : Text(
-                                                "Set End Time",
-                                                style: TextStyle(
-                                                    color:
-                                                        textSecondaryDarkColor),
-                                              ),
+                                                  ),
+                                            ),
+                                          ),
+                                          new GestureDetector(
+                                            onTap: () async {
+                                              _selectEndTime(context);
+                                            },
+                                            child: endTime != null
+                                                ? Text(
+                                                    endTime,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: themeColour),
+                                                  )
+                                                : Text(
+                                                    "Set End Time",
+                                                    style: TextStyle(
+                                                        color: themeColour,
+                                                        fontSize: 18),
+                                                  ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -623,10 +664,45 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                             ),
                             Card(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                              color: backgroundColor,
-                              elevation: 5,
+
+                              elevation: 10,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(
+                                      'Enter Lunch Duration',
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                          decoration:
+                                          TextDecoration.underline),
+                                    ),
+                                    FormBuilderStepper(
+                                      decoration: InputDecoration(
+                                        labelStyle: style,
+                                        labelText: "Lunch Duration (in minutes)",
+                                      ),
+                                      attribute: "lunch_duration",
+                                      initialValue: 0,
+                                      min: 0,
+                                      max: 120,
+                                      step: 5,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+
+                              elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
@@ -636,10 +712,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                     Text(
                                       "Select Dates For Work",
                                       style: TextStyle(
-                                          fontSize: 20,
-                                          decoration: TextDecoration.underline
-//                              fontFamily: 'Exo2',
-                                          ),
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                          decoration:
+                                          TextDecoration.underline),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
@@ -649,6 +725,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
+                                    SizedBox(height: 10),
+
                                     Container(
                                       height: 260,
                                       child: Calendarro(
@@ -658,8 +736,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                             DateTime.now().month + 3, 0),
                                         selectedDate: DateTime(2019, 10, 03),
                                         onPageSelected:
-                                            (pageStartDate, pageEndDate)
-                                        {
+                                            (pageStartDate, pageEndDate) {
                                           setState(() {
                                             calendarMonthName =
                                                 DateFormat('yyyy-MMMM')
