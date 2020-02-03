@@ -272,14 +272,16 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
         _saving = false;
       });
 
-      Fluttertoast.showToast(
-          msg: e.response.data['error'],
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      for (var i = 0; i < 4; i++) {
+        Fluttertoast.showToast(
+            msg: e.response.data['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
     }
   }
 

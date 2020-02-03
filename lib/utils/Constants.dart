@@ -13,6 +13,7 @@ class Constants {
   static String urlProfile = urlBase + 'user/profile';
   static String urlApplicationUpload = urlBase + 'applications';
   static String urlGetAreaManagerSites = urlBase + 'area_managers/getSitesApi';
+  static String urlGetNotificationCount = urlBase + 'work/getNotificationCount';
   static String urlGetRates = urlBase + 'rates/getRatesApi';
 
   static String urlNewJobUpload = urlBase + 'work';

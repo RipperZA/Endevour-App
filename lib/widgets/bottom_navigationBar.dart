@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
+import 'package:endevour/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:endevour/utils/utils.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BottomNavBar extends StatefulWidget {
   final ValueChanged<int> changeCurrentTab;
@@ -15,11 +18,70 @@ class _BottomNavBarState extends State<BottomNavBar>
 //  int tab = 0;
 
   Screen size;
-
+  var notificationArray;
   @override
   void initState() {
     super.initState();
+    this.getNotificationCount();
     widget.tab = 0;
+  }
+
+  getNotificationCount() async {
+    try {
+      Response response;
+
+      print(222);
+
+      Dio dio = new Dio();
+      response = await dio.get(Constants.urlGetNotificationCount,
+          options: Options(
+              method: 'GET',
+              headers: {'Authorization': 'Bearer ' + UserDetails.token},
+              responseType: ResponseType.json // or ResponseType.JSON
+          ));
+
+      if (response.statusCode == 200) {
+        if (this.mounted) {
+          setState(() {
+            this.notificationArray = response.data['data']['notifications'];
+          });
+        }
+      }
+
+      return false;
+    } on DioError catch (e) {
+      setState(() {
+//        _saving = false;
+      });
+      try {
+        Fluttertoast.showToast(
+            msg: e.response.data['error'],
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: Constants.standardErrorMessage,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIos: 1,
+            backgroundColor: colorErrorMessage,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } on Error catch (e) {
+      Fluttertoast.showToast(
+          msg: Constants.standardErrorMessage,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   @override
@@ -40,6 +102,7 @@ class _BottomNavBarState extends State<BottomNavBar>
           if (index != 4) {
             widget.tab = index;
             widget.changeCurrentTab(index);
+            this.getNotificationCount();
           }
         });
       },
@@ -56,8 +119,33 @@ class _BottomNavBarState extends State<BottomNavBar>
         ),
         BottomNavigationBarItem(
           backgroundColor: Colors.grey.shade50,
-          icon: Icon(Icons.watch_later),
-          title: Text('Pending Jobs', style: TextStyle(fontFamily: 'Exo2')),
+          icon: new Stack(
+            children: <Widget>[
+              new Icon(Icons.watch_later),
+              new Positioned(
+                right: 0,
+                child: new Container(
+                  padding: EdgeInsets.all(1),
+                  decoration: new BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  constraints: BoxConstraints(
+                    minWidth: 12,
+                    minHeight: 12,
+                  ),
+                  child: new Text(
+                    notificationArray!=null? '${notificationArray['pending_work_count']}':'',
+                    style: new TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+            ],
+          ),          title: Text('Pending Jobs', style: TextStyle(fontFamily: 'Exo2')),
         ),
         BottomNavigationBarItem(
           backgroundColor: Colors.grey.shade50,

@@ -7,6 +7,7 @@ Color colorCurve = Colors.deepPurple;
 Color colorErrorMessage = Colors.red;
 Color colorSuccessMessage = Colors.green;
 Color colorLightGreen = Colors.green.shade200;
+Color colorLightYellow = Colors.yellow.shade200;
 Color colorLightRed = Colors.red.shade200;
 Color colorCurveSecondary = Color.fromRGBO(97, 10, 155, 0.6);
 Color backgroundColor =Colors.grey.shade200;

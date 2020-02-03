@@ -300,7 +300,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                       ),
                                       color:  ( workList[i].work.arrivedAtWork != null && workList[i].work.verifiedAtWork == null ) ||
                                               ( workList[i].work.leftWorkAt != null && workList[i].work.verifiedLeftWork == null ) ?
-                                              colorLightGreen : null,
+                                              colorLightYellow : null,
 
                                       child: new ListTile(
                                         onTap: () async {
@@ -429,7 +429,7 @@ class _PendingJobPageState extends State<PendingJobPage> {
                                       ),
                                       color:  ( workList[index].work.arrivedAtWork != null && workList[index].work.verifiedAtWork == null ) ||
                                               ( workList[index].work.leftWorkAt != null && workList[index].work.verifiedLeftWork == null ) ?
-                                                                                                                            colorLightGreen : null,
+                                              colorLightYellow : null,
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
