@@ -65,11 +65,11 @@ class _HomePageWorkerState extends State<HomePageWorker>
         break;
       case 1:
         //Search Page
-        tabView = [ApplyJobPage(changeCurrentTab: changeCurrentTab)];
+        tabView = [ApplyJobPage()];
         break;
       case 2:
         //Profile Page
-        tabView = [AcceptedJobPage(changeCurrentTab: changeCurrentTab)];
+        tabView = [AcceptedJobPage()];
         break;
       case 3:
         //Setting Page

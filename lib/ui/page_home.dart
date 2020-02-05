@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         break;
       case 1:
         //Search Page
-        tabView = [CreateNewJobPage(changeCurrentTab: changeCurrentTab)];
+        tabView = [CreateNewJobPage()];
         break;
       case 2:
         //Profile Page

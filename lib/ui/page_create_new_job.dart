@@ -20,9 +20,6 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class CreateNewJobPage extends StatefulWidget {
-  final ValueChanged<int> changeCurrentTab;
-
-  CreateNewJobPage({Key key, this.changeCurrentTab}) : super(key: key);
 
   @override
   _CreateNewJobPageState createState() => _CreateNewJobPageState();

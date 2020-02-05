@@ -12,9 +12,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ApplyJobPage extends StatefulWidget {
-  final ValueChanged<int> changeCurrentTab;
-
-  ApplyJobPage({Key key, this.changeCurrentTab}) : super(key: key);
 
   @override
   _ApplyJobPageState createState() => _ApplyJobPageState();
