@@ -86,6 +86,7 @@ class _BottomNavBarState extends State<BottomNavBar>
   Widget build(BuildContext context) {
     size = Screen(MediaQuery.of(context).size);
 
+
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       iconSize: size.getWidthPx(24),

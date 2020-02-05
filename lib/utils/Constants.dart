@@ -30,6 +30,7 @@ class Constants {
   static String urlCompletedJobs = urlBase + 'work/completedWork';
   static String urlPendingJobs = urlBase + 'work/pendingWork';
   static String urlCreatedJobs = urlBase + 'work/createdWork';
+  static String urlCancelledJobs = urlBase + 'work/cancelledWork';
   static String urlVerifyArrivedAtWork = urlBase + 'work/verifiedArrived/';
   static String urlVerifyLeftWork = urlBase + 'work/verifiedLeft/';
 

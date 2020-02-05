@@ -1,6 +1,6 @@
 import 'package:endevour/services/auth_service.dart';
 import 'package:endevour/services/user_service.dart';
-import 'package:endevour/ui/page_created_job.dart';
+import 'package:endevour/ui/page_cancelled_job.dart';
 import 'package:endevour/ui/page_profile.dart';
 import 'package:endevour/ui/page_settings.dart';
 import 'package:endevour/utils/utils.dart';
@@ -100,20 +100,24 @@ class _DashboardPageState extends State<DashboardPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 propertyCard('icons/new_job.png', 'New Job', 1),
-                profileCard('icons/profile.png', 'Profile'),
+                genericNavPushCard(
+                    'icons/profile.png', 'Profile', ProfilePage()),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('icons/pending_job.png', 'Created Jobs',2),
+                propertyCard('icons/pending_job.png', 'Created Jobs', 2),
                 propertyCard('icons/pending_job.png', 'Pending Jobs', 3),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                settingsCard('icons/imgforgot1.png', 'Settings'),
+                genericNavPushCard('icons/pending_job.png', 'Cancelled Jobs',
+                    CancelledJobPage()),
+                genericNavPushCard(
+                    'icons/imgforgot1.png', 'Settings', SettingPage()),
               ],
             ),
           ],
@@ -199,11 +203,11 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  GestureDetector settingsCard(String imageName, String cardTitle) {
+  GestureDetector genericNavPushCard(
+      String imageName, String cardTitle, Widget route) {
     return GestureDetector(
       onTap: () => {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => SettingPage()))
+        Navigator.push(context, MaterialPageRoute(builder: (context) => route))
       },
       child: Card(
           elevation: 4.0,
@@ -232,6 +236,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ))),
     );
   }
+
   GestureDetector profileCard(String imageName, String cardTitle) {
     return GestureDetector(
       onTap: () => {
@@ -242,7 +247,7 @@ class _DashboardPageState extends State<DashboardPage> {
           elevation: 4.0,
           margin: EdgeInsets.all(8),
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           borderOnForeground: true,
           child: Container(
               width: size.getWidthPx(110),
@@ -254,7 +259,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           topLeft: Radius.circular(12.0),
                           topRight: Radius.circular(12.0)),
                       child:
-                      Image.asset('assets/$imageName', fit: BoxFit.fill)),
+                          Image.asset('assets/$imageName', fit: BoxFit.fill)),
                   SizedBox(height: size.getWidthPx(8)),
                   centerAlignText(
                       text: "$cardTitle",

@@ -11,13 +11,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CreatedJobPage extends StatefulWidget {
+class CancelledJobPage extends StatefulWidget {
 
   @override
-  _CreatedJobPageState createState() => _CreatedJobPageState();
+  _CancelledJobPageState createState() => _CancelledJobPageState();
 }
 
-class _CreatedJobPageState extends State<CreatedJobPage> {
+class _CancelledJobPageState extends State<CancelledJobPage> {
   bool _saving = false;
   Screen size;
   Job jobDetails;
@@ -27,7 +27,7 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
 
   TextEditingController controller = new TextEditingController();
 
-  getCreatedWork() async {
+  getCancelledWork() async {
     try {
       this.workList = List();
       this._searchResult = [];
@@ -35,14 +35,14 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
       Response response;
 
       Dio dio = new Dio();
-      response = await dio.get(Constants.urlCreatedJobs,
+      response = await dio.get(Constants.urlCancelledJobs,
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
               responseType: ResponseType.json));
 
       if (response.statusCode == 200) {
-        var availableWork = response.data['data']['createdWork'];
+        var availableWork = response.data['data']['cancelledWork'];
 
         for (var x in availableWork) {
           var work = WorkAreaManager.fromJson(x);
@@ -53,6 +53,7 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
             });
             this.onSearchTextChanged(controller.text);
           }
+
         }
       }
     } on DioError catch (e) {
@@ -157,7 +158,7 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
 
   @override
   void initState() {
-    getCreatedWork();
+    getCancelledWork();
     super.initState();
   }
 
@@ -205,7 +206,7 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
     size = Screen(MediaQuery.of(context).size);
 
     Text titleWidget() {
-      return Text("Created Jobs",
+      return Text("Cancelled Jobs",
           style: TextStyle(
               fontFamily: 'Exo2',
               fontSize: 24.0,
@@ -233,7 +234,17 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
                 padding: EdgeInsets.only(top: size.getWidthPx(36)),
                 child: Column(
                   children: <Widget>[
-                    Center(child: titleWidget()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          icon: new Icon(Icons.arrow_back, color: Colors.white),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        titleWidget(),
+                        Container(width: 0.0, height: 0.0),
+                      ],
+                    ),
                     SizedBox(height: size.getWidthPx(10)),
                   ],
                 ),
@@ -293,7 +304,6 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
                                         borderRadius:
                                         BorderRadius.circular(20.0),
                                       ),
-
                                       child: new ListTile(
                                         onTap: () async {
                                           await getJobInformation(
@@ -306,7 +316,7 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
                                                     builder: (context) =>
                                                         PendingJobDetailsPage(
                                                             jobDetails:
-                                                                jobDetails))).then((value) async {await this.getCreatedWork();});
+                                                                jobDetails))).then((value) async {await this.getCancelledWork();});
                                           }
                                         },
                                         leading: CircleAvatar(
@@ -435,7 +445,7 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
                                                             PendingJobDetailsPage(
                                                                 jobDetails:
                                                                     jobDetails)))
-                                                .then((value) async {await this.getCreatedWork();});
+                                                .then((value) async {await this.getCancelledWork();});
                                           }
                                         },
                                         leading: CircleAvatar(
