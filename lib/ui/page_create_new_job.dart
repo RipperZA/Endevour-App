@@ -401,7 +401,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
-
                               elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -413,10 +412,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       style: TextStyle(
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold,
-                                          decoration:
-                                          TextDecoration.underline),
+                                          decoration: TextDecoration.underline),
                                     ),
                                     FormBuilderTypeAhead(
+                                      initialValue: new Site(),
                                       validators: [
                                         FormBuilderValidators.required(),
                                       ],
@@ -473,7 +472,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
-
                               elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -485,8 +483,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       style: TextStyle(
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold,
-                                          decoration:
-                                          TextDecoration.underline),
+                                          decoration: TextDecoration.underline),
                                     ),
                                     FormBuilderCustomField(
                                       attribute: "rate",
@@ -536,7 +533,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
-
                               elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -548,8 +544,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       style: TextStyle(
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold,
-                                          decoration:
-                                          TextDecoration.underline),
+                                          decoration: TextDecoration.underline),
                                     ),
                                     FormBuilderStepper(
                                       decoration: InputDecoration(
@@ -570,7 +565,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
-
                               elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -666,7 +660,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
-
                               elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -678,13 +671,13 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       style: TextStyle(
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold,
-                                          decoration:
-                                          TextDecoration.underline),
+                                          decoration: TextDecoration.underline),
                                     ),
                                     FormBuilderStepper(
                                       decoration: InputDecoration(
                                         labelStyle: style,
-                                        labelText: "Lunch Duration (in minutes)",
+                                        labelText:
+                                            "Lunch Duration (in minutes)",
                                       ),
                                       attribute: "lunch_duration",
                                       initialValue: 0,
@@ -701,7 +694,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
-
                               elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -714,8 +706,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       style: TextStyle(
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold,
-                                          decoration:
-                                          TextDecoration.underline),
+                                          decoration: TextDecoration.underline),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
@@ -726,7 +717,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       ),
                                     ),
                                     SizedBox(height: 10),
-
                                     Container(
                                       height: 260,
                                       child: Calendarro(
@@ -734,7 +724,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                             DateTime.now().month, 01),
                                         endDate: DateTime(DateTime.now().year,
                                             DateTime.now().month + 3, 0),
-                                        selectedDate: DateTime(2019, 10, 03),
                                         onPageSelected:
                                             (pageStartDate, pageEndDate) {
                                           setState(() {

@@ -12,6 +12,9 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CreatedJobPage extends StatefulWidget {
+  final ValueChanged<int> changeCurrentTab;
+
+  CreatedJobPage({Key key, this.changeCurrentTab}) : super(key: key);
 
   @override
   _CreatedJobPageState createState() => _CreatedJobPageState();
@@ -43,8 +46,6 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
 
       if (response.statusCode == 200) {
         var availableWork = response.data['data']['createdWork'];
-
-        print(availableWork);
 
         for (var x in availableWork) {
           var work = WorkAreaManager.fromJson(x);
@@ -247,11 +248,6 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeColour,
-        title: Text("Created Jobs"),
-        brightness: Brightness.light,
-      ),
       backgroundColor: backgroundColor,
       body: ModalProgressHUD(
         child: Stack(children: <Widget>[
@@ -266,6 +262,7 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
               child: Container(
                 child: Column(
                   children: <Widget>[
+                    upperPart(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(

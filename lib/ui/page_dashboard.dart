@@ -2,6 +2,7 @@ import 'package:endevour/services/auth_service.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_created_job.dart';
 import 'package:endevour/ui/page_profile.dart';
+import 'package:endevour/ui/page_settings.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -105,14 +106,14 @@ class _DashboardPageState extends State<DashboardPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                createdJobsCard('icons/pending_job.png', 'Created Jobs'),
-                propertyCard('icons/pending_job.png', 'Pending Jobs', 2),
+                propertyCard('icons/pending_job.png', 'Created Jobs',2),
+                propertyCard('icons/pending_job.png', 'Pending Jobs', 3),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('icons/imgforgot1.png', 'Settings', 3),
+                settingsCard('icons/imgforgot1.png', 'Settings'),
               ],
             ),
           ],
@@ -198,11 +199,11 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  GestureDetector createdJobsCard(String imageName, String cardTitle) {
+  GestureDetector settingsCard(String imageName, String cardTitle) {
     return GestureDetector(
       onTap: () => {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => CreatedJobPage()))
+            MaterialPageRoute(builder: (context) => SettingPage()))
       },
       child: Card(
           elevation: 4.0,

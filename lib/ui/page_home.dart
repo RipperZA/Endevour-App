@@ -69,11 +69,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         break;
       case 2:
         //Profile Page
-        tabView = [PendingJobPage()];
+        tabView = [CreatedJobPage()];
         break;
       case 3:
         //Setting Page
-        tabView = [SettingPage()];
+        tabView = [PendingJobPage()];
         break;
     }
     return PageView(controller: pageController, children: tabView);

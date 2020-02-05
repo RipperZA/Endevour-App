@@ -119,6 +119,37 @@ class _BottomNavBarState extends State<BottomNavBar>
           backgroundColor: Colors.grey.shade50,
           icon: new Stack(
             children: <Widget>[
+              new Icon(Icons.create_new_folder),
+              notificationArray!=null && notificationArray['created_work_count'] != 0 ? new Positioned(
+                right: 0,
+                child: new Container(
+                  padding: EdgeInsets.all(1),
+                  decoration: new BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  constraints: BoxConstraints(
+                    minWidth: 12,
+                    minHeight: 12,
+                  ),
+                  child: new Text(
+                    '${notificationArray['created_work_count']}',
+                    style: new TextStyle(
+                      color: Colors.white,
+                      fontSize:   14,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ): SizedBox()
+            ],
+          ),
+          title: Text('Created Jobs', style: TextStyle(fontFamily: 'Exo2')),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Colors.grey.shade50,
+          icon: new Stack(
+            children: <Widget>[
               new Icon(Icons.watch_later),
               notificationArray!=null && notificationArray['pending_work_count'] != 0 ? new Positioned(
                 right: 0,
@@ -143,13 +174,14 @@ class _BottomNavBarState extends State<BottomNavBar>
                 ),
               ): SizedBox()
             ],
-          ),          title: Text('Pending Jobs', style: TextStyle(fontFamily: 'Exo2')),
+          ),
+          title: Text('Pending Jobs', style: TextStyle(fontFamily: 'Exo2')),
         ),
-        BottomNavigationBarItem(
-          backgroundColor: Colors.grey.shade50,
-          icon: Icon(Icons.settings),
-          title: Text('Settings', style: TextStyle(fontFamily: 'Exo2')),
-        ),
+//        BottomNavigationBarItem(
+//          backgroundColor: Colors.grey.shade50,
+//          icon: Icon(Icons.settings),
+//          title: Text('Settings', style: TextStyle(fontFamily: 'Exo2')),
+//        ),
       ],
     );
   }

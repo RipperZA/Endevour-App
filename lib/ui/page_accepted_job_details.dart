@@ -272,16 +272,51 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
         _saving = false;
       });
 
-      for (var i = 0; i < 4; i++) {
-        Fluttertoast.showToast(
-            msg: e.response.data['error'],
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorErrorMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
+      return await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Error!",style: TextStyle(color: colorErrorMessage),),
+            content: new Text(e.response.data['error']),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              RaisedButton.icon(
+                  elevation: 4.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0)),
+                  icon: Icon(
+                    Icons.close,
+                    color: imagePrimaryLightColor,
+                  ),
+                  color: colorErrorMessage,
+                  label: new Text(
+                    "Ok!",
+                    style: TextStyle(
+//                              fontFamily: 'Exo2',
+                      color: textPrimaryLightColor,
+                    ),
+                  ),
+                  disabledColor: disabledButtonColour,
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  }),
+            ],
+          );
+        },
+      );
+
+//      for (var i = 0; i < 4; i++) {
+//        Fluttertoast.showToast(
+//            msg: e.response.data['error'],
+//            toastLength: Toast.LENGTH_LONG,
+//            gravity: ToastGravity.TOP,
+//            timeInSecForIos: 1,
+//            backgroundColor: colorErrorMessage,
+//            textColor: Colors.white,
+//            fontSize: 16.0);
+//      }
     }
   }
 
@@ -442,14 +477,49 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
         _saving = false;
       });
 
-      Fluttertoast.showToast(
-          msg: e.response.data['error'],
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      return await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Error!",style: TextStyle(color: colorErrorMessage),),
+            content: new Text(e.response.data['error']),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              RaisedButton.icon(
+                  elevation: 4.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0)),
+                  icon: Icon(
+                    Icons.close,
+                    color: imagePrimaryLightColor,
+                  ),
+                  color: colorErrorMessage,
+                  label: new Text(
+                    "Ok!",
+                    style: TextStyle(
+//                              fontFamily: 'Exo2',
+                      color: textPrimaryLightColor,
+                    ),
+                  ),
+                  disabledColor: disabledButtonColour,
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  }),
+            ],
+          );
+        },
+      );
+
+//      Fluttertoast.showToast(
+//          msg: e.response.data['error'],
+//          toastLength: Toast.LENGTH_LONG,
+//          gravity: ToastGravity.TOP,
+//          timeInSecForIos: 1,
+//          backgroundColor: colorErrorMessage,
+//          textColor: Colors.white,
+//          fontSize: 16.0);
     }
   }
 

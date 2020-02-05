@@ -27,13 +27,14 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Settings",
-            style:
-                TextStyle(fontFamily: "Exo2", color: textSecondaryLightColor)),
-        backgroundColor: Colors.white,
+        backgroundColor: themeColour,
+        title: Text("Settings"),
+        brightness: Brightness.light,
       ),
+
       body: AnnotatedRegion(
         value: SystemUiOverlayStyle(
             statusBarColor: backgroundColor,
