@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:endevour/model/Job.dart';
 import 'package:endevour/model/JobList.dart';
+import 'package:endevour/services/user_service.dart';
 import 'package:endevour/utils/colors.dart';
 import 'package:endevour/utils/responsive_screen.dart';
+import 'package:endevour/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Padding leftAlignText({text, leftPadding, textColor, fontSize, fontWeight}) {
@@ -96,20 +101,25 @@ Padding jobInformationWidget(JobList job, Screen size) {
               SizedBox(height: 10),
               jobInformationRow('Site', job.siteName),
               SizedBox(height: 10),
-              jobInformationRow('Address', job.work.first.site.fullAddress.toString()),
+              jobInformationRow(
+                  'Address', job.work.first.site.fullAddress.toString()),
               SizedBox(height: 10),
-              jobInformationRow('Work Duration', job.numDays.toStringAsFixed(2) + ' Day(s)'),
+              jobInformationRow(
+                  'Work Duration', job.numDays.toStringAsFixed(2) + ' Day(s)'),
               SizedBox(height: 10),
-              jobInformationRow('Total Hours', job.totalHours.toStringAsFixed(2)),
+              jobInformationRow(
+                  'Total Hours', job.totalHours.toStringAsFixed(2)),
               SizedBox(height: 10),
-              jobInformationRow('Total Lunch (Minutes)', job.totalLunchDuration.toStringAsFixed(0)),
+              jobInformationRow('Total Lunch (Minutes)',
+                  job.totalLunchDuration.toStringAsFixed(0)),
               SizedBox(height: 10),
-              jobInformationRow('Total Pay', "R ${job.totalPay.toStringAsFixed(2)}"),
+              jobInformationRow(
+                  'Total Pay', "R ${job.totalPay.toStringAsFixed(2)}"),
               SizedBox(height: 10),
               jobInformationRow(
                   'Initial Pay', "R ${job.totalPartialPay.toStringAsFixed(2)}"),
-              jobInformationRow(
-                  'Remaining Pay', "R ${job.totalDifferencePay.toStringAsFixed(2)}"),
+              jobInformationRow('Remaining Pay',
+                  "R ${job.totalDifferencePay.toStringAsFixed(2)}"),
             ],
           ),
         ),
@@ -162,7 +172,8 @@ Padding jobInformationWidgetSingle(Job job, Screen size) {
               SizedBox(height: 10),
               jobInformationRow('Total Hours', job.hours.toString()),
               SizedBox(height: 10),
-              jobInformationRow('Total Lunch Duration (Minutes)', job.lunchDuration.toString()),
+              jobInformationRow('Total Lunch Duration (Minutes)',
+                  job.lunchDuration.toString()),
               SizedBox(height: 10),
               jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
               SizedBox(height: 10),
@@ -235,7 +246,11 @@ Row jobInformationRowCellNumber(jobLabel, jobProperty, number) {
                 ),
               ),
               GestureDetector(
-                child: Icon(Icons.phone,size: 20,color: hyperlinkColor,),
+                child: Icon(
+                  Icons.phone,
+                  size: 20,
+                  color: hyperlinkColor,
+                ),
                 onTap: () {
                   _launchNumber(number);
                 },
@@ -256,6 +271,158 @@ Row jobInformationRowCellNumber(jobLabel, jobProperty, number) {
       ),
     ],
   );
+}
+
+getProfilePicture(uuid) async {
+  try {
+    Response response;
+
+    Dio dio = new Dio();
+    response = await dio.get(Constants.urlProfilePicture + '/' + uuid,
+        options: Options(
+            method: 'GET',
+            headers: {'Authorization': 'Bearer ' + UserDetails.token},
+            responseType: ResponseType.json // or ResponseType.JSON
+            ));
+
+    if (response.statusCode == 200) {
+      var profilePicture = response.data['data']['profile_picture'];
+
+      return profilePicture;
+    }
+
+    return null;
+  } on DioError catch (e) {
+    try {
+      Fluttertoast.showToast(
+          msg: e.response.data['error'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: Constants.standardErrorMessage,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  } on Error catch (e) {
+    Fluttertoast.showToast(
+        msg: Constants.standardErrorMessage,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIos: 1,
+        backgroundColor: colorErrorMessage,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+}
+
+Row jobInformationRowProfilePicture(jobLabel, jobProperty, Job job, context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      Flexible(
+        child: Column(
+          children: <Widget>[
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: '',
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: jobLabel + "  ",
+                        style: TextStyle(
+                            fontFamily: 'Exo2',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: textPrimaryColor,
+                            decoration: TextDecoration.underline)),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                child: Icon(
+                  Icons.phone,
+                  size: 26,
+                  color: hyperlinkColor,
+                ),
+                onTap: () {
+                  _launchNumber(job.workerCell);
+                },
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                child: Icon(
+                  Icons.face,
+                  size: 26,
+                  color: hyperlinkColor,
+                ),
+                onTap: () async {
+                  var profilePicture = await getProfilePicture(job.workerUuid);
+
+                  if (profilePicture != null) {
+                    Navigator.of(context).push(MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                      return Scaffold(
+                        appBar: AppBar(
+                          backgroundColor: themeColour,
+                          title: Text(job.workerName),
+                          brightness: Brightness.light,
+                        ),
+                        body: Center(
+                          child: PhotoHero(
+                            photo: profilePicture,
+                          ),
+                        ),
+                      );
+                    }));
+                  }
+                },
+              )
+            ]),
+            SizedBox(
+              height: 5,
+            ),
+            Text(jobProperty,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Exo2',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: textPrimaryColor))
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+class PhotoHero extends StatelessWidget {
+  const PhotoHero({Key key, this.photo}) : super(key: key);
+
+  final String photo;
+
+  @override
+  Widget build(BuildContext context) {
+    ImageProvider imageProvider = new MemoryImage(base64Decode(photo));
+
+    return Container(
+        child: PhotoView(
+      imageProvider: imageProvider,
+      minScale: 0.25,
+      maxScale: 2.0,
+    ));
+  }
 }
 
 _launchNumber(number) async {

@@ -455,7 +455,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
                 : Container(width: 0, height: 0),
             !Constants.isNullEmptyFalseOrZero(job.workerCell)
                 ?
-            jobInformationRowCellNumber('Worker Cell', job.workerCell, job.workerCell)
+            jobInformationRowProfilePicture('Worker Cell', job.workerCell, job, context)
                 : Container(width: 0, height: 0),
             !Constants.isNullEmptyFalseOrZero(job.workerCell)
                 ? SizedBox(height: 10)
@@ -477,34 +477,6 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Row jobInformationRow(jobLabel, jobProperty) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Flexible(
-          child: Column(
-            children: <Widget>[
-              Text(jobLabel + ': ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Exo2',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: textPrimaryColor)),
-              Text(jobProperty,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Exo2',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: textPrimaryColor))
-            ],
-          ),
-        ),
-      ],
     );
   }
 

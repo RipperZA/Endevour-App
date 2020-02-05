@@ -7,6 +7,7 @@ class Job {
   String areaManagerNumber;
   String workerName;
   String workerCell;
+  String workerUuid;
   double hours;
   double payTotalDay;
   double payPartialDay;
@@ -32,8 +33,9 @@ class Job {
         site = Site.fromJson(json['site']),
         areaManagerName = json['area_manager_name'],
         areaManagerNumber = json['area_manager_number'],
-        workerName = json['worker_name'],
-        workerCell = json['worker_cell'],
+        workerName = json['worker_name'].toString(),
+        workerCell = json['worker_cell'].toString(),
+        workerUuid = json['worker_uuid'].toString(),
         hours = json['hours'].toDouble(),
         payTotalDay = json['pay_total_day'].toDouble(),
         payPartialDay = json['pay_partial_day'].toDouble(),
@@ -52,6 +54,7 @@ class Job {
         'areaManagerName': areaManagerName,
         'workerName': workerName,
         'workerCell': workerCell,
+        'workerUuid': workerUuid,
         'hours': hours,
         'payTotalDay': payTotalDay,
         'payPartialDay': payPartialDay,
