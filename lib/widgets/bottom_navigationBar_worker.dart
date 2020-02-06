@@ -188,7 +188,7 @@ class _BottomNavBarWorkerState extends State<BottomNavBarWorker>
           title: Text('Current Jobs', style: TextStyle(fontFamily: 'Exo2')),
         ),
         BottomNavigationBarItem(
-          backgroundColor: Colors.grey.shade50,
+            backgroundColor: Colors.grey.shade50,
           icon: Icon(Icons.settings),
           title: Text('Settings', style: TextStyle(fontFamily: 'Exo2')),
         ),
