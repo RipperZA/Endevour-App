@@ -159,6 +159,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
       appBar: AppBar(
         backgroundColor: themeColour,
         title: Text("Job Details"),
+        brightness: Brightness.light,
       ),
       backgroundColor: backgroundColor,
       body: ModalProgressHUD(
@@ -466,9 +467,12 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     job.work.first.areaManagerName +
                         " (${job.work.first.areaManagerNumber.toString()})",
                     job.work.first.areaManagerNumber),
-                SizedBox(height: 10),
+
+                this.viewOnly == true?
+                SizedBox(height: 10) : Container(),
+                this.viewOnly == true?
                 jobInformationRowProfilePicture('Worker Cell',
-                    job.work.first.worker.cellNumber, job.work.first, context),
+                    job.work.first.worker.cellNumber, job.work.first, context): Container(),
                 SizedBox(height: 10),
                 jobInformationRow('Site', job.siteName),
                 SizedBox(height: 10),
@@ -598,7 +602,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           Icons.thumb_up,
           color: imagePrimaryLightColor,
         ),
-        color: themeColour,
+        color: colorSuccessMessage,
         label: new Text(
           "Accept Job",
           style: TextStyle(

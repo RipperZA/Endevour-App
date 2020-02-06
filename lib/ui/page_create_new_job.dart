@@ -30,7 +30,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   int _selectedIndex = 1;
   Completer<GoogleMapController> _controller = Completer();
   LatLng _center = LatLng(-25.8197299, 28.290334);
-  Site _currentSite = new Site();
+  Site currentSite = new Site();
   Set<Marker> _markers = {
     Marker(
         markerId: MarkerId("African Corporate Cleaning"),
@@ -257,8 +257,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   final double _zoom = 16;
 
   Future<void> _goToNewSite() async {
-    double lat = _currentSite.latitude;
-    double long = _currentSite.longitude;
+    double lat = currentSite.latitude;
+    double long = currentSite.longitude;
     GoogleMapController controller = await _controller.future;
     controller
         .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, long), _zoom));
@@ -267,10 +267,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
       _markers.clear();
 
       _markers.add(Marker(
-          markerId: MarkerId(_currentSite.name),
-          position: LatLng(_currentSite.latitude, _currentSite.longitude),
+          markerId: MarkerId(currentSite.name),
+          position: LatLng(currentSite.latitude, currentSite.longitude),
           infoWindow: InfoWindow(
-            title: _currentSite.name,
+            title: currentSite.name,
           )));
     });
   }
@@ -300,6 +300,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
 
           FormData formData = new FormData(); // just like JS
           formData.addAll(formValues);
+          formData.add('client_site', currentSite.uuid); //for some reason the update form_builder doesnt add the uuid to client_site but the name therefore it wont work on server which needs uuid. so just set it here
           formData.add('dates', workDates);
           formData.add('start_time', startTime);
           formData.add('end_time', endTime);
@@ -426,10 +427,10 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       attribute: 'client_site',
                                       onChanged: (site) => {
                                         setState(() {
-                                          _currentSite = site;
+                                          currentSite = site;
                                           _center = LatLng(
-                                              _currentSite.latitude,
-                                              _currentSite.longitude);
+                                              currentSite.latitude,
+                                              currentSite.longitude);
                                           _goToNewSite();
                                         })
                                       },
@@ -831,13 +832,12 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       workDates.length > 0 &&
                                       startTime != null &&
                                       endTime != null) {
-                                    setState(() {
-                                      _fbKey.currentState.value['client_site'] =
-                                          _currentSite.uuid;
-                                      print(_fbKey.currentState.value);
-                                      _saving = true;
-                                      uploadNewJob(context);
-                                    });
+                                      setState(() {
+                                        _fbKey.currentState.value['client_site'] = currentSite.uuid;
+                                        _saving = true;
+                                        uploadNewJob(context);
+                                      });
+
                                   } else {
                                     Fluttertoast.showToast(
                                         msg:
