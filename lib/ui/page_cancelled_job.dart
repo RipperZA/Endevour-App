@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:endevour/model/Job.dart';
-import 'package:endevour/model/WorkAreaManager.dart';
+import 'package:endevour/model/JobList.dart';
+import 'package:endevour/model/WorkList.dart';
 import 'package:endevour/services/user_service.dart';
-import 'package:endevour/ui/page_pending_job_details.dart';
+import 'package:endevour/ui/page_job_details.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CancelledJobPage extends StatefulWidget {
-
   @override
   _CancelledJobPageState createState() => _CancelledJobPageState();
 }
@@ -20,18 +19,15 @@ class CancelledJobPage extends StatefulWidget {
 class _CancelledJobPageState extends State<CancelledJobPage> {
   bool _saving = false;
   Screen size;
-  Job jobDetails;
+  JobList jobDetails;
 
-  List<WorkAreaManager> workList = List();
-  List<WorkAreaManager> _searchResult = [];
+  List<WorkList> workList = List();
+  List<WorkList> _searchResult = [];
 
   TextEditingController controller = new TextEditingController();
 
   getCancelledWork() async {
     try {
-      this.workList = List();
-      this._searchResult = [];
-
       Response response;
 
       Dio dio = new Dio();
@@ -43,17 +39,14 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
 
       if (response.statusCode == 200) {
         var availableWork = response.data['data']['cancelledWork'];
-
         for (var x in availableWork) {
-          var work = WorkAreaManager.fromJson(x);
+          WorkList work = WorkList.fromJson(x);
 
           if (this.mounted) {
             setState(() {
               this.workList.add(work);
             });
-            this.onSearchTextChanged(controller.text);
           }
-
         }
       }
     } on DioError catch (e) {
@@ -92,7 +85,7 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
     }
   }
 
-  getJobInformation(uuid) async {
+  getJobInformation(batch) async {
     try {
       setState(() {
         _saving = true;
@@ -100,7 +93,7 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
       Response response;
 
       Dio dio = new Dio();
-      response = await dio.get(Constants.urlGetJobDetailsAreaManager + uuid,
+      response = await dio.get(Constants.urlGetJobDetails + batch,
           options: Options(
               method: 'GET',
               headers: {'Authorization': 'Bearer ' + UserDetails.token},
@@ -112,7 +105,7 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
       if (response.statusCode == 200) {
         var jobInformation = response.data['data']['jobInformation'];
 
-        var job = Job.fromJson(jobInformation);
+        JobList job = JobList.fromJson(jobInformation);
 
         if (this.mounted) {
           setState(() {
@@ -192,8 +185,8 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
     text = text.toLowerCase();
 
     workList.forEach((work) {
-      if (work.work.name.toLowerCase().contains(text) ||
-          work.work.area.toLowerCase().contains(text)) _searchResult.add(work);
+      if (work.siteName.toLowerCase().contains(text) ||
+          work.area.toLowerCase().contains(text)) _searchResult.add(work);
     });
 
     setState(() {
@@ -292,8 +285,7 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
                               controller.text.isNotEmpty
                           ? new ListView.builder(
                               itemCount: _searchResult.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, i) {
+                              itemBuilder: (context, index) {
                                 return Column(
                                   children: <Widget>[
                                     SizedBox(
@@ -302,111 +294,137 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
                                     new Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(20.0),
+                                            BorderRadius.circular(20.0),
                                       ),
-                                      child: new ListTile(
-                                        onTap: () async {
-                                          await getJobInformation(
-                                              workList[i].work.uuid.toString());
+                                      child: ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount:
+                                              _searchResult[index].work.length,
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, position) {
+                                            return ListTile(
+                                              onTap: () async {
+                                                await getJobInformation(
+                                                    _searchResult[index]
+                                                        .work[position]
+                                                        .batch
+                                                        .toString());
 
-                                          if (jobDetails != null) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PendingJobDetailsPage(
-                                                            jobDetails:
-                                                                jobDetails))).then((value) async {await this.getCancelledWork();});
-                                          }
-                                        },
-                                        leading: CircleAvatar(
-                                          child: Text(workList[i].work.name[0]),
-                                          backgroundColor: themeColour,
-                                          foregroundColor: backgroundColor,
-                                        ),
-                                        title: new Text(
-                                            _searchResult[i].work.name +
-                                                ' ' +
-                                                _searchResult[i].work.area),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            RichText(
-                                              text: TextSpan(
-                                                text: '',
-                                                style:
-                                                    DefaultTextStyle.of(context)
-                                                        .style,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'Start:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  TextSpan(
-                                                      text:
-                                                          ' ${_searchResult[i].work.startDate}'),
+                                                if (jobDetails != null) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              JobDetailsPage(
+                                                                jobDetails:
+                                                                    jobDetails,
+                                                                viewOnly: true,
+                                                              )));
+                                                }
+                                              },
+                                              leading: CircleAvatar(
+                                                child: Text(_searchResult[index]
+                                                    .work[position]
+                                                    .name[0]),
+                                                backgroundColor: themeColour,
+                                                foregroundColor:
+                                                    backgroundColor,
+                                              ),
+                                              title: new Text(
+                                                  _searchResult[index]
+                                                          .work[position]
+                                                          .name +
+                                                      ' ' +
+                                                      _searchResult[index]
+                                                          .work[position]
+                                                          .area),
+                                              subtitle: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: '',
+                                                      style:
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text: 'Start:',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        TextSpan(
+                                                            text:
+                                                                ' ${_searchResult[index].work[position].startDate}'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: '',
+                                                      style:
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text: 'End:',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        TextSpan(
+                                                            text:
+                                                                ' ${_searchResult[index].work[position].endDate}'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: '',
+                                                      style:
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text: 'Worker:',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        TextSpan(
+                                                            text:
+                                                                ' ${_searchResult[index].worker.name + ' ' + _searchResult[index].worker.surname}'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: '',
+                                                      style:
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text:
+                                                                'Day ${_searchResult[index].work[position].current_day} of ${_searchResult[index].work[position].total_days}',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
-                                            ),
-                                            RichText(
-                                              text: TextSpan(
-                                                text: '',
-                                                style:
-                                                    DefaultTextStyle.of(context)
-                                                        .style,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'End:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  TextSpan(
-                                                      text:
-                                                          ' ${_searchResult[i].work.endDate}'),
-                                                ],
-                                              ),
-                                            ),
-                                            RichText(
-                                              text: TextSpan(
-                                                text: '',
-                                                style:
-                                                    DefaultTextStyle.of(context)
-                                                        .style,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'Worker:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  TextSpan(
-                                                      text:
-                                                          ' ${_searchResult[i].worker.name + ' ' + _searchResult[i].worker.surname}'),
-                                                ],
-                                              ),
-                                            ),
-                                            RichText(
-                                              text: TextSpan(
-                                                text: '',
-                                                style:
-                                                    DefaultTextStyle.of(context)
-                                                        .style,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'Cell:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  TextSpan(
-                                                      text:
-                                                          ' ${_searchResult[i].worker.cellNumber}'),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                            );
+                                          }),
                                       margin: const EdgeInsets.all(0.0),
                                     ),
                                     SizedBox(
@@ -427,116 +445,139 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
                                     new Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(20.0),
+                                            BorderRadius.circular(20.0),
                                       ),
-                                      child: new ListTile(
-                                        onTap: () async {
-                                          await getJobInformation(
-                                              workList[index]
-                                                  .work
-                                                  .uuid
-                                                  .toString());
+                                      child: ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount:
+                                              workList[index].work.length,
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, position) {
+                                            return ListTile(
+                                              onTap: () async {
+                                                await getJobInformation(
+                                                    workList[index]
+                                                        .work[position]
+                                                        .batch
+                                                        .toString());
 
-                                          if (jobDetails != null) {
-                                            Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            PendingJobDetailsPage(
+                                                print(jobDetails
+                                                    .work.first.workerCell);
+
+                                                if (jobDetails != null) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              JobDetailsPage(
                                                                 jobDetails:
-                                                                    jobDetails)))
-                                                .then((value) async {await this.getCancelledWork();});
-                                          }
-                                        },
-                                        leading: CircleAvatar(
-                                          child: Text(
-                                              workList[index].work.name[0]),
-                                          backgroundColor: themeColour,
-                                          foregroundColor: backgroundColor,
-                                        ),
-                                        title: new Text(
-                                            workList[index].work.name +
-                                                ' ' +
-                                                workList[index].work.area),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            RichText(
-                                              text: TextSpan(
-                                                text: '',
-                                                style:
-                                                    DefaultTextStyle.of(context)
-                                                        .style,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'Start:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  TextSpan(
-                                                      text:
-                                                          ' ${workList[index].work.startDate}'),
+                                                                    jobDetails,
+                                                                viewOnly: true,
+                                                              )));
+                                                }
+                                              },
+                                              leading: CircleAvatar(
+                                                child: Text(workList[index]
+                                                    .work[position]
+                                                    .name[0]),
+                                                backgroundColor: themeColour,
+                                                foregroundColor:
+                                                    backgroundColor,
+                                              ),
+                                              title: new Text(workList[index]
+                                                      .work[position]
+                                                      .name +
+                                                  ' ' +
+                                                  workList[index]
+                                                      .work[position]
+                                                      .area),
+                                              subtitle: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: '',
+                                                      style:
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text: 'Start:',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        TextSpan(
+                                                            text:
+                                                                ' ${workList[index].work[position].startDate}'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: '',
+                                                      style:
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text: 'End:',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        TextSpan(
+                                                            text:
+                                                                ' ${workList[index].work[position].endDate}'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: '',
+                                                      style:
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text: 'Worker:',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        TextSpan(
+                                                            text:
+                                                                ' ${workList[index].worker.name + ' ' + workList[index].worker.surname}'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: '',
+                                                      style:
+                                                          DefaultTextStyle.of(
+                                                                  context)
+                                                              .style,
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text:
+                                                                'Day ${workList[index].work[position].current_day} of ${workList[index].work[position].total_days}',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
-                                            ),
-                                            RichText(
-                                              text: TextSpan(
-                                                text: '',
-                                                style:
-                                                    DefaultTextStyle.of(context)
-                                                        .style,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'End:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  TextSpan(
-                                                      text:
-                                                          ' ${workList[index].work.endDate}'),
-                                                ],
-                                              ),
-                                            ),
-                                            RichText(
-                                              text: TextSpan(
-                                                text: '',
-                                                style:
-                                                    DefaultTextStyle.of(context)
-                                                        .style,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'Worker:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  TextSpan(
-                                                      text:
-                                                          ' ${workList[index].worker.name + ' ' + workList[index].worker.surname}'),
-                                                ],
-                                              ),
-                                            ),
-                                            RichText(
-                                              text: TextSpan(
-                                                text: '',
-                                                style:
-                                                    DefaultTextStyle.of(context)
-                                                        .style,
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: 'Cell:',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  TextSpan(
-                                                      text:
-                                                          ' ${workList[index].worker.cellNumber}'),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                            );
+                                          }),
                                       margin: const EdgeInsets.all(0.0),
                                     ),
                                     SizedBox(

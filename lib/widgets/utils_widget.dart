@@ -252,7 +252,7 @@ Row jobInformationRowCellNumber(jobLabel, jobProperty, number) {
                   color: hyperlinkColor,
                 ),
                 onTap: () {
-                  _launchNumber(number);
+                  launchNumber(number);
                 },
               )
             ]),
@@ -355,7 +355,7 @@ Row jobInformationRowProfilePicture(jobLabel, jobProperty, Job job, context) {
                   color: hyperlinkColor,
                 ),
                 onTap: () {
-                  _launchNumber(job.workerCell);
+                  launchNumber(job.workerCell);
                 },
               ),
               SizedBox(
@@ -425,7 +425,7 @@ class PhotoHero extends StatelessWidget {
   }
 }
 
-_launchNumber(number) async {
+launchNumber(number) async {
   var url = "tel://${number}";
 
   if (await canLaunch(url)) {

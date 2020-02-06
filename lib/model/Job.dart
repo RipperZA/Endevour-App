@@ -1,4 +1,5 @@
 import 'Site.dart';
+import 'Worker.dart';
 
 class Job {
   String uuid;
@@ -19,7 +20,8 @@ class Job {
   String startDate;
   String endDate;
   int lunchDuration;
-
+  String cancelledAt;
+  Worker worker;
   Job(
       {this.uuid,
       this.site,
@@ -46,7 +48,9 @@ class Job {
         verifiedLeftWork = json['verified_left_work'],
         startDate = json['start_date'],
         endDate = json['end_date'],
-        lunchDuration = json['lunch_duration'];
+        lunchDuration = json['lunch_duration'],
+        cancelledAt = json['cancelled_at'],
+        worker = Worker.fromJson(json['worker']);
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,

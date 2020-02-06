@@ -1,4 +1,5 @@
 import 'Work.dart';
+import 'Worker.dart';
 
 class WorkList {
   String batch;
@@ -9,10 +10,11 @@ class WorkList {
   double totalPay;
   double totalHours;
   int numDays;
+  Worker worker;
   List<Work> work;
 
   WorkList(this.batch, this.startDate, this.endDate, this.siteName, this.area,
-      this.totalPay, this.totalHours, this.numDays, [this.work]);
+      this.totalPay, this.totalHours, this.numDays, this.worker, [this.work]);
 
   factory WorkList.fromJson(Map<String, dynamic> json) {
     if (json['items'] != null) {
@@ -29,6 +31,7 @@ class WorkList {
           json['total_pay'].toDouble(),
           json['total_hours'].toDouble(),
           json['num_days'],
+          Worker.fromJson(json['worker']),
           json['items']
               .map((workJson) => Work.fromJson(workJson))
               .toList()
@@ -43,6 +46,7 @@ class WorkList {
           json['total_pay'].toDouble(),
           json['total_hours'].toDouble(),
           json['num_days'],
+          Worker.fromJson(json['worker']),
 //           List<Work>()
       );
     }

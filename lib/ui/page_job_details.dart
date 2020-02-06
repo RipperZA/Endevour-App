@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:endevour/model/Job.dart';
 import 'package:endevour/model/JobList.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_home_worker.dart';
@@ -11,10 +12,13 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JobDetailsPage extends StatefulWidget {
-  const JobDetailsPage({Key key, @required this.jobDetails}) : super(key: key);
+  const JobDetailsPage(
+      {Key key, @required this.jobDetails, this.viewOnly = false})
+      : super(key: key);
 
 //  final String jobUuid;
   final JobList jobDetails;
+  final bool viewOnly;
 
   _JobDetailsPageState createState() => _JobDetailsPageState();
 }
@@ -24,10 +28,12 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
 
   JobList job;
   bool _saving = false;
+  bool viewOnly;
 
   void initState() {
 //    getJobInformation();
     job = widget.jobDetails;
+    viewOnly = widget.viewOnly;
 
     super.initState();
   }
@@ -240,13 +246,34 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           ),
 //
           jobInformationWidget(job, size),
+          this.viewOnly == true
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircleAvatar(
+                      radius: 10,
+                      child: Text(''),
+                      backgroundColor: colorLightRed,
+                      foregroundColor: backgroundColor,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Text("Red Indicates which days were cancelled",
+                      style: TextStyle(fontSize: 16.0),),
+                    ),
+                  ],
+                )
+              : Container(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
 //              height: size.getWidthPx(300),
               child: ListView.separated(
-                  physics:
-                  NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: job.work.length,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -259,6 +286,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     return Card(
 //                          color: backgroundColor,
                       elevation: 5,
+                      color: job.work[index].cancelledAt != null
+                          ? colorLightRed
+                          : null,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
@@ -286,7 +316,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       text: 'Total Hours:',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
-                                  TextSpan(text: ' ${job.work[index].hours.toStringAsFixed(2)}'),
+                                  TextSpan(
+                                      text:
+                                          ' ${job.work[index].hours.toStringAsFixed(2)}'),
                                 ],
                               ),
                             ),
@@ -299,7 +331,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       text: 'Total Lunch Duration (Minutes):',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
-                                  TextSpan(text: ' ${job.work[index].lunchDuration.toStringAsFixed(0)}'),
+                                  TextSpan(
+                                      text:
+                                          ' ${job.work[index].lunchDuration.toStringAsFixed(0)}'),
                                 ],
                               ),
                             ),
@@ -395,6 +429,163 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     ]);
   }
 
+  Padding jobInformationWidget(JobList job, Screen size) {
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+//      color: backgroundColor,
+        elevation: 5,
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                centreAlignText(
+                    text: "Job Overview",
+                    padding: size.getWidthPx(16),
+                    textColor: textPrimaryColor,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w900,
+                    underline: true),
+                SizedBox(
+                  height: 15,
+                ),
+                jobInformationRow('Start Date', job.work.first.startDate),
+                SizedBox(
+                  height: 10,
+                ),
+                jobInformationRow('End Date', job.work.last.endDate),
+                SizedBox(
+                  height: 10,
+                ),
+                jobInformationRowCellNumber(
+                    'Area Manager',
+                    job.work.first.areaManagerName +
+                        " (${job.work.first.areaManagerNumber.toString()})",
+                    job.work.first.areaManagerNumber),
+                SizedBox(height: 10),
+                jobInformationRowProfilePicture('Worker Cell',
+                    job.work.first.worker.cellNumber, job.work.first, context),
+                SizedBox(height: 10),
+                jobInformationRow('Site', job.siteName),
+                SizedBox(height: 10),
+                jobInformationRow(
+                    'Address', job.work.first.site.fullAddress.toString()),
+                SizedBox(height: 10),
+                jobInformationRow('Work Duration',
+                    job.numDays.toStringAsFixed(2) + ' Day(s)'),
+                SizedBox(height: 10),
+                jobInformationRow(
+                    'Total Hours', job.totalHours.toStringAsFixed(2)),
+                SizedBox(height: 10),
+                jobInformationRow('Total Lunch (Minutes)',
+                    job.totalLunchDuration.toStringAsFixed(0)),
+                SizedBox(height: 10),
+                jobInformationRow(
+                    'Total Pay', "R ${job.totalPay.toStringAsFixed(2)}"),
+                SizedBox(height: 10),
+                jobInformationRow('Initial Pay',
+                    "R ${job.totalPartialPay.toStringAsFixed(2)}"),
+                jobInformationRow('Remaining Pay',
+                    "R ${job.totalDifferencePay.toStringAsFixed(2)}"),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row jobInformationRowProfilePicture(jobLabel, jobProperty, Job job, context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Flexible(
+          child: Column(
+            children: <Widget>[
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: '',
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: jobLabel + "  ",
+                              style: TextStyle(
+                                  fontFamily: 'Exo2',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: textPrimaryColor,
+                                  decoration: TextDecoration.underline)),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      child: Icon(
+                        Icons.phone,
+                        size: 26,
+                        color: hyperlinkColor,
+                      ),
+                      onTap: () {
+                        launchNumber(job.worker.cellNumber);
+                      },
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    GestureDetector(
+                      child: Icon(
+                        Icons.face,
+                        size: 26,
+                        color: hyperlinkColor,
+                      ),
+                      onTap: () async {
+                        var profilePicture =
+                            await getProfilePicture(job.worker.uuid);
+
+                        if (profilePicture != null) {
+                          Navigator.of(context).push(MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                            return Scaffold(
+                              appBar: AppBar(
+                                backgroundColor: themeColour,
+                                title:
+                                    Text(job.worker.name + job.worker.surname),
+                                brightness: Brightness.light,
+                              ),
+                              body: Center(
+                                child: PhotoHero(
+                                  photo: profilePicture,
+                                ),
+                              ),
+                            );
+                          }));
+                        }
+                      },
+                    )
+                  ]),
+              SizedBox(
+                height: 5,
+              ),
+              Text(jobProperty,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: 'Exo2',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: textPrimaryColor))
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Container buttonWidgetAccept() {
     return Container(
       padding: EdgeInsets.symmetric(
@@ -416,63 +607,66 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: () async {
-          await showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              // return object of type Dialog
-              return AlertDialog(
-                title: new Text("Please Confirm!"),
-                content: new Text("Are you sure you want to accept this job?"),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_down,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorErrorMessage,
-                      label: new Text(
-                        "No!",
-                        style: TextStyle(
+        onPressed: this.viewOnly == false
+            ? () async {
+                await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
+                      title: new Text("Please Confirm!"),
+                      content:
+                          new Text("Are you sure you want to accept this job?"),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_down,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorErrorMessage,
+                            label: new Text(
+                              "No!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      }),
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_up,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorSuccessMessage,
-                      label: new Text(
-                        "Yes!",
-                        style: TextStyle(
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }),
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_up,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorSuccessMessage,
+                            label: new Text(
+                              "Yes!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        acceptJob();
-                      }),
-                ],
-              );
-            },
-          );
-        },
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              acceptJob();
+                            }),
+                      ],
+                    );
+                  },
+                );
+              }
+            : null,
       ),
     );
   }

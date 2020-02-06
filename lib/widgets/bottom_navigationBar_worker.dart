@@ -185,7 +185,7 @@ class _BottomNavBarWorkerState extends State<BottomNavBarWorker>
               ): SizedBox()
             ],
           ),
-          title: Text('Created Jobs', style: TextStyle(fontFamily: 'Exo2')),
+          title: Text('Current Jobs', style: TextStyle(fontFamily: 'Exo2')),
         ),
         BottomNavigationBarItem(
           backgroundColor: Colors.grey.shade50,
