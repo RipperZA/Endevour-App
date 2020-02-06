@@ -376,11 +376,10 @@ Row jobInformationRowProfilePicture(jobLabel, jobProperty, Job job, context) {
                       return Scaffold(
                         appBar: AppBar(
                           iconTheme: IconThemeData(
-                            color: textPrimaryColor
+                            color: textPrimaryLightColor
                           ),
-                          backgroundColor: textPrimaryLightColor,
+                          backgroundColor: themeColour,
                           title: Text(job.workerName,style: TextStyle(
-                            color: textPrimaryColor
                           ),),
                           brightness: Brightness.light,
                         ),

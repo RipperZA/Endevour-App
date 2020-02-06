@@ -29,6 +29,9 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
 
   getAcceptedWork() async {
     try {
+      //so that when the .then runs it doesnt create duplicates
+      this.workList = List();
+      this._searchResult = [];
       Response response;
 
       Dio dio = new Dio();
@@ -312,7 +315,10 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                                               AcceptedJobDetailsPage(
                                                                 jobDetails:
                                                                     jobDetails,
-                                                              )));
+                                                              ))).then(
+                                                          (value) async {
+                                                        await this.getAcceptedWork();
+                                                      });
                                                 }
                                               },
                                               leading: CircleAvatar(
@@ -442,7 +448,10 @@ class _AcceptedJobPageState extends State<AcceptedJobPage> {
                                                               AcceptedJobDetailsPage(
                                                                 jobDetails:
                                                                     jobDetails,
-                                                              )));
+                                                              ))).then(
+                                                          (value) async {
+                                                        await this.getAcceptedWork();
+                                                      });
                                                 }
                                               },
                                               leading: CircleAvatar(

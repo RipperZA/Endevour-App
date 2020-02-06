@@ -235,7 +235,7 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         titleWidget(),
-                        Container(width: 0.0, height: 0.0),
+                        Container(width: 50, height: 0.0),
                       ],
                     ),
                     SizedBox(height: size.getWidthPx(10)),

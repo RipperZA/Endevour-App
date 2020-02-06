@@ -204,28 +204,28 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
 
-          UserDetails.userRoles.contains('worker') ?
-          RaisedButton(
-            elevation: 8.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(22.0)),
-            padding: EdgeInsets.all(size.getWidthPx(10)),
-            child: Text(
-              'View Job History',
-              style: TextStyle(
-                  fontFamily: 'Exo2', color: Colors.white, fontSize: 14.0),
-            ),
-            color: colorCurve,
-            onPressed: ()
-            {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CompletedJobPage(
-                          )));
-            },
-          ): Container()
+          UserDetails.userRoles.contains('worker')
+              ? RaisedButton(
+                  elevation: 8.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(22.0)),
+                  padding: EdgeInsets.all(size.getWidthPx(10)),
+                  child: Text(
+                    'View Job History',
+                    style: TextStyle(
+                        fontFamily: 'Exo2',
+                        color: Colors.white,
+                        fontSize: 14.0),
+                  ),
+                  color: colorCurve,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CompletedJobPage()));
+                  },
+                )
+              : Container()
         ],
       )
     ]);
@@ -386,12 +386,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Column nameWidget() {
     return Column(
       children: <Widget>[
-        Text("Alex Spyridis",
-            style: TextStyle(
-                fontFamily: "Exo2",
-                fontSize: 16.0,
-                color: colorCurve,
-                fontWeight: FontWeight.w700)),
+        profileInfoList.length >= 1
+            ? Text(profileInfoList.first.value.toString(),
+                style: TextStyle(
+                    fontFamily: "Exo2",
+                    fontSize: 16.0,
+                    color: colorCurve,
+                    fontWeight: FontWeight.w700))
+            : Text(''),
         SizedBox(height: size.getWidthPx(4)),
 //        Text("Photographer",
 //            style: TextStyle(
