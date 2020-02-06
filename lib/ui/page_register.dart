@@ -318,6 +318,7 @@ class _RegisterPageState extends State<RegisterPage>
         }
 
         Dio dio = new Dio();
+
         response = await dio.post(uploadUrl,
             data: formData,
             options: Options(
@@ -328,8 +329,6 @@ class _RegisterPageState extends State<RegisterPage>
         setState(() {
           _saving = false;
         });
-        print(response);
-        print(response.data);
 
         await showDialog(
           barrierDismissible: false,
@@ -374,6 +373,7 @@ class _RegisterPageState extends State<RegisterPage>
         });
       }
     } on DioError catch (e) {
+
       try {
         setState(() {
           _saving = false;
@@ -384,24 +384,49 @@ class _RegisterPageState extends State<RegisterPage>
           context: context,
           builder: (BuildContext context) {
             // return object of type Dialog
-            return AlertDialog(
-              title: new Text("Error!"),
-              content: new Text(e.response.data['responseMessage'].toString()),
-              actions: <Widget>[
-                // usually buttons at the bottom of the dialog
-                new RaisedButton.icon(
-                  icon: Icon(Icons.close),
-                  textColor: Colors.white,
-                  color: colorErrorMessage,
-                  label: new Text("Close"),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
+            try
+            {
+              return AlertDialog(
+                title: new Text("Error!"),
+                content: new Text(e.response.data['responseMessage'].toString()),
+                actions: <Widget>[
+                  // usually buttons at the bottom of the dialog
+                  new RaisedButton.icon(
+                    icon: Icon(Icons.close),
+                    textColor: Colors.white,
+                    color: colorErrorMessage,
+                    label: new Text("Close"),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            }
+            catch(error)
+            {
+              return AlertDialog(
+                title: new Text("Error!"),
+                content: new Text(e.toString()),
+                actions: <Widget>[
+                  // usually buttons at the bottom of the dialog
+                  new RaisedButton.icon(
+                    icon: Icon(Icons.close),
+                    textColor: Colors.white,
+                    color: colorErrorMessage,
+                    label: new Text("Close"),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            }
+
           },
         );
 
@@ -597,6 +622,7 @@ class _RegisterPageState extends State<RegisterPage>
                                         icon: Icon(Icons.camera_alt),
                                         textColor: Colors.white,
                                         label: Text("Camera"),
+                                        color: themeColour,
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(30.0)),
@@ -609,6 +635,7 @@ class _RegisterPageState extends State<RegisterPage>
                                       new RaisedButton.icon(
                                         icon: Icon(Icons.photo_album),
                                         textColor: Colors.white,
+                                        color: themeColour,
                                         label: new Text("Gallery"),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -813,6 +840,7 @@ class _RegisterPageState extends State<RegisterPage>
                             icon: Icon(Icons.camera_alt),
                             textColor: Colors.white,
                             label: Text("Camera"),
+                            color: themeColour,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0)),
                             onPressed: () {
@@ -824,6 +852,7 @@ class _RegisterPageState extends State<RegisterPage>
                           new RaisedButton.icon(
                             icon: Icon(Icons.photo_album),
                             textColor: Colors.white,
+                            color: themeColour,
                             label: new Text("Gallery"),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0)),
@@ -1062,6 +1091,7 @@ class _RegisterPageState extends State<RegisterPage>
                                       icon: Icon(Icons.camera_alt),
                                       textColor: Colors.white,
                                       label: Text("Camera"),
+                                      color: themeColour,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(30.0)),
@@ -1075,6 +1105,7 @@ class _RegisterPageState extends State<RegisterPage>
                                       icon: Icon(Icons.photo_album),
                                       textColor: Colors.white,
                                       label: new Text("Gallery"),
+                                      color: themeColour,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(30.0)),
