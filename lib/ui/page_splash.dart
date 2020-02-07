@@ -39,8 +39,10 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(Constants.loggingIn, true);
 
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+            (Route<dynamic> route) => false);
 
 //    String isOnBoard = await LocalStorage.sharedInstance.readValue(Constants.isOnBoard);
 //

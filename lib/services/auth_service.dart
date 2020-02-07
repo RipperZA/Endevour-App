@@ -383,9 +383,11 @@ class AuthService {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool(Constants.loggingIn, false);
 
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
-
+        //Fix for if they logout and then tap back button it doesn't show the previous screen again. Completely pops other underlying screens
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+                (Route<dynamic> route) => false);
         return true;
       }
 
