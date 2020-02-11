@@ -1,5 +1,6 @@
 import 'package:endevour/services/auth_service.dart';
 import 'package:endevour/services/user_service.dart';
+import 'package:endevour/ui/page_cancelled_job.dart';
 import 'package:endevour/ui/page_profile.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
@@ -39,7 +40,9 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
           await showDialog<String>(
               context: context,
               barrierDismissible: false,
-              builder: (BuildContext context) => UpdatePasswordDialog(myContext: this.context,));
+              builder: (BuildContext context) => UpdatePasswordDialog(
+                    myContext: this.context,
+                  ));
         });
       }
     }
@@ -105,12 +108,53 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 propertyCard('icons/open_job.png', 'Open Jobs', 2),
-                propertyCard('icons/imgforgot1.png', 'Settings', 3),
+                genericNavPushCard('icons/cancelled_jobs.png', 'Cancelled Jobs',
+                    CancelledJobPage()),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                propertyCard('icons/settings.png', 'Settings', 3),
               ],
             ),
           ],
         ),
       ],
+    );
+  }
+
+  GestureDetector genericNavPushCard(
+      String imageName, String cardTitle, Widget route) {
+    return GestureDetector(
+      onTap: () => {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => route))
+      },
+      child: Card(
+          elevation: 4.0,
+          margin: EdgeInsets.all(8),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          borderOnForeground: true,
+          child: Container(
+              width: size.getWidthPx(110),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          topRight: Radius.circular(12.0)),
+                      child:
+                          Image.asset('assets/$imageName', fit: BoxFit.fill)),
+                  SizedBox(height: size.getWidthPx(8)),
+                  centerAlignText(
+                      text: "$cardTitle",
+                      centerPadding: size.getWidthPx(8),
+                      textColor: colorCurve,
+                      fontSize: 14.0),
+                ],
+              ))),
     );
   }
 
@@ -194,8 +238,8 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
   GestureDetector profileCard(String imageName, String cardTitle) {
     return GestureDetector(
       onTap: () => {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ProfilePage()))
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfilePage()))
       },
       child: Card(
           elevation: 4.0,
@@ -263,7 +307,8 @@ class UpdatePasswordDialog extends StatefulWidget {
 
 class _UpdatePasswordDialogState extends State<UpdatePasswordDialog> {
   var _isPasswordValid = false;
-  TextEditingController passwordController = new TextEditingController(text: '');
+  TextEditingController passwordController =
+      new TextEditingController(text: '');
 
   @override
   void dispose() {
@@ -271,7 +316,6 @@ class _UpdatePasswordDialogState extends State<UpdatePasswordDialog> {
     passwordController.dispose();
     super.dispose();
   }
-
 
   @override
   void initState() {
@@ -285,7 +329,8 @@ class _UpdatePasswordDialogState extends State<UpdatePasswordDialog> {
 
   updatePassword() async {
     try {
-      bool _result = await appAuth.updatePassword(this.passwordController.text,widget.myContext);
+      bool _result = await appAuth.updatePassword(
+          this.passwordController.text, widget.myContext);
 
       if (_result) {}
     } catch (e) {
@@ -312,6 +357,7 @@ class _UpdatePasswordDialogState extends State<UpdatePasswordDialog> {
       });
     }
   }
+
   _buildAboutDialog(BuildContext context) {
     String validatePassword(String value) {
       if (value.length < 6)
@@ -346,11 +392,11 @@ class _UpdatePasswordDialogState extends State<UpdatePasswordDialog> {
             Center(
               child: FlatButton(
                 onPressed: _isPasswordValid == true
-                           ? () {
-                  this.updatePassword();
-                  Navigator.of(context).pop();
-                }
-                           : null,
+                    ? () {
+                        this.updatePassword();
+                        Navigator.of(context).pop();
+                      }
+                    : null,
                 disabledColor: disabledButtonColour,
                 textColor: textPrimaryLightColor,
                 color: themeColour,
@@ -372,6 +418,5 @@ class _UpdatePasswordDialogState extends State<UpdatePasswordDialog> {
   @override
   Widget build(BuildContext context) {
     return _buildAboutDialog(context);
-
   }
 }

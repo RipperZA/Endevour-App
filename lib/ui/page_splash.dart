@@ -28,9 +28,9 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
         body: Center(
             child: Container(
-                width: size.getWidthPx(300),
-                height: size.getWidthPx(300),
-                child: Image.asset("assets/icons/logo_splash.png"))));
+//                width: size.getWidthPx(300),
+//                height: size.getWidthPx(300),
+                child: Image.asset("assets/icons/logo_splash_2.png"))));
   }
 
   Future navigateFromSplash() async {

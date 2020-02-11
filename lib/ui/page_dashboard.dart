@@ -107,17 +107,17 @@ class _DashboardPageState extends State<DashboardPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('icons/pending_job.png', 'Created Jobs', 2),
+                propertyCard('icons/created_jobs.png', 'Created Jobs', 2),
                 propertyCard('icons/pending_job.png', 'Pending Jobs', 3),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                genericNavPushCard('icons/pending_job.png', 'Cancelled Jobs',
+                genericNavPushCard('icons/cancelled_jobs.png', 'Cancelled Jobs',
                     CancelledJobPage()),
                 genericNavPushCard(
-                    'icons/imgforgot1.png', 'Settings', SettingPage()),
+                    'icons/settings.png', 'Settings', SettingPage()),
               ],
             ),
           ],

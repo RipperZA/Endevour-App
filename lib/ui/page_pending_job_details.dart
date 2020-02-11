@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:endevour/model/Job.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_home.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/utils_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -358,7 +358,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       likeWidget(),
-                      nameWidget(),
+                      Flexible(child: nameWidget()),
                       followersWidget(),
                     ],
                   ),
@@ -454,8 +454,8 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
                 ? SizedBox(height: 10)
                 : Container(width: 0, height: 0),
             !Constants.isNullEmptyFalseOrZero(job.workerCell)
-                ?
-            jobInformationRowProfilePicture('Worker Cell', job.workerCell, job, context)
+                ? jobInformationRowProfilePicture(
+                    'Worker Cell', job.workerCell, job, context)
                 : Container(width: 0, height: 0),
             !Constants.isNullEmptyFalseOrZero(job.workerCell)
                 ? SizedBox(height: 10)
@@ -470,14 +470,16 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
             SizedBox(height: 10),
             jobInformationRow('Hours', job.hours.toString()),
             SizedBox(height: 10),
-            jobInformationRow('Lunch Duration (Minutes)', job.lunchDuration.toString()),
-            SizedBox(height: 10),
-            jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
+            jobInformationRow(
+                'Lunch Duration (Minutes)', job.lunchDuration.toString()),
             SizedBox(height: 10),
             jobInformationRow(
-                'Initial Pay', "R ${job.payPartialDay.toString()}"),
+                'Total Pay', "R ${job.payTotalDay.toStringAsFixed(2)}"),
+            SizedBox(height: 10),
             jobInformationRow(
-                'Remaining Pay', "R ${job.payDifferenceDay.toString()}"),
+                'Initial Pay', "R ${job.payPartialDay.toStringAsFixed(2)}"),
+            jobInformationRow('Remaining Pay',
+                "R ${job.payDifferenceDay.toStringAsFixed(2)}"),
           ],
         ),
       ),
@@ -626,63 +628,65 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: job.arrivedAtWork != null && job.verifiedAtWork == null ? () async {
-          await showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              // return object of type Dialog
-              return AlertDialog(
-                title: new Text("Please Confirm!"),
-                content: new Text("Are you sure the worker has arrived?"),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_down,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorErrorMessage,
-                      label: new Text(
-                        "No!",
-                        style: TextStyle(
+        onPressed: job.arrivedAtWork != null && job.verifiedAtWork == null
+            ? () async {
+                await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
+                      title: new Text("Please Confirm!"),
+                      content: new Text("Are you sure the worker has arrived?"),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_down,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorErrorMessage,
+                            label: new Text(
+                              "No!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      }),
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_up,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorSuccessMessage,
-                      label: new Text(
-                        "Yes!",
-                        style: TextStyle(
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }),
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_up,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorSuccessMessage,
+                            label: new Text(
+                              "Yes!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        await verifyArrivedAtWork();
-                      }),
-                ],
-              );
-            },
-          );
-        } : null,
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              await verifyArrivedAtWork();
+                            }),
+                      ],
+                    );
+                  },
+                );
+              }
+            : null,
       ),
     );
   }
@@ -708,63 +712,69 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
           ),
         ),
         disabledColor: disabledButtonColour,
-        onPressed: job.arrivedAtWork != null && job.verifiedAtWork != null && job.leftWorkAt != null && job.verifiedLeftWork == null ? () async {
-          await showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              // return object of type Dialog
-              return AlertDialog(
-                title: new Text("Please Confirm!"),
-                content: new Text("Are you sure the worker has finished?"),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_down,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorErrorMessage,
-                      label: new Text(
-                        "No!",
-                        style: TextStyle(
+        onPressed: job.arrivedAtWork != null &&
+                job.verifiedAtWork != null &&
+                job.leftWorkAt != null &&
+                job.verifiedLeftWork == null
+            ? () async {
+                await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
+                      title: new Text("Please Confirm!"),
+                      content:
+                          new Text("Are you sure the worker has finished?"),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_down,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorErrorMessage,
+                            label: new Text(
+                              "No!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      }),
-                  RaisedButton.icon(
-                      elevation: 4.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      icon: Icon(
-                        Icons.thumb_up,
-                        color: imagePrimaryLightColor,
-                      ),
-                      color: colorSuccessMessage,
-                      label: new Text(
-                        "Yes!",
-                        style: TextStyle(
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }),
+                        RaisedButton.icon(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            icon: Icon(
+                              Icons.thumb_up,
+                              color: imagePrimaryLightColor,
+                            ),
+                            color: colorSuccessMessage,
+                            label: new Text(
+                              "Yes!",
+                              style: TextStyle(
 //                              fontFamily: 'Exo2',
-                          color: textPrimaryLightColor,
-                        ),
-                      ),
-                      disabledColor: disabledButtonColour,
-                      onPressed: () async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        await verifyLeftWork();
-                      }),
-                ],
-              );
-            },
-          );
-        } : null,
+                                color: textPrimaryLightColor,
+                              ),
+                            ),
+                            disabledColor: disabledButtonColour,
+                            onPressed: () async {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              await verifyLeftWork();
+                            }),
+                      ],
+                    );
+                  },
+                );
+              }
+            : null,
       ),
     );
   }
@@ -772,7 +782,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
   Column likeWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.payPartialDay}",
+        Text("R ${job.payPartialDay.toStringAsFixed(2)}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
@@ -793,6 +803,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
     return Column(
       children: <Widget>[
         Text(job.site.name,
+            overflow: TextOverflow.ellipsis,
 //        Text('asdada',
             style: TextStyle(
                 fontFamily: "Exo2",
@@ -800,7 +811,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
                 color: colorCurve,
                 fontWeight: FontWeight.w700)),
         SizedBox(height: size.getWidthPx(4)),
-        Text("R ${job.payTotalDay}",
+        Text("R ${job.payTotalDay.toStringAsFixed(2)}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
@@ -813,7 +824,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
   Column followersWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.payDifferenceDay}",
+        Text("R ${job.payDifferenceDay.toStringAsFixed(2)}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,

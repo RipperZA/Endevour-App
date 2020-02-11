@@ -175,12 +175,12 @@ Padding jobInformationWidgetSingle(Job job, Screen size) {
               jobInformationRow('Total Lunch Duration (Minutes)',
                   job.lunchDuration.toString()),
               SizedBox(height: 10),
-              jobInformationRow('Total Pay', "R ${job.payTotalDay.toString()}"),
+              jobInformationRow('Total Pay', "R ${job.payTotalDay.toStringAsFixed(2)}"),
               SizedBox(height: 10),
               jobInformationRow(
-                  'Initial Pay', "R ${job.payPartialDay.toString()}"),
+                  'Initial Pay', "R ${job.payPartialDay.toStringAsFixed(2)}"),
               jobInformationRow(
-                  'Remaining Pay', "R ${job.payDifferenceDay.toString()}"),
+                  'Remaining Pay', "R ${job.payDifferenceDay.toStringAsFixed(2)}"),
             ],
           ),
         ),

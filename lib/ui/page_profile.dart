@@ -175,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
 //                      likeWidget(),
-                      nameWidget(),
+                      Flexible(child: nameWidget()),
 //                      followersWidget(),
                     ],
                   ),
@@ -387,7 +387,8 @@ class _ProfilePageState extends State<ProfilePage> {
     return Column(
       children: <Widget>[
         profileInfoList.length >= 1
-            ? Text(profileInfoList.first.value.toString(),
+            ? Text(profileInfoList.first.value.toString() + 'asdasdasd asdasdasdsa asdasd asdasdasd',
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     fontFamily: "Exo2",
                     fontSize: 16.0,

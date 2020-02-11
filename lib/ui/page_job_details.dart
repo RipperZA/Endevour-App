@@ -220,7 +220,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           likeWidget(),
-                          nameWidget(),
+                          Flexible(child: nameWidget()),
                           followersWidget(),
                         ],
                       ),
@@ -263,8 +263,10 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     Container(
                       padding: const EdgeInsets.all(8.0),
                       width: MediaQuery.of(context).size.width * 0.8,
-                      child: Text("Red Indicates which days were cancelled",
-                      style: TextStyle(fontSize: 16.0),),
+                      child: Text(
+                        "Red Indicates which days were cancelled",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
                     ),
                   ],
                 )
@@ -467,12 +469,14 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     job.work.first.areaManagerName +
                         " (${job.work.first.areaManagerNumber.toString()})",
                     job.work.first.areaManagerNumber),
-
-                this.viewOnly == true?
-                SizedBox(height: 10) : Container(),
-                this.viewOnly == true?
-                jobInformationRowProfilePicture('Worker Cell',
-                    job.work.first.worker.cellNumber, job.work.first, context): Container(),
+                this.viewOnly == true ? SizedBox(height: 10) : Container(),
+                this.viewOnly == true
+                    ? jobInformationRowProfilePicture(
+                        'Worker Cell',
+                        job.work.first.worker.cellNumber,
+                        job.work.first,
+                        context)
+                    : Container(),
                 SizedBox(height: 10),
                 jobInformationRow('Site', job.siteName),
                 SizedBox(height: 10),
@@ -707,7 +711,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   Column likeWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.totalPartialPay}",
+        Text("R ${job.totalPartialPay.toStringAsFixed(2)}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
@@ -728,6 +732,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     return Column(
       children: <Widget>[
         Text(job.siteName,
+            overflow: TextOverflow.ellipsis,
 //        Text('asdada',
             style: TextStyle(
                 fontFamily: "Exo2",
@@ -735,7 +740,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 color: colorCurve,
                 fontWeight: FontWeight.w700)),
         SizedBox(height: size.getWidthPx(4)),
-        Text("R ${job.totalPay}",
+        Text("R ${job.totalPay.toStringAsFixed(2)}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
@@ -748,7 +753,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   Column followersWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.totalDifferencePay}",
+        Text("R ${job.totalDifferencePay.toStringAsFixed(2)}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,

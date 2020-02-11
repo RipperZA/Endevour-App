@@ -278,7 +278,10 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
         builder: (BuildContext context) {
           // return object of type Dialog
           return AlertDialog(
-            title: new Text("Error!",style: TextStyle(color: colorErrorMessage),),
+            title: new Text(
+              "Error!",
+              style: TextStyle(color: colorErrorMessage),
+            ),
             content: new Text(e.response.data['error']),
             actions: <Widget>[
               // usually buttons at the bottom of the dialog
@@ -483,7 +486,10 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
         builder: (BuildContext context) {
           // return object of type Dialog
           return AlertDialog(
-            title: new Text("Error!",style: TextStyle(color: colorErrorMessage),),
+            title: new Text(
+              "Error!",
+              style: TextStyle(color: colorErrorMessage),
+            ),
             content: new Text(e.response.data['error']),
             actions: <Widget>[
               // usually buttons at the bottom of the dialog
@@ -603,7 +609,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       likeWidget(),
-                      nameWidget(),
+                      Flexible(child: nameWidget()),
                       followersWidget(),
                     ],
                   ),
@@ -967,7 +973,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
   Column likeWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.payPartialDay}",
+        Text("R ${job.payPartialDay.toStringAsFixed(2)}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
@@ -988,6 +994,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
     return Column(
       children: <Widget>[
         Text(job.site.name,
+            overflow: TextOverflow.ellipsis,
 //        Text('asdada',
             style: TextStyle(
                 fontFamily: "Exo2",
@@ -995,7 +1002,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                 color: colorCurve,
                 fontWeight: FontWeight.w700)),
         SizedBox(height: size.getWidthPx(4)),
-        Text("R ${job.payTotalDay}",
+        Text("R ${job.payTotalDay.toStringAsFixed(2)}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
@@ -1008,7 +1015,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
   Column followersWidget() {
     return Column(
       children: <Widget>[
-        Text("R ${job.payDifferenceDay}",
+        Text("R ${job.payDifferenceDay.toStringAsFixed(2)}",
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
