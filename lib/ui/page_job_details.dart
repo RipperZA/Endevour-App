@@ -351,7 +351,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                           fontWeight: FontWeight.bold)),
                                   TextSpan(
                                       text:
-                                          ' R ${job.work[index].payTotalDay}'),
+                                          ' R ${job.work[index].payTotalDay.toStringAsFixed(2)}'),
                                 ],
                               ),
                             ),
