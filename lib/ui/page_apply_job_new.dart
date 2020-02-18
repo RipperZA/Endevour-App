@@ -374,7 +374,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' R ${_searchResult[index].totalPay}'),
+                                                          ' R ${_searchResult[index].totalPay.toStringAsFixed(2)}'),
                                                 ],
                                               ),
                                             ),
@@ -524,7 +524,7 @@ class _ApplyJobPageState extends State<ApplyJobPage> {
                                                               FontWeight.bold)),
                                                   TextSpan(
                                                       text:
-                                                          ' R ${workList[index].totalPay}'),
+                                                          ' R ${workList[index].totalPay.toStringAsFixed(2)}'),
                                                 ],
                                               ),
                                             ),
