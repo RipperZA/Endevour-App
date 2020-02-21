@@ -14,7 +14,7 @@
     <!--    Todo testfingerprint-->
     <application
             android:name="io.flutter.app.FlutterApplication"
-            android:label="endevour"
+            android:label="Endevour"
             android:icon="@mipmap/ic_launcher"
             android:theme="@style/Theme.AppCompat.Light"
     >
