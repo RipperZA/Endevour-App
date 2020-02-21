@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Container(
 //                width: size.getWidthPx(300),
 //                height: size.getWidthPx(300),
-                child: Image.asset("assets/icons/logo_splash_2.png"))));
+                child: Image.asset("assets/icons/logo_splash.png"))));
   }
 
   Future navigateFromSplash() async {
