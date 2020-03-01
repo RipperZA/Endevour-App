@@ -387,7 +387,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Column(
       children: <Widget>[
         profileInfoList.length >= 1
-            ? Text(profileInfoList.first.value.toString() + 'asdasdasd asdasdasdsa asdasd asdasdasd',
+            ? Text(profileInfoList.first.value.toString(),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     fontFamily: "Exo2",

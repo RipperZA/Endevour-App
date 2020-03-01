@@ -995,7 +995,6 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
       children: <Widget>[
         Text(job.site.name,
             overflow: TextOverflow.ellipsis,
-//        Text('asdada',
             style: TextStyle(
                 fontFamily: "Exo2",
                 fontSize: 16.0,
