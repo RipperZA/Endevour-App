@@ -295,27 +295,37 @@ class _RegisterPageState extends State<RegisterPage>
           _cvImages.length > 0) {
         var batch = randomAlphaNumeric(15);
         Response response;
-        FormData formData = new FormData(); // just like JS
-        formData.add("batch", batch);
-        formData.add("name", formName); //rtesti
-        formData.add("surname", formSurname);
-        formData.add("email", formEmail);
-        formData.add("cell_number", formPhoneNumber);
 
-        formData.add("selfie_image",
-            new UploadFileInfo(_selfieImage, Path.basename(_selfieImage.path)));
-
-        formData.add(
-            "id_document_image",
-            new UploadFileInfo(
-                _idDocumentImage, Path.basename(_idDocumentImage.path)));
-
-        for (var i = 0; i < _cvImages.length; i++) {
-          formData.add(
-              "cv_image_" + i.toString(),
-              new UploadFileInfo(
-                  _cvImages[i], Path.basename(_cvImages[i].path)));
+        List multipartArray = [];
+        for (var i = 0; i < _cvImages.length; i++){
+          multipartArray.add(await MultipartFile.fromFile(_cvImages[i].path, filename: "cv_image_" + i.toString()));
         }
+
+        FormData formData = new FormData.fromMap(<String, dynamic>{
+          "batch": batch,
+          'name': formName,
+          'surname': formSurname,
+          'email': formEmail,
+          'cell_number': formPhoneNumber,
+          "selfie_image": await MultipartFile.fromFile(_selfieImage.path, filename: "selfie_image"),
+          "id_document_image": await MultipartFile.fromFile(_idDocumentImage.path, filename: "id_document_image"),
+          'cv_images': multipartArray,
+        }); // just like JS
+
+//        formData.add("selfie_image",
+//            new UploadFileInfo(_selfieImage, Path.basename(_selfieImage.path)));
+
+//        formData.add(
+//            "id_document_image",
+//            new UploadFileInfo(
+//                _idDocumentImage, Path.basename(_idDocumentImage.path)));
+
+//        for (var i = 0; i < _cvImages.length; i++) {
+//          formData.add(
+//              "cv_image_" + i.toString(),
+//              new UploadFileInfo(
+//                  _cvImages[i], Path.basename(_cvImages[i].path)));
+//        }
 
         Dio dio = new Dio();
 
@@ -373,7 +383,6 @@ class _RegisterPageState extends State<RegisterPage>
         });
       }
     } on DioError catch (e) {
-
       try {
         setState(() {
           _saving = false;
@@ -384,11 +393,11 @@ class _RegisterPageState extends State<RegisterPage>
           context: context,
           builder: (BuildContext context) {
             // return object of type Dialog
-            try
-            {
+            try {
               return AlertDialog(
                 title: new Text("Error!"),
-                content: new Text(e.response.data['responseMessage'].toString()),
+                content:
+                    new Text(e.response.data['responseMessage'].toString()),
                 actions: <Widget>[
                   // usually buttons at the bottom of the dialog
                   new RaisedButton.icon(
@@ -404,9 +413,7 @@ class _RegisterPageState extends State<RegisterPage>
                   ),
                 ],
               );
-            }
-            catch(error)
-            {
+            } catch (error) {
               return AlertDialog(
                 title: new Text("Error!"),
                 content: new Text(e.toString()),
@@ -426,7 +433,6 @@ class _RegisterPageState extends State<RegisterPage>
                 ],
               );
             }
-
           },
         );
 

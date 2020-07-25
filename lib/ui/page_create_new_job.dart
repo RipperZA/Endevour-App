@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:calendarro/calendarro.dart';
 import 'package:calendarro/default_day_tile_builder.dart';
@@ -296,14 +297,16 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
         try {
           Response response;
           var formValues = _fbKey.currentState.value;
-//          print(json.encode(formValues));
+          print(json.encode(formValues));
+          FormData formData = new FormData.fromMap(<String, dynamic>{ }); // just like JS
 
-          FormData formData = new FormData(); // just like JS
-          formData.addAll(formValues);
-          formData.add('client_site', currentSite.uuid); //for some reason the update form_builder doesnt add the uuid to client_site but the name therefore it wont work on server which needs uuid. so just set it here
-          formData.add('dates', workDates);
-          formData.add('start_time', startTime);
-          formData.add('end_time', endTime);
+          //todo manually add all form values dio has changed addAll
+//          FormData formData = new FormData(); // just like JS
+//          formData.addAll([formValues]);
+//          formData.add('client_site', currentSite.uuid); //for some reason the update form_builder doesnt add the uuid to client_site but the name therefore it wont work on server which needs uuid. so just set it here
+//          formData.add('dates', workDates);
+//          formData.add('start_time', startTime);
+//          formData.add('end_time', endTime);
 
           Dio dio = new Dio();
           response = await dio.post(uploadUrl,

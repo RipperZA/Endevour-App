@@ -24,9 +24,7 @@ class AuthService {
   Future<bool> login(email, password) async {
     try {
       Response response;
-      FormData formData = new FormData(); // just like JS
-      formData.add("email", email);
-      formData.add("password", password);
+      FormData formData = new FormData.fromMap(<String, dynamic>{ "email": email,'password':password }); // just like JS
 
       Dio dio = new Dio();
       dio.options.connectTimeout = 10000; //5s
@@ -93,15 +91,13 @@ class AuthService {
   Future<bool> loginFingerPrint() async {
     try {
       Response response;
-      FormData formData = new FormData(); // just like JS
 
       var email = await LocalStorage.sharedInstance
           .readValue(Constants.storageEmail);
       var pass = await LocalStorage.sharedInstance
           .readValue(Constants.storagePassword);
 
-      formData.add("email", email);
-      formData.add("password", pass);
+      FormData formData = new FormData.fromMap(<String, dynamic>{ "email": email,'password':pass }); // just like JS
 
       Dio dio = new Dio();
       dio.options.connectTimeout = 10000; //5s
@@ -203,9 +199,7 @@ class AuthService {
       var playerToken = status.subscriptionStatus.pushToken;
 
       Response response;
-      FormData formData = new FormData(); // just like JS
-      formData.add("push_id", playerId);
-      formData.add("push_token", playerToken);
+      FormData formData = new FormData.fromMap(<String, dynamic>{ "push_id": playerId,'push_token':playerToken }); // just like JS
 
       Dio dio = new Dio();
       response = await dio.post(Constants.urlPushIdAndToken,
@@ -240,8 +234,7 @@ class AuthService {
   Future<bool> updatePassword(password, context) async {
     try {
       Response response;
-      FormData formData = new FormData(); // just like JS
-      formData.add("password", password.toString());
+      FormData formData = new FormData.fromMap(<String, dynamic>{ "password":  password.toString()}); // just like JS
 
       Dio dio = new Dio();
       response = await dio.post(Constants.urlUpdatePassword,

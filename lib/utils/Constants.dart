@@ -2,7 +2,8 @@ import 'dart:ui';
 
 class Constants {
   //URLs
-  static String urlBase = 'https://endevour.co.za/api/';
+//  static String urlBase = 'https://endevour.co.za/api/';
+  static String urlBase = 'http://192.168.1.104:8000/api/';
 
   static String urlLogin = urlBase + 'login';
   static String urlResetPassword = urlBase + 'password/email';

@@ -55,9 +55,7 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
   Future<bool> resetPassword() async {
     try {
       Response response;
-      FormData formData = new FormData(); // just like JS
-
-      formData.add("email", emailController.text.toString());
+      FormData formData = new FormData.fromMap(<String, dynamic>{ "email": emailController.text.toString()}); // just like JS
 
       Dio dio = new Dio();
       dio.options.connectTimeout = 10000; //5s
