@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:calendarro/calendarro.dart';
-import 'package:calendarro/default_day_tile_builder.dart';
 import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:dio/dio.dart';
 import 'package:endevour/model/Rate.dart';
@@ -20,8 +19,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-class CreateNewJobPage extends StatefulWidget {
+import 'CustomDayTileBuilder.dart';
 
+class CreateNewJobPage extends StatefulWidget {
   @override
   _CreateNewJobPageState createState() => _CreateNewJobPageState();
 }
@@ -298,7 +298,12 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
           Response response;
           var formValues = _fbKey.currentState.value;
           print(json.encode(formValues));
-          FormData formData = new FormData.fromMap(<String, dynamic>{ }); // just like JS
+          FormData formData = new FormData.fromMap(<String, dynamic>{
+            "client_site": currentSite.uuid,
+            'dates': workDates,
+            'start_time': startTime,
+            'end_time': endTime,
+          }); // just like JS
 
           //todo manually add all form values dio has changed addAll
 //          FormData formData = new FormData(); // just like JS
@@ -431,8 +436,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       onChanged: (site) => {
                                         setState(() {
                                           currentSite = site;
-                                          _center = LatLng(
-                                              currentSite.latitude,
+                                          _center = LatLng(currentSite.latitude,
                                               currentSite.longitude);
                                           _goToNewSite();
                                         })
@@ -702,6 +706,39 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     SizedBox(height: 10),
+                                    Row(
+                                      children: <Widget>[
+                                        Column(
+                                          children: <Widget>[
+                                            SizedBox(
+                                                width: 16.0,
+                                                height: 16.0,
+                                                child: const DecoratedBox(
+                                                  decoration: const BoxDecoration(
+                                                      color: Colors.red),
+                                                )),
+                                            Text(' Public Holiday'),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            SizedBox(
+                                                width: 16.0,
+                                                height: 16.0,
+                                                child: const DecoratedBox(
+                                                  decoration: const BoxDecoration(
+                                                      color: Colors.red),
+                                                )),
+                                            Text(' Public Holiday'),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                     Text(
                                       "Select Dates For Work",
                                       style: TextStyle(
@@ -740,7 +777,9 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         //default was Colors.blue and there was no other way to change it currently.
                                         // remember to change it again if you change calendarro version
                                         // todo: remember to add 'package:endevour/utils/utils.dart' in default_day_tile.dart be able to find the variable 'themeColour'
-                                        dayTileBuilder: DefaultDayTileBuilder(),
+                                        dayTileBuilder: CustomDayTileBuilder(
+                                            todayHighlightColor:
+                                                colorLightYellow),
                                         displayMode: DisplayMode.MONTHS,
                                         selectionMode: SelectionMode.MULTI,
 //                                      onTap: (date) =>
@@ -835,12 +874,12 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       workDates.length > 0 &&
                                       startTime != null &&
                                       endTime != null) {
-                                      setState(() {
-                                        _fbKey.currentState.value['client_site'] = currentSite.uuid;
-                                        _saving = true;
-                                        uploadNewJob(context);
-                                      });
-
+                                    setState(() {
+                                      _fbKey.currentState.value['client_site'] =
+                                          currentSite.uuid;
+                                      _saving = true;
+                                      uploadNewJob(context);
+                                    });
                                   } else {
                                     Fluttertoast.showToast(
                                         msg:

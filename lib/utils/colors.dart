@@ -12,6 +12,10 @@ Color colorLightRed = Colors.red.shade200;
 Color colorCurveSecondary = Color.fromRGBO(97, 10, 155, 0.6);
 Color backgroundColor =Colors.grey.shade200;
 Color textPrimaryColor =Colors.black87;
+Color weekdayColour = Colors.grey;
+Color saturdayColour = Colors.lightGreen;
+Color sundayColour = Colors.lightBlue;
+Color publicHolidayColour = Colors.red;
 
 //textColors
 Color textPrimaryLightColor = Colors.white;

@@ -2,8 +2,8 @@ import 'dart:ui';
 
 class Constants {
   //URLs
-//  static String urlBase = 'https://endevour.co.za/api/';
-  static String urlBase = 'http://192.168.1.104:8000/api/';
+  static String urlBase = 'https://endevour.co.za/api/';
+//  static String urlBase = 'http://192.168.1.153:8000/api/';
 
   static String urlLogin = urlBase + 'login';
   static String urlResetPassword = urlBase + 'password/email';
@@ -45,7 +45,8 @@ class Constants {
   static String isOnBoard = "IS_ONBOARD";
   static String isLoggedIn = "IS_LOGGED_IN";
   static String loggingIn = "LOGGING_IN"; //the app is being opened
-  static String loggedInOnce = "LOGGED_IN_ONCE"; //they have logged in successfully with email/password at least once
+  static String loggedInOnce =
+      "LOGGED_IN_ONCE"; //they have logged in successfully with email/password at least once
   static String storageUserPermissions = "USER_PERMISSIONS";
   static String storageUserRoles = "USER_ROLES";
   static String storageUserToken = "USER_TOKEN";
@@ -75,4 +76,19 @@ class Constants {
 
   static bool isNullEmptyFalseOrZero(Object o) =>
       o == null || false == o || 0 == o || "" == o;
+
+  static const holidays = [
+    '01-01',
+    '03-21',
+    '04-10',
+    '04-13',
+    '04-27',
+    '05-01',
+    '06-16',
+    '08-09',
+    '09-24',
+    '12-16',
+    '12-24',
+    '12-25',
+  ];
 }
