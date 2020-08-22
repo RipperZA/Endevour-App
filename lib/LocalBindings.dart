@@ -1,5 +1,6 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LocalStorageBindings {
   final storage = new FlutterSecureStorage();
@@ -25,7 +26,6 @@ class LocalStorageBindings {
     Map<String, String> value = await storage.readAll();
     return value;
   }
-
 }
 
 class LocalStorage {

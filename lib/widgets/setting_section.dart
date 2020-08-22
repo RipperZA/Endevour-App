@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:endevour/utils/utils.dart';
-
-import 'tile_row.dart';
+import 'package:flutter/material.dart';
 
 class SettingSection extends StatefulWidget {
   final String headerText;
@@ -48,7 +46,8 @@ class _SettingSectionState extends State<SettingSection> {
         ),
         Card(
             elevation: 4.0,
-            margin: new EdgeInsets.symmetric(horizontal: size.getWidthPx(10), vertical: size.getWidthPx(6)),
+            margin: new EdgeInsets.symmetric(
+                horizontal: size.getWidthPx(10), vertical: size.getWidthPx(6)),
             borderOnForeground: true,
             child: Column(
               children: widget.children,

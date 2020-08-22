@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:endevour/model/Job.dart';
 import 'package:endevour/model/JobList.dart';
@@ -175,12 +176,13 @@ Padding jobInformationWidgetSingle(Job job, Screen size) {
               jobInformationRow('Total Lunch Duration (Minutes)',
                   job.lunchDuration.toString()),
               SizedBox(height: 10),
-              jobInformationRow('Total Pay', "R ${job.payTotalDay.toStringAsFixed(2)}"),
+              jobInformationRow(
+                  'Total Pay', "R ${job.payTotalDay.toStringAsFixed(2)}"),
               SizedBox(height: 10),
               jobInformationRow(
                   'Initial Pay', "R ${job.payPartialDay.toStringAsFixed(2)}"),
-              jobInformationRow(
-                  'Remaining Pay', "R ${job.payDifferenceDay.toStringAsFixed(2)}"),
+              jobInformationRow('Remaining Pay',
+                  "R ${job.payDifferenceDay.toStringAsFixed(2)}"),
             ],
           ),
         ),
@@ -375,12 +377,13 @@ Row jobInformationRowProfilePicture(jobLabel, jobProperty, Job job, context) {
                         builder: (BuildContext context) {
                       return Scaffold(
                         appBar: AppBar(
-                          iconTheme: IconThemeData(
-                            color: textPrimaryLightColor
-                          ),
+                          iconTheme:
+                              IconThemeData(color: textPrimaryLightColor),
                           backgroundColor: themeColour,
-                          title: Text(job.workerName,style: TextStyle(
-                          ),),
+                          title: Text(
+                            job.workerName,
+                            style: TextStyle(),
+                          ),
                           brightness: Brightness.light,
                         ),
                         body: Center(
