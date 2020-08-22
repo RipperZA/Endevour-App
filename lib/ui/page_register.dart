@@ -35,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage>
   var _isPhoneNumberValid = false;
   var uploadUrl = Constants.urlApplicationUpload;
   bool _saving = false;
-
+  final picker = ImagePicker();
   AnimationController _animationController;
 
   static const String africanCorporateCleaningUrl =
@@ -227,36 +227,30 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   Future getImageSelfie(ImageSource imgSource) async {
-    var picture =
-        await ImagePicker.pickImage(source: imgSource, maxHeight: 1500);
+    var picture = await picker.getImage(source: imgSource, maxHeight: 1080);
     print(picture);
 
     setState(() {
       if (picture != null) {
-        _selfieImage = picture;
+        _selfieImage = File(picture.path);
       }
     });
   }
 
   Future getImageIdDocument(ImageSource imgSource) async {
-    var picture =
-        await ImagePicker.pickImage(source: imgSource, maxHeight: 1500);
-    print(picture);
+    final pickedFile = await picker.getImage(source: imgSource, maxHeight: 1080);
 
     setState(() {
-      if (picture != null) {
-        _idDocumentImage = picture;
-      }
+      _idDocumentImage = File(pickedFile.path);
     });
   }
 
   Future getImageCV(ImageSource imgSource) async {
-    File picture =
-        await ImagePicker.pickImage(source: imgSource, maxHeight: 1500);
+    PickedFile picture = await picker.getImage(source: imgSource, maxHeight: 1080);
     setState(() {
       if (picture != null) {
         if (_cvImages.length < 4) {
-          _cvImages.add(picture);
+          _cvImages.add(File(picture.path));
 //          _cvImages = _cvImages.reversed.toList();
         } else {
           showDialog(
