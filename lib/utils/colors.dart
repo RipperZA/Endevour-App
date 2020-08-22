@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 Color themeColour = Colors.deepPurple;
 Color colorCurve = Colors.deepPurple;
-//Color colorCurve = Color.fromRGBO(97, 10, 165, 0.8);
 Color colorErrorMessage = Colors.red;
 Color colorSuccessMessage = Colors.green;
 Color colorLightGreen = Colors.green.shade200;

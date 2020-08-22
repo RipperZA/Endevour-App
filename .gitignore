@@ -11,6 +11,7 @@
 #My Own Stuff To Ignore
 key.properties
 key.jks
+keys.dart
 
 # IntelliJ related
 *.iml

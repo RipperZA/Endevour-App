@@ -5,6 +5,7 @@ import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_forgotpass.dart';
 import 'package:endevour/ui/page_home_worker.dart';
 import 'package:endevour/ui/page_register.dart';
+import 'package:endevour/utils/keys.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -57,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    OneSignal.shared.init(Constants.oneSignalAppKey);
+    OneSignal.shared.init(Keys.oneSignalAppKey);
 
     emailController.addListener(validEmail);
     passwordController.addListener(validPassword);

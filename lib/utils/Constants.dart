@@ -61,14 +61,8 @@ class Constants {
   static const String PHOTOSURL = "https://api.unsplash.com/";
   static const String PHOTOS = "photos";
 
-  //Google Maps API Key
-  static const String accessKey =
-      "f96abcd230664d7cab7ed900470db93878d44b15d672603e8c6817a267a96c78";
-
   static const String standardErrorMessage =
       "Something Went Wrong. Please Try Again. If the problem continues please contact support";
-
-  static const String oneSignalAppKey = "28fe38a2-d375-4d9f-9b9b-c14eafabfa02";
 
   static bool isNullEmptyOrFalse(Object o) =>
       o == null || false == o || "" == o;
