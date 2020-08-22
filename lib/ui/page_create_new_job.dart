@@ -657,7 +657,8 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                           decoration: TextDecoration.underline),
                                     ),
                                     ListView.builder(
-                                        padding: EdgeInsets.only(top: 10),
+                                        padding:
+                                            EdgeInsets.only(top: 10, bottom: 0),
 //                                        scrollDirection: Axis.vertical,
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
@@ -686,6 +687,38 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                                 )
                                               ]);
                                         }),
+                                    ListView(
+                                        padding:
+                                            EdgeInsets.only(top: 0, bottom: 0),
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        children: <Widget>[
+                                          Row(
+                                            children: <Widget>[
+                                              SizedBox(
+                                                  width: 16.0,
+                                                  height: 16.0,
+                                                  child: DecoratedBox(
+                                                    decoration: BoxDecoration(
+                                                        color: themeColour),
+                                                  )),
+                                              Text(' Selected Date'),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: <Widget>[
+                                              SizedBox(
+                                                  width: 16.0,
+                                                  height: 16.0,
+                                                  child: DecoratedBox(
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            colorLightYellow),
+                                                  )),
+                                              Text(' Today'),
+                                            ],
+                                          ),
+                                        ]),
                                     SizedBox(
                                       height: 15,
                                     ),
