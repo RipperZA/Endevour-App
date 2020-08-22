@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:calendarro/calendarro.dart';
 import 'package:calendarro/default_weekday_labels_row.dart';
@@ -8,7 +7,6 @@ import 'package:endevour/model/Rate.dart';
 import 'package:endevour/model/Site.dart';
 import 'package:endevour/model/models.dart';
 import 'package:endevour/services/user_service.dart';
-import 'package:endevour/ui/page_home.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -292,26 +290,32 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   Widget build(BuildContext context) {
     size = Screen(MediaQuery.of(context).size);
 
+    determineColour(rateCode) {
+      if (rateCode.toString().toLowerCase().contains('public_holiday'))
+        return publicHolidayColour;
+      else if (rateCode.toString().toLowerCase().contains('saturday'))
+        return saturdayColour;
+      else if (rateCode.toString().toLowerCase().contains('sunday'))
+        return sundayColour;
+      else
+        return weekdayColour;
+    }
+
     uploadNewJob(BuildContext context) async {
       {
         try {
+          _saving = true;
+
           Response response;
           var formValues = _fbKey.currentState.value;
-          print(json.encode(formValues));
           FormData formData = new FormData.fromMap(<String, dynamic>{
             "client_site": currentSite.uuid,
-            'dates': workDates,
+            'number_workers': formValues['number_workers'],
             'start_time': startTime,
             'end_time': endTime,
-          }); // just like JS
-
-          //todo manually add all form values dio has changed addAll
-//          FormData formData = new FormData(); // just like JS
-//          formData.addAll([formValues]);
-//          formData.add('client_site', currentSite.uuid); //for some reason the update form_builder doesnt add the uuid to client_site but the name therefore it wont work on server which needs uuid. so just set it here
-//          formData.add('dates', workDates);
-//          formData.add('start_time', startTime);
-//          formData.add('end_time', endTime);
+            'dates': workDates,
+            'lunch_duration': formValues['lunch_duration'],
+          });
 
           Dio dio = new Dio();
           response = await dio.post(uploadUrl,
@@ -468,67 +472,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                           return siteList;
                                         }
                                       },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              elevation: 10,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Text(
-                                      'Select Work Rate',
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                          decoration: TextDecoration.underline),
-                                    ),
-                                    FormBuilderCustomField(
-                                      attribute: "rate",
-                                      validators: [
-                                        FormBuilderValidators.required(),
-                                      ],
-                                      formField: FormField(
-                                        // key: _fieldKey,
-                                        enabled: true,
-//                              initialValue: rateList.first.uuid,
-                                        builder:
-                                            (FormFieldState<dynamic> field) {
-                                          return InputDecorator(
-                                            decoration: InputDecoration(
-                                              labelStyle: style,
-                                              labelText: "Select Rate",
-                                              contentPadding: EdgeInsets.only(
-                                                  top: 10.0, bottom: 0.0),
-                                              border: InputBorder.none,
-                                              errorText: field.errorText,
-                                            ),
-                                            child: DropdownButton(
-                                              isExpanded: true,
-                                              items: rateList.map((option) {
-                                                return DropdownMenuItem(
-                                                  child: Text(option.name +
-                                                      '- R' +
-                                                      option.ratePerHour
-                                                          .toString()),
-                                                  value: option.uuid,
-                                                );
-                                              }).toList(),
-                                              value: field.value,
-                                              onChanged: (value) {
-                                                field.didChange(value);
-                                              },
-                                            ),
-                                          );
-                                        },
-                                      ),
                                     ),
                                   ],
                                 ),
@@ -705,39 +648,45 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    SizedBox(height: 10),
-                                    Row(
-                                      children: <Widget>[
-                                        Column(
-                                          children: <Widget>[
-                                            SizedBox(
-                                                width: 16.0,
-                                                height: 16.0,
-                                                child: const DecoratedBox(
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.red),
-                                                )),
-                                            Text(' Public Holiday'),
-                                          ],
-                                        ),
-                                      ],
+                                    Text(
+                                      "Rates Legend",
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline),
                                     ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            SizedBox(
-                                                width: 16.0,
-                                                height: 16.0,
-                                                child: const DecoratedBox(
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.red),
-                                                )),
-                                            Text(' Public Holiday'),
-                                          ],
-                                        ),
-                                      ],
+                                    ListView.builder(
+                                        padding: EdgeInsets.only(top: 10),
+//                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: rateList.length,
+                                        itemBuilder: (context, index) {
+                                          return Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                        width: 16.0,
+                                                        height: 16.0,
+                                                        child: DecoratedBox(
+                                                          decoration: BoxDecoration(
+                                                              color: determineColour(
+                                                                  rateList[
+                                                                          index]
+                                                                      .code)),
+                                                        )),
+                                                    Text(
+                                                        ' ${rateList[index].name}: R ${rateList[index].ratePerHour.toStringAsFixed(2)}'),
+                                                  ],
+                                                )
+                                              ]);
+                                        }),
+                                    SizedBox(
+                                      height: 15,
                                     ),
                                     Text(
                                       "Select Dates For Work",
@@ -877,7 +826,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                     setState(() {
                                       _fbKey.currentState.value['client_site'] =
                                           currentSite.uuid;
-                                      _saving = true;
                                       uploadNewJob(context);
                                     });
                                   } else {
