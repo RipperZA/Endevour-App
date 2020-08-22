@@ -29,9 +29,8 @@ class CustomColorCalendarroDayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     determineTileColour() {
-      if (Constants.holidays.contains(date.toString().substring(5, 10) )) {
+      if (Constants.holidays.contains(date.toString().substring(5, 10))) {
         return publicHolidayColour;
       } else if (date.weekday == DateTime.saturday) {
         return saturdayColour;
@@ -42,8 +41,6 @@ class CustomColorCalendarroDayItem extends StatelessWidget {
       }
     }
 
-    bool isWeekend = DateUtils.isWeekend(date);
-//    var textColor = isWeekend ? Colors.grey : Colors.black;
     var textColor = determineTileColour();
     bool isToday = DateUtils.isToday(date);
     calendarroState = Calendarro.of(context);
@@ -52,7 +49,7 @@ class CustomColorCalendarroDayItem extends StatelessWidget {
 
     BoxDecoration boxDecoration;
     if (daySelected) {
-      boxDecoration = BoxDecoration(color:themeColour, shape: BoxShape.circle);
+      boxDecoration = BoxDecoration(color: themeColour, shape: BoxShape.circle);
     } else if (isToday) {
       boxDecoration =
           BoxDecoration(color: todayHighlightColor, shape: BoxShape.circle);

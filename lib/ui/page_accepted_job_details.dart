@@ -30,9 +30,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
   var location = new Location();
 
   void initState() {
-//    getJobInformation();
     job = widget.jobDetails;
-
     super.initState();
   }
 
@@ -581,17 +579,6 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
 
   Widget upperPart() {
     return Stack(children: <Widget>[
-//      ClipPath(
-//        clipper: UpperClipper(),
-//        child: Container(
-//          height: size.getWidthPx(80),
-//          decoration: BoxDecoration(
-//            gradient: LinearGradient(
-//              colors: [colorCurve, colorCurve],
-//            ),
-//          ),
-//        ),
-//      ),
       Column(
         children: <Widget>[
           Container(
@@ -608,22 +595,15 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      likeWidget(),
-                      Flexible(child: nameWidget()),
-                      followersWidget(),
+                      partialPaymentWidget(),
+                      Flexible(child: totalPaymentWidget()),
+                      differencePaymentWidget(),
                     ],
                   ),
                 ],
               ),
             ),
           ),
-//          Padding(
-//            padding: EdgeInsets.only(
-//                top: size.getWidthPx(8),
-//                left: size.getWidthPx(20),
-//                right: size.getWidthPx(20)),
-//            child: Container(height: size.getWidthPx(4), color: colorCurve),
-//          ),
           Container(
             child: Card(
               shape: RoundedRectangleBorder(
@@ -668,17 +648,6 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
         ],
       )
     ]);
-  }
-
-  GestureDetector followerAvatarWidget(String assetIcon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: CircleAvatar(
-        maxRadius: size.getWidthPx(24),
-        backgroundColor: Colors.transparent,
-        child: Image.asset(assetIcon),
-      ),
-    );
   }
 
   Container buttonWidgetCancel() {
@@ -970,7 +939,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
     );
   }
 
-  Column likeWidget() {
+  Column partialPaymentWidget() {
     return Column(
       children: <Widget>[
         Text("R ${job.payPartialDay.toStringAsFixed(2)}",
@@ -990,7 +959,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
     );
   }
 
-  Column nameWidget() {
+  Column totalPaymentWidget() {
     return Column(
       children: <Widget>[
         Text(job.site.name,
@@ -1011,7 +980,7 @@ class _AcceptedJobDetailsPageState extends State<AcceptedJobDetailsPage> {
     );
   }
 
-  Column followersWidget() {
+  Column differencePaymentWidget() {
     return Column(
       children: <Widget>[
         Text("R ${job.payDifferenceDay.toStringAsFixed(2)}",

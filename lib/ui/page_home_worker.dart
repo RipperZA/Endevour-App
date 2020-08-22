@@ -1,5 +1,5 @@
 import 'package:endevour/ui/page_accepted_job.dart';
-import 'package:endevour/ui/page_apply_job_new.dart';
+import 'package:endevour/ui/page_apply_job.dart';
 import 'package:endevour/ui/page_dashboard_worker.dart';
 import 'package:endevour/widgets/bottom_navigationBar_worker.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +20,6 @@ class _HomePageWorkerState extends State<HomePageWorker>
 
   void buttonNavigation(dynamic childValue) {
     this.changeCurrentTab(childValue);
-    final BottomNavBarWorker navigationBar = globalKey.currentWidget;
-//    navigationBar.onTap(childValue);
   }
 
   changeCurrentTab(int tab) {
@@ -34,7 +32,6 @@ class _HomePageWorkerState extends State<HomePageWorker>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pageController = new PageController();
   }

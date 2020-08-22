@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:endevour/utils/utils.dart';
+import 'package:flutter/material.dart';
 
 class IntroPage extends StatelessWidget {
   final String assetImage;
-  final  String text;
-  final  String title;
+  final String text;
+  final String title;
 
   IntroPage(this.assetImage, this.title, this.text);
 
   @override
   Widget build(BuildContext context) {
-    Screen  size = Screen(MediaQuery.of(context).size);
+    Screen size = Screen(MediaQuery.of(context).size);
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -26,30 +26,37 @@ class IntroPage extends StatelessWidget {
             child: Center(
               child: Text(
                 title,
-                style: TextStyle(fontFamily: 'Exo2',fontWeight: FontWeight.w500,fontSize: 26,color: Colors.white),
+                style: TextStyle(
+                    fontFamily: 'Exo2',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 26,
+                    color: Colors.white),
                 textAlign: TextAlign.center,
               ),
             ),
           ),
-
-
           Center(
             child: Column(
               verticalDirection: VerticalDirection.up,
               children: <Widget>[
-
                 Padding(
-                  padding: EdgeInsets.only(bottom: size.getWidthPx(80),left: size.getWidthPx(30),right: size.getWidthPx(20)),
+                  padding: EdgeInsets.only(
+                      bottom: size.getWidthPx(80),
+                      left: size.getWidthPx(30),
+                      right: size.getWidthPx(20)),
                   child: Text(
                     text,
-                    style: TextStyle(fontFamily: 'Exo2',fontWeight: FontWeight.w500,fontSize: 16,color: Colors.grey.shade700),
+                    style: TextStyle(
+                        fontFamily: 'Exo2',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: Colors.grey.shade700),
                     textAlign: TextAlign.center,
                   ),
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );

@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:endevour/utils/utils.dart';
-import 'package:flutter/material.dart';
 import 'package:endevour/widgets/widgets.dart';
-import 'package:endevour/utils/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class PageForgotPassword extends StatefulWidget {
@@ -12,14 +11,13 @@ class PageForgotPassword extends StatefulWidget {
 
 class _PageForgotPasswordState extends State<PageForgotPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
-  String _email;
   bool isLoading = false;
   var _isEmailValid = false;
   FocusNode _emailFocusNode = new FocusNode();
   TextEditingController emailController = new TextEditingController();
 
   Screen size;
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -34,7 +32,6 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
     super.initState();
     emailController.addListener(validEmail);
   }
-
 
   validEmail() {
     String value = emailController.text;
@@ -55,7 +52,9 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
   Future<bool> resetPassword() async {
     try {
       Response response;
-      FormData formData = new FormData.fromMap(<String, dynamic>{ "email": emailController.text.toString()}); // just like JS
+      FormData formData = new FormData.fromMap(<String, dynamic>{
+        "email": emailController.text.toString()
+      }); // just like JS
 
       Dio dio = new Dio();
       dio.options.connectTimeout = 10000; //5s
@@ -64,12 +63,9 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
           options: Options(
               method: 'POST',
               responseType: ResponseType.json // or ResponseType.JSON
-          ));
+              ));
 
-      print(response.data);
-
-      if (response.statusCode == 200)
-      {
+      if (response.statusCode == 200) {
         Fluttertoast.showToast(
             msg: response.data['msg'],
             toastLength: Toast.LENGTH_LONG,
@@ -107,7 +103,6 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
       }
       return false;
     } on Error catch (e) {
-      print(1);
       print(e);
 
       Fluttertoast.showToast(
@@ -133,21 +128,19 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
         bottom: false,
         top: true,
         child: Scaffold(
-          appBar: AppBar(
-              elevation: 0.0,
-              primary: false,
-              centerTitle: true,
-             backgroundColor: Colors.transparent,
-              leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: colorCurve,
-                ),
-                onPressed: () => Navigator.pop(context, false),
-              )
-          ),
+            appBar: AppBar(
+                elevation: 0.0,
+                primary: false,
+                centerTitle: true,
+                backgroundColor: Colors.transparent,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: colorCurve,
+                  ),
+                  onPressed: () => Navigator.pop(context, false),
+                )),
             backgroundColor: backgroundColor,
-
             body: Stack(children: <Widget>[
               ClipPath(
                   clipper: BottomShapeClipper(),
@@ -156,18 +149,19 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
                   )),
               Center(
                 child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _forgotGradientText(),
-                  SizedBox(height: size.getWidthPx(24)),
-                  Header(),
-                  SizedBox(height: size.getWidthPx(24)),
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: size.getWidthPx(16)),
-                      child: _emailFeild())
-                ],
-              ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      _forgotGradientText(),
+                      SizedBox(height: size.getWidthPx(24)),
+                      Header(),
+                      SizedBox(height: size.getWidthPx(24)),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: size.getWidthPx(16)),
+                          child: _emailFeild())
+                    ],
+                  ),
                 ),
               )
             ])),
@@ -226,14 +220,16 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
       focusNode: null,
       keyboardType: TextInputType.emailAddress,
       controller: emailController,
-      onEditingComplete: () {FocusScope.of(context).requestFocus(FocusNode());},
+      onEditingComplete: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
       obscureText: false,
 //      style: style,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Email",
           border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
   }
 
@@ -262,17 +258,16 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
               fontFamily: 'Exo2', color: Colors.white, fontSize: 20.0),
         ),
         color: colorCurve,
-        onPressed: _isEmailValid ? () async {
-          // Validate Email First
-          var _result = await resetPassword();
+        onPressed: _isEmailValid
+            ? () async {
+                // Validate Email First
+                var _result = await resetPassword();
 
-          if (_result == true)
-            {
-              Navigator.pop(context, false);
-            }
-
-
-        } : null,
+                if (_result == true) {
+                  Navigator.pop(context, false);
+                }
+              }
+            : null,
       ),
     );
   }
@@ -287,5 +282,4 @@ class _PageForgotPasswordState extends State<PageForgotPassword> {
     }
     return null;
   }
-
 }

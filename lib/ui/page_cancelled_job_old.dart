@@ -9,10 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CancelledJobPage extends StatefulWidget {
-
   @override
   _CancelledJobPageState createState() => _CancelledJobPageState();
 }
@@ -53,7 +51,6 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
             });
             this.onSearchTextChanged(controller.text);
           }
-
         }
       }
     } on DioError catch (e) {
@@ -160,20 +157,6 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
   void initState() {
     getCancelledWork();
     super.initState();
-  }
-
-  _launchURL(lat, long) async {
-    var url = 'https://www.google.com/maps/search/?api=1&query=' +
-        lat.toString() +
-        ',' +
-        long.toString();
-    print(url);
-
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
   onSearchTextChanged(String text) async {
@@ -302,7 +285,7 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
                                     new Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(20.0),
+                                            BorderRadius.circular(20.0),
                                       ),
                                       child: new ListTile(
                                         onTap: () async {
@@ -311,12 +294,15 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
 
                                           if (jobDetails != null) {
                                             Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PendingJobDetailsPage(
-                                                            jobDetails:
-                                                                jobDetails))).then((value) async {await this.getCancelledWork();});
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PendingJobDetailsPage(
+                                                                jobDetails:
+                                                                    jobDetails)))
+                                                .then((value) async {
+                                              await this.getCancelledWork();
+                                            });
                                           }
                                         },
                                         leading: CircleAvatar(
@@ -427,7 +413,7 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
                                     new Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(20.0),
+                                            BorderRadius.circular(20.0),
                                       ),
                                       child: new ListTile(
                                         onTap: () async {
@@ -445,7 +431,9 @@ class _CancelledJobPageState extends State<CancelledJobPage> {
                                                             PendingJobDetailsPage(
                                                                 jobDetails:
                                                                     jobDetails)))
-                                                .then((value) async {await this.getCancelledWork();});
+                                                .then((value) async {
+                                              await this.getCancelledWork();
+                                            });
                                           }
                                         },
                                         leading: CircleAvatar(

@@ -19,12 +19,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: themeColour,
       ),
-      home: CollectionApp(),
+      home: EndevourApp(),
     );
   }
 }
 
-class CollectionApp extends StatelessWidget {
+class EndevourApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,7 +43,6 @@ class CollectionApp extends StatelessWidget {
 //            focusedBorder: new UnderlineInputBorder(
 //              borderSide: BorderSide(color: Colors.black),) ,
 //          )
-
             ),
         home: SplashScreen());
   }

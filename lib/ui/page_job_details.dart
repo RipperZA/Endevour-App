@@ -31,7 +31,6 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   bool viewOnly;
 
   void initState() {
-//    getJobInformation();
     job = widget.jobDetails;
     viewOnly = widget.viewOnly;
 
@@ -142,7 +141,6 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         lat.toString() +
         ',' +
         long.toString();
-    print(url);
 
     if (await canLaunch(url)) {
       await launch(url);
@@ -189,17 +187,6 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
 
   Widget upperPart() {
     return Stack(children: <Widget>[
-//      ClipPath(
-//        clipper: UpperClipper(),
-//        child: Container(
-//          height: size.getWidthPx(80),
-//          decoration: BoxDecoration(
-//            gradient: LinearGradient(
-//              colors: [colorCurve, colorCurve],
-//            ),
-//          ),
-//        ),
-//      ),
       Column(
         children: <Widget>[
           Padding(
@@ -219,9 +206,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          likeWidget(),
+                          partialPaymentWidget(),
                           Flexible(child: nameWidget()),
-                          followersWidget(),
+                          differencePaymentWidget(),
                         ],
                       ),
                       Padding(
@@ -708,7 +695,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     );
   }
 
-  Column likeWidget() {
+  Column partialPaymentWidget() {
     return Column(
       children: <Widget>[
         Text("R ${job.totalPartialPay.toStringAsFixed(2)}",
@@ -749,7 +736,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     );
   }
 
-  Column followersWidget() {
+  Column differencePaymentWidget() {
     return Column(
       children: <Widget>[
         Text("R ${job.totalDifferencePay.toStringAsFixed(2)}",

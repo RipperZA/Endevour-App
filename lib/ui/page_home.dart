@@ -5,8 +5,6 @@ import 'package:endevour/ui/page_pending_job.dart';
 import 'package:endevour/widgets/bottom_navigationBar.dart';
 import 'package:flutter/material.dart';
 
-import 'page_settings.dart';
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -20,8 +18,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void buttonNavigation(dynamic childValue) {
     this.changeCurrentTab(childValue);
-    final BottomNavBar navigationBar = globalKey.currentWidget;
-//    navigationBar.onTap(childValue);
   }
 
   changeCurrentTab(int tab) {
@@ -34,7 +30,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pageController = new PageController();
   }
@@ -72,7 +67,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         tabView = [CreatedJobPage()];
         break;
       case 3:
-        //Setting Page
         tabView = [PendingJobPage()];
         break;
     }

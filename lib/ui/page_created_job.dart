@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CreatedJobPage extends StatefulWidget {
   @override
@@ -28,7 +27,6 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
 
   getCreatedWork() async {
     try {
-
       //so that when the .then runs it doesnt create duplicates
       this.workList = List();
       this._searchResult = [];
@@ -157,20 +155,6 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
   void initState() {
     getCreatedWork();
     super.initState();
-  }
-
-  _launchURL(lat, long) async {
-    var url = 'https://www.google.com/maps/search/?api=1&query=' +
-        lat.toString() +
-        ',' +
-        long.toString();
-    print(url);
-
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
   onSearchTextChanged(String text) async {

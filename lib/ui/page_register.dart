@@ -11,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:path/path.dart' as Path;
 import 'package:random_string/random_string.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -38,8 +37,6 @@ class _RegisterPageState extends State<RegisterPage>
   final picker = ImagePicker();
   AnimationController _animationController;
 
-  static const String africanCorporateCleaningUrl =
-      'https://www.africancorporatecleaning.co.za/contact.html';
   FocusNode _nameFocusNode = new FocusNode();
   FocusNode _surnameFocusNode = new FocusNode();
   FocusNode _emailFocusNode = new FocusNode();
@@ -144,29 +141,6 @@ class _RegisterPageState extends State<RegisterPage>
     }
   }
 
-//  Future showDialogPhaseTwo() async {
-//    showDialog(
-//      barrierDismissible: false,
-//      context: context,
-//      builder: (BuildContext context) {
-//        // return object of type Dialog
-//        return AlertDialog(
-//          title: new Text("Succeaaaaaaaaaaass!"),
-//          content: new Text('aaaa'),
-//          actions: <Widget>[
-//            // usually buttons at the bottom of the dialog
-//            new FlatButton(
-//              child: new Text("Close"),
-//              onPressed: () {
-//                Navigator.pop(context);
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
-
   _buildAboutDialog(BuildContext context) {
     return AlertDialog(
       title: Center(
@@ -183,11 +157,6 @@ class _RegisterPageState extends State<RegisterPage>
             FlatButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-//            await showDialogPhaseTwo().then((onValue) {
-//              Navigator.pop(context);
-//            }, onError: (err) {
-//              Navigator.pop(context);
-//            });
               },
               textColor: Theme.of(context).primaryColor,
               child: Center(
@@ -238,7 +207,8 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   Future getImageIdDocument(ImageSource imgSource) async {
-    final pickedFile = await picker.getImage(source: imgSource, maxHeight: 1080);
+    final pickedFile =
+        await picker.getImage(source: imgSource, maxHeight: 1080);
 
     setState(() {
       _idDocumentImage = File(pickedFile.path);
@@ -246,7 +216,8 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   Future getImageCV(ImageSource imgSource) async {
-    PickedFile picture = await picker.getImage(source: imgSource, maxHeight: 1080);
+    PickedFile picture =
+        await picker.getImage(source: imgSource, maxHeight: 1080);
     setState(() {
       if (picture != null) {
         if (_cvImages.length < 4) {
@@ -291,8 +262,9 @@ class _RegisterPageState extends State<RegisterPage>
         Response response;
 
         List multipartArray = [];
-        for (var i = 0; i < _cvImages.length; i++){
-          multipartArray.add(await MultipartFile.fromFile(_cvImages[i].path, filename: "cv_image_" + i.toString()));
+        for (var i = 0; i < _cvImages.length; i++) {
+          multipartArray.add(await MultipartFile.fromFile(_cvImages[i].path,
+              filename: "cv_image_" + i.toString()));
         }
 
         FormData formData = new FormData.fromMap(<String, dynamic>{
@@ -301,25 +273,13 @@ class _RegisterPageState extends State<RegisterPage>
           'surname': formSurname,
           'email': formEmail,
           'cell_number': formPhoneNumber,
-          "selfie_image": await MultipartFile.fromFile(_selfieImage.path, filename: "selfie_image"),
-          "id_document_image": await MultipartFile.fromFile(_idDocumentImage.path, filename: "id_document_image"),
+          "selfie_image": await MultipartFile.fromFile(_selfieImage.path,
+              filename: "selfie_image"),
+          "id_document_image": await MultipartFile.fromFile(
+              _idDocumentImage.path,
+              filename: "id_document_image"),
           'cv_images': multipartArray,
-        }); // just like JS
-
-//        formData.add("selfie_image",
-//            new UploadFileInfo(_selfieImage, Path.basename(_selfieImage.path)));
-
-//        formData.add(
-//            "id_document_image",
-//            new UploadFileInfo(
-//                _idDocumentImage, Path.basename(_idDocumentImage.path)));
-
-//        for (var i = 0; i < _cvImages.length; i++) {
-//          formData.add(
-//              "cv_image_" + i.toString(),
-//              new UploadFileInfo(
-//                  _cvImages[i], Path.basename(_cvImages[i].path)));
-//        }
+        });
 
         Dio dio = new Dio();
 

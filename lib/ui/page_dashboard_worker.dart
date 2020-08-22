@@ -22,8 +22,6 @@ class DashboardPageWorker extends StatefulWidget {
 
 class _DashboardPageWorkerState extends State<DashboardPageWorker> {
   Screen size;
-  int _selectedIndex = 1;
-  final _formKey = GlobalKey<FormState>();
 
   buttonNavigation(index) {
     widget.buttonNavigation(index);
@@ -31,7 +29,6 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     if (this.mounted) {
@@ -100,14 +97,14 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('icons/available_jobs.png', 'Available Jobs', 1),
+                dashboardCard('icons/available_jobs.png', 'Available Jobs', 1),
                 profileCard('icons/profile.png', 'Profile'),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('icons/open_job.png', 'Open Jobs', 2),
+                dashboardCard('icons/open_job.png', 'Open Jobs', 2),
                 genericNavPushCard('icons/cancelled_jobs.png', 'Cancelled Jobs',
                     CancelledJobPage()),
               ],
@@ -115,7 +112,7 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('icons/settings.png', 'Settings', 3),
+                dashboardCard('icons/settings.png', 'Settings', 3),
               ],
             ),
           ],
@@ -167,22 +164,6 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
             color: Colors.white));
   }
 
-  Padding leftAlignText({text, leftPadding, textColor, fontSize, fontWeight}) {
-    return Padding(
-      padding: EdgeInsets.only(left: leftPadding),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(text ?? "",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                fontFamily: 'Exo2',
-                fontSize: fontSize,
-                fontWeight: fontWeight ?? FontWeight.w500,
-                color: textColor)),
-      ),
-    );
-  }
-
   Padding centerAlignText(
       {text, centerPadding, textColor, fontSize, fontWeight}) {
     return Padding(
@@ -200,7 +181,7 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
     );
   }
 
-  GestureDetector propertyCard(String imageName, String cardTitle, int page) {
+  GestureDetector dashboardCard(String imageName, String cardTitle, int page) {
     return GestureDetector(
       onTap: () => {
         this.buttonNavigation(page),
@@ -266,32 +247,6 @@ class _DashboardPageWorkerState extends State<DashboardPageWorker> {
                       fontSize: 14.0),
                 ],
               ))),
-    );
-  }
-
-  Padding buildChoiceChip(index, chipName) {
-    return Padding(
-      padding: EdgeInsets.only(left: size.getWidthPx(8)),
-      child: ChoiceChip(
-        backgroundColor: backgroundColor,
-        selectedColor: colorCurve,
-        labelStyle: TextStyle(
-            fontFamily: 'Exo2',
-            color:
-                (_selectedIndex == index) ? backgroundColor : textPrimaryColor),
-        elevation: 4.0,
-        padding: EdgeInsets.symmetric(
-            vertical: size.getWidthPx(4), horizontal: size.getWidthPx(12)),
-        selected: (_selectedIndex == index) ? true : false,
-        label: Text(chipName),
-        onSelected: (selected) {
-          if (selected) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          }
-        },
-      ),
     );
   }
 }

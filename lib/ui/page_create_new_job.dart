@@ -5,7 +5,6 @@ import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:dio/dio.dart';
 import 'package:endevour/model/Rate.dart';
 import 'package:endevour/model/Site.dart';
-import 'package:endevour/model/models.dart';
 import 'package:endevour/services/user_service.dart';
 import 'package:endevour/ui/page_home.dart';
 import 'package:endevour/utils/utils.dart';
@@ -31,20 +30,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   Completer<GoogleMapController> _controller = Completer();
   LatLng _center = LatLng(-25.8197299, 28.290334);
   Site currentSite = new Site();
-  Set<Marker> _markers = {
-    Marker(
-        markerId: MarkerId("African Corporate Cleaning"),
-        position: LatLng(-25.8197299, 28.290334),
-        infoWindow: InfoWindow(
-          title: "African Corporate Cleaning",
-        ))
-  };
-  TextStyle style = TextStyle(fontSize: 21.0);
-  static UnderlineInputBorder _underlineInputBorder =
-      UnderlineInputBorder(borderSide: BorderSide(color: Colors.black));
-
-//  final _formKey = GlobalKey<FormState>();
-
   var data;
   bool autoValidate = true;
   bool readOnly = false;
@@ -57,16 +42,19 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   var workDates = [];
   var startTime;
   var endTime;
-
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
-  ValueChanged _clientSite = (val) {
-    print(val);
+  Set<Marker> _markers = {
+    Marker(
+        markerId: MarkerId("African Corporate Cleaning"),
+        position: LatLng(-25.8197299, 28.290334),
+        infoWindow: InfoWindow(
+          title: "African Corporate Cleaning",
+        ))
   };
-
-  ValueChanged _onChanged = (val) {
-    print(val);
-  };
+  TextStyle style = TextStyle(fontSize: 21.0);
+  static UnderlineInputBorder _underlineInputBorder =
+      UnderlineInputBorder(borderSide: BorderSide(color: Colors.black));
 
   List<Site> siteList = List();
   List<Rate> rateList = List();
@@ -398,12 +386,9 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                   children: <Widget>[
                     upperPart(),
                     FormBuilder(
-                      // context,
                       key: _fbKey,
                       autovalidate: false,
-
                       initialValue: {},
-                      // readOnly: true,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -431,9 +416,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         FormBuilderValidators.required(),
                                       ],
                                       decoration: InputDecoration(
-//                            enabledBorder: _underlineInputBorder,
-//                            focusedBorder: _underlineInputBorder,
-//                            labelStyle: style,
                                         labelText:
                                             "Client Site (Search by Site Name)",
                                       ),
@@ -451,7 +433,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                           title: Text(site.name),
                                         );
                                       },
-//                          initialValue: siteList[0].name,
                                       selectionToTextTransformer: (Site site) =>
                                           site.name,
                                       suggestionsCallback: (query) {
@@ -541,9 +522,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   decoration:
-                                                      TextDecoration.none
-//                              fontFamily: 'Exo2',
-                                                  ),
+                                                      TextDecoration.none),
                                             ),
                                           ),
                                           new GestureDetector(
@@ -575,9 +554,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   decoration:
-                                                      TextDecoration.none
-//                              fontFamily: 'Exo2',
-                                                  ),
+                                                      TextDecoration.none),
                                             ),
                                           ),
                                           new GestureDetector(
@@ -638,7 +615,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                 ),
                               ),
                             ),
-
                             Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -659,7 +635,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                     ListView.builder(
                                         padding:
                                             EdgeInsets.only(top: 10, bottom: 0),
-//                                        scrollDirection: Axis.vertical,
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
                                         itemCount: rateList.length,
@@ -756,10 +731,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                         },
                                         weekdayLabelsRow:
                                             CalendarroWeekdayLabelsView(),
-                                        //NB I changed the default_day_tile.dart in calendarro to match the theme colour when choosing a day on calendar.
-                                        //default was Colors.blue and there was no other way to change it currently.
-                                        // remember to change it again if you change calendarro version
-                                        // todo: remember to add 'package:endevour/utils/utils.dart' in default_day_tile.dart be able to find the variable 'themeColour'
                                         dayTileBuilder: CustomDayTileBuilder(
                                             todayHighlightColor:
                                                 colorLightYellow),
@@ -779,24 +750,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                 ),
                               ),
                             ),
-
-//
-//                            SizedBox(
-//                              height: 20,
-//                            ),
-//                            FormBuilderDateRangePicker(
-//                              attribute: "date_range",
-//                              firstDate: DateTime(2019),
-//                              lastDate: DateTime(2020),
-//                              validators: [
-//                                FormBuilderValidators.required(),
-//                              ],
-//                              format: DateFormat("yyyy-MM-dd"),
-//                              onChanged: _onChanged,
-//                              decoration:
-//                                  InputDecoration(labelText: "Date Range"),
-//                              // readonly: true,
-//                            ),
                           ],
                         ),
                       ),
@@ -825,7 +778,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                             setState(() {
                               showSiteOnMaps = !showSiteOnMaps;
                             });
-//              login();
                           },
                         ),
                         SizedBox(
@@ -838,7 +790,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                           label: new Text(
                             "Submit",
                             style: TextStyle(
-//                              fontFamily: 'Exo2',
                               color: textPrimaryLightColor,
                             ),
                           ),
@@ -908,8 +859,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
   }
 
   Widget upperPart() {
-    String dropdownValue = 'One';
-
     return Stack(
       children: <Widget>[
         ClipPath(
@@ -925,29 +874,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
         ),
         Column(
           children: <Widget>[
-//            Container(
-//              padding: EdgeInsets.symmetric(
-//                  vertical: size.getWidthPx(20),
-//                  horizontal: size.getWidthPx(16)),
-//              width: size.getWidthPx(200),
-//              child: RaisedButton(
-//                elevation: 8.0,
-//                shape: RoundedRectangleBorder(
-//                    borderRadius: new BorderRadius.circular(30.0)),
-//                padding: EdgeInsets.all(size.getWidthPx(12)),
-//                child: Text(
-//                  "Print Sites",
-//                  style: TextStyle(
-//                      fontFamily: 'Exo2', color: Colors.white, fontSize: 20.0),
-//                ),
-//                color: colorCurve,
-//                onPressed: () {
-//                  print(this.siteList.map((f) {
-//                    return f.name;
-//                  }).toList());
-//                },
-//              ),
-//            ),
             Center(
               child: Container(
                 padding: EdgeInsets.only(top: size.getWidthPx(36)),
@@ -972,73 +898,5 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
             fontSize: 24.0,
             fontWeight: FontWeight.w900,
             color: Colors.white));
-  }
-
-  BoxField _searchWidget() {
-    return BoxField(
-        controller: TextEditingController(),
-        focusNode: FocusNode(),
-        hintText: "Select by city, area or locality.",
-        lableText: "Search...",
-        obscureText: false,
-        onSaved: (String val) {},
-        icon: Icons.search,
-        iconColor: colorCurve);
-  }
-
-  Padding leftAlignText({text, leftPadding, textColor, fontSize, fontWeight}) {
-    return Padding(
-      padding: EdgeInsets.only(left: leftPadding),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(text ?? "",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-//                fontFamily: 'Exo2',
-                fontSize: fontSize,
-                fontWeight: fontWeight ?? FontWeight.w500,
-                color: textColor)),
-      ),
-    );
-  }
-
-  Card propertyCard(Property property) {
-    return Card(
-        elevation: 4.0,
-        margin: EdgeInsets.all(8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        borderOnForeground: true,
-        child: Container(
-            height: size.getWidthPx(150),
-            width: size.getWidthPx(170),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12.0),
-                        topRight: Radius.circular(12.0)),
-                    child: Image.asset('assets/${property.image}',
-                        fit: BoxFit.fill)),
-                SizedBox(height: size.getWidthPx(8)),
-                leftAlignText(
-                    text: property.propertyName,
-                    leftPadding: size.getWidthPx(8),
-                    textColor: colorCurve,
-                    fontSize: 14.0),
-                leftAlignText(
-                    text: property.propertyLocation,
-                    leftPadding: size.getWidthPx(8),
-                    textColor: Colors.black54,
-                    fontSize: 12.0),
-                SizedBox(height: size.getWidthPx(4)),
-                leftAlignText(
-                    text: property.propertyPrice,
-                    leftPadding: size.getWidthPx(8),
-                    textColor: colorCurve,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w800),
-              ],
-            )));
   }
 }

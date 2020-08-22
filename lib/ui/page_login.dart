@@ -350,30 +350,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Row _socialButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        socialCircleAvatar("assets/icons/icnfb.png", () {}),
-        SizedBox(width: size.getWidthPx(18)),
-        socialCircleAvatar("assets/icons/icn_twitter.png", () {}),
-        SizedBox(width: size.getWidthPx(18)),
-        socialCircleAvatar("assets/icons/icngmail.png", () {}),
-      ],
-    );
-  }
-
-  GestureDetector socialCircleAvatar(String assetIcon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: CircleAvatar(
-        maxRadius: size.getWidthPx(24),
-        backgroundColor: Colors.transparent,
-        child: Image.asset(assetIcon),
-      ),
-    );
-  }
-
   loginFields() => Container(
         child: Form(
             key: _formKey,
@@ -413,9 +389,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 _registerButtonWidget(),
                 SizedBox(height: size.getWidthPx(28)),
-
                 SizedBox(height: size.getWidthPx(12)),
-//                _socialButtons()
               ],
             )),
       );

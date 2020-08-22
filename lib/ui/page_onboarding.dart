@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:endevour/ui/page_login.dart';
 import 'package:endevour/ui/page_register.dart';
 import 'package:endevour/utils/Constants.dart';
-import 'package:endevour/widgets/dots_indicator.dart';
 import 'package:endevour/utils/utils.dart';
+import 'package:endevour/widgets/dots_indicator.dart';
+import 'package:flutter/material.dart';
+
 import '../LocalBindings.dart';
 import 'intro_page.dart';
 
@@ -17,12 +17,14 @@ class OnBoardingPage extends StatefulWidget {
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final _controller = PageController();
   bool leadingVisibility = false;
-  Screen  size;
-  
+  Screen size;
+
   final List<Widget> _pages = [
-    IntroPage("assets/onboard_1.png","Step 1", "Complete personal details accompanied by a selfie! \n \n Head and shoulders only!"),
-    IntroPage("assets/onboard_2.png","Step 2", "Upload your ID/Smart Id"),
-    IntroPage("assets/onboard_3.png","Step 3", "Upload your CV! \n \n Max 4 photos. \n \n Once ready click the submit button and you're done!"),
+    IntroPage("assets/onboard_1.png", "Step 1",
+        "Complete personal details accompanied by a selfie! \n \n Head and shoulders only!"),
+    IntroPage("assets/onboard_2.png", "Step 2", "Upload your ID/Smart Id"),
+    IntroPage("assets/onboard_3.png", "Step 3",
+        "Upload your CV! \n \n Max 4 photos. \n \n Once ready click the submit button and you're done!"),
   ];
   int currentPageIndex = 0;
 
@@ -92,26 +94,36 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               )),
           actions: <Widget>[
             Padding(
-              padding: EdgeInsets.only(top: size.getWidthPx(16), right:  size.getWidthPx(12), bottom: size.getWidthPx(12)),
+              padding: EdgeInsets.only(
+                  top: size.getWidthPx(16),
+                  right: size.getWidthPx(12),
+                  bottom: size.getWidthPx(12)),
               child: RaisedButton(
                 child: Text(
                   isLastPage ? 'DONE' : 'NEXT',
-                  style: TextStyle(fontFamily: 'Exo2',fontWeight: FontWeight.w500,fontSize: 14,color: Colors.grey.shade700),
+                  style: TextStyle(
+                      fontFamily: 'Exo2',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Colors.grey.shade700),
                 ),
                 onPressed: isLastPage
-                    ? () async{
-                  // Last Page Done Click
+                    ? () async {
+                        // Last Page Done Click
 
-                  LocalStorage.sharedInstance.writeValue(key:Constants.isOnBoard,value: "1");
+                        LocalStorage.sharedInstance
+                            .writeValue(key: Constants.isOnBoard, value: "1");
 
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterPage()));
-
-                }
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegisterPage()));
+                      }
                     : () {
-                  _controller.animateToPage(currentPageIndex + 1,
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeIn);
-                },
+                        _controller.animateToPage(currentPageIndex + 1,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeIn);
+                      },
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(30.0)),
               ),
@@ -125,21 +137,21 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   Positioned pageViewFillWidget() {
     return Positioned.fill(
         child: PageView.builder(
-          controller: _controller,
-          itemCount: _pages.length,
-          itemBuilder: (BuildContext context, int index) {
-            return _pages[index % _pages.length];
-          },
-          onPageChanged: (int p) {
-            setState(() {
-              currentPageIndex = p;
-              if (currentPageIndex == 0) {
-                leadingVisibility = false;
-              } else {
-                leadingVisibility = true;
-              }
-            });
-          },
-        ));
+      controller: _controller,
+      itemCount: _pages.length,
+      itemBuilder: (BuildContext context, int index) {
+        return _pages[index % _pages.length];
+      },
+      onPageChanged: (int p) {
+        setState(() {
+          currentPageIndex = p;
+          if (currentPageIndex == 0) {
+            leadingVisibility = false;
+          } else {
+            leadingVisibility = true;
+          }
+        });
+      },
+    ));
   }
 }

@@ -1,6 +1,5 @@
-
-import 'package:flutter/material.dart';
 import 'package:endevour/utils/utils.dart';
+import 'package:flutter/material.dart';
 
 class PageComingSoon extends StatefulWidget {
   @override
@@ -13,7 +12,6 @@ class _PageComingSoonState extends State<PageComingSoon> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -23,16 +21,13 @@ class _PageComingSoonState extends State<PageComingSoon> {
         appBar: AppBar(
           centerTitle: true,
           title: Text("Search",
-              style:
-              TextStyle(fontFamily: "Exo2", color: backgroundColor)),
+              style: TextStyle(fontFamily: "Exo2", color: backgroundColor)),
           backgroundColor: colorCurve,
         ),
         body: Center(
             child: Container(
                 width: size.getWidthPx(300),
                 height: size.getWidthPx(300),
-                child: Image.asset("assets/icons/icn_coming_soon.png")))
-    );
+                child: Image.asset("assets/icons/icn_coming_soon.png"))));
   }
-
 }

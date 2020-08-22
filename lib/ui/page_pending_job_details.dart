@@ -14,7 +14,6 @@ class PendingJobDetailsPage extends StatefulWidget {
   const PendingJobDetailsPage({Key key, @required this.jobDetails})
       : super(key: key);
 
-//  final String jobUuid;
   final Job jobDetails;
 
   _PendingJobDetailsPageState createState() => _PendingJobDetailsPageState();
@@ -27,9 +26,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
   bool _saving = false;
 
   void initState() {
-//    getJobInformation();
     job = widget.jobDetails;
-
     super.initState();
   }
 
@@ -295,7 +292,6 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
   Widget build(BuildContext context) {
     size = Screen(MediaQuery.of(context).size);
 
-    //todo make system ui dark
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColour,
@@ -330,17 +326,6 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
 
   Widget upperPart() {
     return Stack(children: <Widget>[
-//      ClipPath(
-//        clipper: UpperClipper(),
-//        child: Container(
-//          height: size.getWidthPx(80),
-//          decoration: BoxDecoration(
-//            gradient: LinearGradient(
-//              colors: [colorCurve, colorCurve],
-//            ),
-//          ),
-//        ),
-//      ),
       Column(
         children: <Widget>[
           Container(
@@ -348,7 +333,6 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-//              color: backgroundColor,
               elevation: 5,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -357,22 +341,15 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      likeWidget(),
+                      partialPaymentWidget(),
                       Flexible(child: nameWidget()),
-                      followersWidget(),
+                      differencePaymentWidget(),
                     ],
                   ),
                 ],
               ),
             ),
           ),
-//          Padding(
-//            padding: EdgeInsets.only(
-//                top: size.getWidthPx(8),
-//                left: size.getWidthPx(20),
-//                right: size.getWidthPx(20)),
-//            child: Container(height: size.getWidthPx(4), color: colorCurve),
-//          ),
           Container(
             child: Card(
               shape: RoundedRectangleBorder(
@@ -482,17 +459,6 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
                 "R ${job.payDifferenceDay.toStringAsFixed(2)}"),
           ],
         ),
-      ),
-    );
-  }
-
-  GestureDetector followerAvatarWidget(String assetIcon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: CircleAvatar(
-        maxRadius: size.getWidthPx(24),
-        backgroundColor: Colors.transparent,
-        child: Image.asset(assetIcon),
       ),
     );
   }
@@ -779,7 +745,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
     );
   }
 
-  Column likeWidget() {
+  Column partialPaymentWidget() {
     return Column(
       children: <Widget>[
         Text("R ${job.payPartialDay.toStringAsFixed(2)}",
@@ -820,7 +786,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
     );
   }
 
-  Column followersWidget() {
+  Column differencePaymentWidget() {
     return Column(
       children: <Widget>[
         Text("R ${job.payDifferenceDay.toStringAsFixed(2)}",

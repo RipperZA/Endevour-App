@@ -22,8 +22,6 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   Screen size;
-  int _selectedIndex = 1;
-  final _formKey = GlobalKey<FormState>();
 
   buttonNavigation(index) {
     widget.buttonNavigation(index);
@@ -99,7 +97,7 @@ class _DashboardPageState extends State<DashboardPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('icons/new_job.png', 'New Job', 1),
+                dashboardCard('icons/new_job.png', 'New Job', 1),
                 genericNavPushCard(
                     'icons/profile.png', 'Profile', ProfilePage()),
               ],
@@ -107,8 +105,8 @@ class _DashboardPageState extends State<DashboardPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                propertyCard('icons/created_jobs.png', 'Created Jobs', 2),
-                propertyCard('icons/pending_job.png', 'Pending Jobs', 3),
+                dashboardCard('icons/created_jobs.png', 'Created Jobs', 2),
+                dashboardCard('icons/pending_job.png', 'Pending Jobs', 3),
               ],
             ),
             Row(
@@ -168,7 +166,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  GestureDetector propertyCard(String imageName, String cardTitle, int page) {
+  GestureDetector dashboardCard(String imageName, String cardTitle, int page) {
     return GestureDetector(
       onTap: () => {
         this.buttonNavigation(page),
@@ -208,40 +206,6 @@ class _DashboardPageState extends State<DashboardPage> {
     return GestureDetector(
       onTap: () => {
         Navigator.push(context, MaterialPageRoute(builder: (context) => route))
-      },
-      child: Card(
-          elevation: 4.0,
-          margin: EdgeInsets.all(8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          borderOnForeground: true,
-          child: Container(
-              width: size.getWidthPx(110),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(12.0),
-                          topRight: Radius.circular(12.0)),
-                      child:
-                          Image.asset('assets/$imageName', fit: BoxFit.fill)),
-                  SizedBox(height: size.getWidthPx(8)),
-                  centerAlignText(
-                      text: "$cardTitle",
-                      centerPadding: size.getWidthPx(8),
-                      textColor: colorCurve,
-                      fontSize: 14.0),
-                ],
-              ))),
-    );
-  }
-
-  GestureDetector profileCard(String imageName, String cardTitle) {
-    return GestureDetector(
-      onTap: () => {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ProfilePage()))
       },
       child: Card(
           elevation: 4.0,
