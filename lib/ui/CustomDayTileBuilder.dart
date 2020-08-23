@@ -37,7 +37,7 @@ class CustomColorCalendarroDayItem extends StatelessWidget {
       } else if (date.weekday == DateTime.sunday) {
         return sundayColour;
       } else {
-        return weekdayColour;
+        return standardColour;
       }
     }
 

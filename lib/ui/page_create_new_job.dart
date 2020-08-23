@@ -287,7 +287,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
       else if (rateCode.toString().toLowerCase().contains('sunday'))
         return sundayColour;
       else
-        return weekdayColour;
+        return standardColour;
     }
 
     uploadNewJob(BuildContext context) async {
