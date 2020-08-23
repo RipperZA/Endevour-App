@@ -8,6 +8,7 @@ class Constants {
   static String urlResetPassword = urlBase + 'password/email';
   static String urlUpdatePassword = urlBase + 'auth/updatePassword';
   static String urlPing = urlBase + 'auth/ping';
+  static String urlVersionInfo = urlBase + 'version_info';
   static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
   static String urlLogout = urlBase + 'auth/logout';
   static String urlProfile = urlBase + 'user/profile';
