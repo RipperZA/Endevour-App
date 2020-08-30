@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     try {
       //Get Current installed version of app
       final PackageInfo info = await PackageInfo.fromPlatform();
-      print(info.buildNumber);
 
       double currentVersion = double.parse(
           info.version.trim().replaceAll(".", "") +
@@ -138,6 +137,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   bodyView(currentTab) {
     //Current Tabs in Home Screen...
+
     switch (currentTab) {
       case 0:
         //Dashboard Page
