@@ -753,7 +753,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   }
 
   Container buttonWidgetCancel() {
-    return Container(
+    return UserDetails.userRoles.contains('area_manager') == true ? Container(
       padding: EdgeInsets.symmetric(
           vertical: size.getWidthPx(4), horizontal: size.getWidthPx(12)),
       child: RaisedButton.icon(
@@ -831,7 +831,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           );
         } : null,
       ),
-    );
+    ) : Container();
   }
 
   Container buttonWidgetNavigate() {
