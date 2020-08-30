@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:endevour/model/Job.dart';
 import 'package:endevour/model/JobList.dart';
 import 'package:endevour/services/user_service.dart';
+import 'package:endevour/ui/page_home.dart';
 import 'package:endevour/ui/page_home_worker.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/utils_widget.dart';
@@ -36,6 +37,85 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
 
     super.initState();
   }
+
+  cancelJob() async {
+    try {
+      setState(() {
+        _saving = true;
+      });
+
+      Response response;
+
+      Dio dio = new Dio();
+
+      response = await dio.get(Constants.urlCancelJob + job.work.first.uuid,
+          options: Options(
+              method: 'GET',
+              headers: {'Authorization': 'Bearer ' + UserDetails.token},
+              responseType: ResponseType.json));
+
+      setState(() {
+        _saving = false;
+      });
+      if (response.statusCode == 200) {
+        await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Success!"),
+              content: new Text(response.data['message']),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                RaisedButton.icon(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    icon: Icon(
+                      Icons.close,
+                      color: imagePrimaryLightColor,
+                    ),
+                    color: colorSuccessMessage,
+                    label: new Text(
+                      "Close!",
+                      style: TextStyle(
+//                              fontFamily: 'Exo2',
+                        color: textPrimaryLightColor,
+                      ),
+                    ),
+                    disabledColor: disabledButtonColour,
+                    onPressed: () async {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    }),
+              ],
+            );
+          },
+        ).then((onValue) {
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomePage()));
+        }, onError: (err) {
+          Navigator.pop(context);
+        });
+      }
+    } on DioError catch (e) {
+      setState(() {
+        _saving = false;
+      });
+
+      Fluttertoast.showToast(
+          msg: e.response.data['error'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIos: 1,
+          backgroundColor: colorErrorMessage,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
 
   acceptJob() async {
     try {
@@ -224,6 +304,12 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                         children: <Widget>[
                           buttonWidgetAccept(),
                           buttonWidgetNavigate(),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          buttonWidgetCancel(),
                         ],
                       ),
                     ],
@@ -662,6 +748,88 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 );
               }
             : null,
+      ),
+    );
+  }
+
+  Container buttonWidgetCancel() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+          vertical: size.getWidthPx(4), horizontal: size.getWidthPx(12)),
+      child: RaisedButton.icon(
+        elevation: 4.0,
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0)),
+        icon: Icon(
+          Icons.cancel,
+          color: imagePrimaryLightColor,
+        ),
+        color: colorErrorMessage,
+        label: new Text(
+          "Cancel Job",
+          style: TextStyle(
+//                              fontFamily: 'Exo2',
+            color: textPrimaryLightColor,
+          ),
+        ),
+        disabledColor: disabledButtonColour,
+        onPressed: UserDetails.userRoles.contains('area_manager') == true ? () async {
+          await showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              // return object of type Dialog
+              return AlertDialog(
+                title: new Text("Please Confirm!"),
+                content: new Text("Are you sure you want to cancel this job?"),
+                actions: <Widget>[
+                  // usually buttons at the bottom of the dialog
+                  RaisedButton.icon(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0)),
+                      icon: Icon(
+                        Icons.thumb_down,
+                        color: imagePrimaryLightColor,
+                      ),
+                      color: colorErrorMessage,
+                      label: new Text(
+                        "No!",
+                        style: TextStyle(
+//                              fontFamily: 'Exo2',
+                          color: textPrimaryLightColor,
+                        ),
+                      ),
+                      disabledColor: disabledButtonColour,
+                      onPressed: () async {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      }),
+                  RaisedButton.icon(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0)),
+                      icon: Icon(
+                        Icons.thumb_up,
+                        color: imagePrimaryLightColor,
+                      ),
+                      color: colorSuccessMessage,
+                      label: new Text(
+                        "Yes!",
+                        style: TextStyle(
+//                              fontFamily: 'Exo2',
+                          color: textPrimaryLightColor,
+                        ),
+                      ),
+                      disabledColor: disabledButtonColour,
+                      onPressed: () async {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        cancelJob();
+                      }),
+                ],
+              );
+            },
+          );
+        } : null,
       ),
     );
   }
