@@ -304,6 +304,7 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
             'end_time': endTime,
             'dates': workDates,
             'lunch_duration': formValues['lunch_duration'],
+            'reason': formValues['reason'],
           });
 
           Dio dio = new Dio();
@@ -454,6 +455,38 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                           return siteList;
                                         }
                                       },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              elevation: 10,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(
+                                      'Reason For Work Request',
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline),
+                                    ),
+                                    FormBuilderTextField(
+                                      attribute: "reason",
+                                      maxLines: 3,
+                                      decoration: InputDecoration(
+                                        labelStyle: style,
+                                        labelText: "Enter Reason",
+                                      ),
+                                      validators: [
+                                        FormBuilderValidators.required(),
+                                      ],
                                     ),
                                   ],
                                 ),
