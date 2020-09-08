@@ -481,7 +481,6 @@ class _CreateNewJobPageState extends State<CreateNewJobPage> {
                                       attribute: "reason",
                                       maxLines: 3,
                                       decoration: InputDecoration(
-                                        labelStyle: style,
                                         labelText: "Enter Reason",
                                       ),
                                       validators: [
