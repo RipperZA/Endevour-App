@@ -197,7 +197,6 @@ class _RegisterPageState extends State<RegisterPage>
 
   Future getImageSelfie(ImageSource imgSource) async {
     var picture = await picker.getImage(source: imgSource, maxHeight: 1080);
-    print(picture);
 
     setState(() {
       if (picture != null) {
@@ -926,9 +925,6 @@ class _RegisterPageState extends State<RegisterPage>
                           _phases['phaseOne'] = false;
                           _phases['phaseTwo'] = false;
                           _phases['phaseThree'] = true;
-                          print(_selfieImage);
-                          print(_idDocumentImage);
-                          print(_phases);
                         });
                       },
                       //getImage,
