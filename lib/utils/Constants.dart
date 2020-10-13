@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 class Constants {
-  //URLs
+  //URLs testing bitbucket
   static String urlBase = 'https://endevour.co.za/api/';
 
   static String urlLogin = urlBase + 'login';
