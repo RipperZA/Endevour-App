@@ -5,7 +5,6 @@ import 'package:endevour/ui/page_pending_job.dart';
 import 'package:endevour/widgets/bottom_navigationBar.dart';
 import 'package:flutter/material.dart';
 
-import 'page_settings.dart';
 
 class HomePage extends StatefulWidget {
   @override

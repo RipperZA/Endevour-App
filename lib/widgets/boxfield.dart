@@ -73,12 +73,8 @@ class BoxField extends StatefulWidget {
     this.validator,
     this.onFieldSubmitted,
   })  : assert(textAlign != null),
-        assert(autofocus != null),
-        assert(obscureText != null),
-        assert(autocorrect != null),
-        assert(maxLengthEnforced != null),
-        assert(maxLines == null || maxLines > 0),
-        assert(maxLength == null || maxLength > 0),
+        assert(maxLines > 0),
+        assert(maxLength > 0),
         keyboardType = keyboardType ??
             (maxLines == 1 ? TextInputType.text : TextInputType.multiline);
 

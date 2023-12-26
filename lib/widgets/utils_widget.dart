@@ -3,8 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:endevour/model/Job.dart';
 import 'package:endevour/model/JobList.dart';
 import 'package:endevour/services/user_service.dart';
-import 'package:endevour/utils/colors.dart';
-import 'package:endevour/utils/responsive_screen.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -312,7 +310,7 @@ getProfilePicture(uuid) async {
           textColor: Colors.white,
           fontSize: 16.0);
     }
-  } on Error catch (e) {
+  } on Error {
     Fluttertoast.showToast(
         msg: Constants.standardErrorMessage,
         toastLength: Toast.LENGTH_LONG,
@@ -430,7 +428,7 @@ class PhotoHero extends StatelessWidget {
 }
 
 launchNumber(number) async {
-  var url = "tel://${number}";
+  var url = "tel://$number";
 
   if (await canLaunch(url)) {
     await launch(url);

@@ -5,7 +5,6 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:dio/dio.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -254,35 +253,33 @@ class _RegisterPageState extends State<RegisterPage>
     File picture =
         await ImagePicker.pickImage(source: imgSource, maxHeight: 1500);
     setState(() {
-      if (picture != null) {
-        if (_cvImages.length < 4) {
-          _cvImages.add(picture);
+      if (_cvImages.length < 4) {
+        _cvImages.add(picture);
 //          _cvImages = _cvImages.reversed.toList();
-        } else {
-          showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              // return object of type Dialog
-              return AlertDialog(
-                title: new Text("Error!"),
-                content: new Text(
-                    'Only A Maxiumum of 4 photos can be uploaded for your CV'),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  new FlatButton(
-                    child: new Text("Close"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        }
+      } else {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Error!"),
+              content: new Text(
+                  'Only A Maxiumum of 4 photos can be uploaded for your CV'),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new FlatButton(
+                  child: new Text("Close"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
-    });
+        });
   }
 
   uploadDocuments(BuildContext context) async {
@@ -290,9 +287,7 @@ class _RegisterPageState extends State<RegisterPage>
       setState(() {
         _saving = true;
       });
-      if (_selfieImage != null &&
-          _idDocumentImage != null &&
-          _cvImages.length > 0) {
+      if (_cvImages.length > 0) {
         var batch = randomAlphaNumeric(15);
         Response response;
         FormData formData = new FormData(); // just like JS
@@ -448,7 +443,7 @@ class _RegisterPageState extends State<RegisterPage>
             textColor: Colors.white,
             fontSize: 16.0);
       }
-    } on Error catch (e) {
+    } on Error {
       setState(() {
         _saving = false;
       });

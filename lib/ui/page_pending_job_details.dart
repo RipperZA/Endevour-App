@@ -265,7 +265,7 @@ class _PendingJobDetailsPageState extends State<PendingJobDetailsPage> {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-    } on Error catch (e) {
+    } on Error {
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,

@@ -71,7 +71,7 @@ class TileRow extends StatelessWidget {
                       ),
                     ),
                   ),
-                  rowValue == null || rowValue == ""
+                  rowValue == ""
                       ? Icon(Icons.arrow_forward_ios,size: size.getWidthPx(12),)
                       : Expanded(
                     flex: 1,

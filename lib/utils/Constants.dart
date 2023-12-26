@@ -1,38 +1,43 @@
 import 'dart:ui';
+import '../config.dart';
 
 class Constants {
   //URLs
-  static String urlBase = 'https://endevour.co.za/api/';
+  static final String urlBase = 'https://endevour.co.za/api/';
 
-  static String urlLogin = urlBase + 'login';
-  static String urlResetPassword = urlBase + 'password/email';
-  static String urlUpdatePassword = urlBase + 'auth/updatePassword';
-  static String urlPing = urlBase + 'auth/ping';
-  static String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
-  static String urlLogout = urlBase + 'auth/logout';
-  static String urlProfile = urlBase + 'user/profile';
-  static String urlProfilePicture = urlBase + 'user/profilePicture';
-  static String urlApplicationUpload = urlBase + 'applications';
-  static String urlGetAreaManagerSites = urlBase + 'area_managers/getSitesApi';
-  static String urlGetNotificationCount = urlBase + 'work/getNotificationCount';
-  static String urlGetRates = urlBase + 'rates/getRatesApi';
+  static final String urlLogin = urlBase + 'login';
+  static final String urlResetPassword = urlBase + 'password/email';
+  static final String urlUpdatePassword = urlBase + 'auth/updatePassword';
+  static final String urlPing = urlBase + 'auth/ping';
+  static final String urlPushIdAndToken = urlBase + 'auth/updatePushIdAndToken';
+  static final String urlLogout = urlBase + 'auth/logout';
+  static final String urlProfile = urlBase + 'user/profile';
+  static final String urlProfilePicture = urlBase + 'user/profilePicture';
+  static final String urlApplicationUpload = urlBase + 'applications';
+  static final String urlGetAreaManagerSites =
+      urlBase + 'area_managers/getSitesApi';
+  static final String urlGetNotificationCount =
+      urlBase + 'work/getNotificationCount';
+  static final String urlGetRates = urlBase + 'rates/getRatesApi';
 
-  static String urlNewJobUpload = urlBase + 'work';
-  static String urlGetAvailableWork = urlBase + 'work/getAvailableWork';
-  static String urlGetJobDetails = urlBase + 'work/';
-  static String urlGetJobDetailsSingle = urlBase + 'workSingle/';
-  static String urlGetJobDetailsAreaManager = urlBase + 'workAreaManager/';
-  static String urlAcceptJob = urlBase + 'work/accept/';
-  static String urlCancelJob = urlBase + 'work/cancel/';
-  static String urlArrivedAtWork = urlBase + 'work/arrived/';
-  static String urlLeftWork = urlBase + 'work/left/';
-  static String urlAcceptedJobs = urlBase + 'work/acceptedWork';
-  static String urlCompletedJobs = urlBase + 'work/completedWork';
-  static String urlPendingJobs = urlBase + 'work/pendingWork';
-  static String urlCreatedJobs = urlBase + 'work/createdWork';
-  static String urlCancelledJobs = urlBase + 'work/cancelledWork';
-  static String urlVerifyArrivedAtWork = urlBase + 'work/verifiedArrived/';
-  static String urlVerifyLeftWork = urlBase + 'work/verifiedLeft/';
+  static final String urlNewJobUpload = urlBase + 'work';
+  static final String urlGetAvailableWork = urlBase + 'work/getAvailableWork';
+  static final String urlGetJobDetails = urlBase + 'work/';
+  static final String urlGetJobDetailsSingle = urlBase + 'workSingle/';
+  static final String urlGetJobDetailsAreaManager =
+      urlBase + 'workAreaManager/';
+  static final String urlAcceptJob = urlBase + 'work/accept/';
+  static final String urlCancelJob = urlBase + 'work/cancel/';
+  static final String urlArrivedAtWork = urlBase + 'work/arrived/';
+  static final String urlLeftWork = urlBase + 'work/left/';
+  static final String urlAcceptedJobs = urlBase + 'work/acceptedWork';
+  static final String urlCompletedJobs = urlBase + 'work/completedWork';
+  static final String urlPendingJobs = urlBase + 'work/pendingWork';
+  static final String urlCreatedJobs = urlBase + 'work/createdWork';
+  static final String urlCancelledJobs = urlBase + 'work/cancelledWork';
+  static final String urlVerifyArrivedAtWork =
+      urlBase + 'work/verifiedArrived/';
+  static final String urlVerifyLeftWork = urlBase + 'work/verifiedLeft/';
 
   //colors
   static const Color clr_purple = const Color(0xFF9C27B0);
@@ -41,18 +46,19 @@ class Constants {
   static const Color clr_orange = const Color(0xFFFF682D);
   static const Color clr_light_grey = const Color(0xAAD3D3D3);
 
-  static String isOnBoard = "IS_ONBOARD";
-  static String isLoggedIn = "IS_LOGGED_IN";
-  static String loggingIn = "LOGGING_IN"; //the app is being opened
-  static String loggedInOnce = "LOGGED_IN_ONCE"; //they have logged in successfully with email/password at least once
-  static String storageUserPermissions = "USER_PERMISSIONS";
-  static String storageUserRoles = "USER_ROLES";
-  static String storageUserToken = "USER_TOKEN";
-  static String storageUserName = "USER_NAME";
-  static String storageEmail = "USER_EMAIL";
-  static String storagePassword = "USER_PASSWORD";
-  static String storageUserSurname = "USER_SURNAME";
-  static String storageUserVerified = "USER_VERIFIED";
+  static final String isOnBoard = "IS_ONBOARD";
+  static final String isLoggedIn = "IS_LOGGED_IN";
+  static final String loggingIn = "LOGGING_IN"; //the app is being opened
+  static final String loggedInOnce =
+      "LOGGED_IN_ONCE"; //they have logged in successfully with email/password at least once
+  static final String storageUserPermissions = "USER_PERMISSIONS";
+  static final String storageUserRoles = "USER_ROLES";
+  static final String storageUserToken = "USER_TOKEN";
+  static final String storageUserName = "USER_NAME";
+  static final String storageEmail = "USER_EMAIL";
+  static final String storagePassword = "USER_PASSWORD";
+  static final String storageUserSurname = "USER_SURNAME";
+  static final String storageUserVerified = "USER_VERIFIED";
 
   //Validations REGEX
   static final String PATTERN_EMAIL =
@@ -61,17 +67,15 @@ class Constants {
   static const String PHOTOS = "photos";
 
   //Google Maps API Key
-  static const String accessKey =
-      "f96abcd230664d7cab7ed900470db93878d44b15d672603e8c6817a267a96c78";
+  static const String accessKey = Config.accessKey;
 
   static const String standardErrorMessage =
       "Something Went Wrong. Please Try Again. If the problem continues please contact support";
 
-  static const String oneSignalAppKey = "28fe38a2-d375-4d9f-9b9b-c14eafabfa02";
+  static const String oneSignalAppKey = Config.oneSignalAppKey;
 
-  static bool isNullEmptyOrFalse(Object o) =>
-      o == null || false == o || "" == o;
+  static bool isNullEmptyOrFalse(Object o) => false == o || "" == o;
 
   static bool isNullEmptyFalseOrZero(Object o) =>
-      o == null || false == o || 0 == o || "" == o;
+      false == o || 0 == o || "" == o;
 }

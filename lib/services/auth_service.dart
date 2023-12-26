@@ -76,7 +76,7 @@ class AuthService {
         return false;
       }
       return false;
-    } on Error catch (e) {
+    } on Error {
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
@@ -151,7 +151,7 @@ class AuthService {
         return false;
       }
       return false;
-    } on Error catch (e) {
+    } on Error {
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
@@ -291,38 +291,37 @@ class AuthService {
 
       await this.getItemsFromStorage();
 
-      if (UserDetails.token != null) {
-        Dio dio = new Dio();
-        response = await dio.get(Constants.urlPing,
-            options: Options(
-                method: 'GET',
-                headers: {'Authorization': 'Bearer ' + UserDetails.token},
-                responseType: ResponseType.json // or ResponseType.JSON
-                ));
+      Dio dio = new Dio();
+      response = await dio.get(Constants.urlPing,
+          options: Options(
+              method: 'GET',
+              headers: {'Authorization': 'Bearer ' + UserDetails.token},
+              responseType: ResponseType.json // or ResponseType.JSON
+              ));
 
-        try {
-          if (response.data['ping'] == true) {
-            Fluttertoast.showToast(
-                msg: response.data['msg'],
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.TOP,
-                timeInSecForIos: 1,
-                backgroundColor: colorSuccessMessage,
-                textColor: Colors.white,
-                fontSize: 16.0);
+      try {
+        if (response.data['ping'] == true) {
+          Fluttertoast.showToast(
+              msg: response.data['msg'],
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.TOP,
+              timeInSecForIos: 1,
+              backgroundColor: colorSuccessMessage,
+              textColor: Colors.white,
+              fontSize: 16.0);
 
-            if (UserDetails.userRoles.contains('worker'))
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomePageWorker()));
-            if (UserDetails.userRoles.contains('area_manager'))
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+          if (UserDetails.userRoles.contains('worker'))
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => HomePageWorker()));
+          if (UserDetails.userRoles.contains('area_manager'))
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
 
-            return true;
-          }
+          return true;
+        }
 
-          return false;
-        } catch (e) {
+        return false;
+      } catch (e) {
 //          Fluttertoast.showToast(
 //              msg: "Session Expired. Please Login Again",
 //              toastLength: Toast.LENGTH_LONG,
@@ -331,11 +330,10 @@ class AuthService {
 //              backgroundColor: colorErrorMessage,
 //              textColor: Colors.white,
 //              fontSize: 16.0);
-          return false;
-        }
+        return false;
       }
-      return false;
-    } on DioError catch (e) {
+          return false;
+    } on DioError {
 //      Fluttertoast.showToast(
 //          msg: "Session Expired. Please Login Again",
 //          toastLength: Toast.LENGTH_LONG,
@@ -414,7 +412,7 @@ class AuthService {
             fontSize: 16.0);
         return false;
       }
-    } on Error catch (e) {
+    } on Error {
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,

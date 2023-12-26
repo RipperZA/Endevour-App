@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:endevour/services/auth_service.dart';
 import 'package:endevour/services/user_service.dart';
-import 'package:endevour/ui/page_login.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/widgets.dart';
 

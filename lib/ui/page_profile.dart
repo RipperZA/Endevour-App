@@ -91,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-    } on Error catch (e) {
+    } on Error {
       setState(() {
         _showSpinner = false;
       });

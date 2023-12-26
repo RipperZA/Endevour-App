@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:endevour/utils/utils.dart';
 
-import 'tile_row.dart';
 
 class SettingSection extends StatefulWidget {
   final String headerText;

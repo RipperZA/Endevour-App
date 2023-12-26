@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:endevour/widgets/widgets.dart';
-import 'package:endevour/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class PageForgotPassword extends StatefulWidget {

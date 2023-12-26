@@ -77,7 +77,7 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-    } on Error catch (e) {
+    } on Error {
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
@@ -141,7 +141,7 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-    } on Error catch (e) {
+    } on Error {
       Fluttertoast.showToast(
           msg: Constants.standardErrorMessage,
           toastLength: Toast.LENGTH_LONG,
@@ -318,7 +318,6 @@ class _CreatedJobPageState extends State<CreatedJobPage> {
                                                       (value) async {
                                                     await this.getCreatedWork();
                                                   });
-                                                  ;
                                                 }
                                               },
                                               leading: CircleAvatar(
