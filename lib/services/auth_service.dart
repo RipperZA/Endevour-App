@@ -218,7 +218,6 @@ class AuthService {
 
       if (response.statusCode == 200)
       {
-        print(response.data);
         return true;
       }
 

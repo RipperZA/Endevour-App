@@ -12,7 +12,6 @@ class LocalAuthenticationService {
   bool isAuthenticated = false;
 
   Future<void> authenticate() async {
-//    if (_isProtectionEnabled) {
     try {
       isAuthenticated = await _auth.authenticateWithBiometrics(
         localizedReason: 'Use Fingerprint Login For Easy Access',
@@ -23,6 +22,5 @@ class LocalAuthenticationService {
     } on PlatformException catch (e) {
       print(e);
     }
-//    }
   }
 }
