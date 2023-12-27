@@ -1,41 +1,52 @@
+// -----------------------------------------------------------------------------
+// This file contains import statements for various packages and modules.
+// It also declares a class JobService with static methods for job acceptance.
+// -----------------------------------------------------------------------------
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/model/JobList.dart';
 import 'package:endevour/services/user_service.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../bloc/job_details_bloc.dart';
 
-import '../ui/page_home_worker.dart';
-
+// -----------------------------------------
+// JobService - Service class for job actions
+// -----------------------------------------
 class JobService {
-  static final String _acceptJobUrl = Constants.urlAcceptJob;
 
-  static Future<void> acceptJob(JobList job, BuildContext context) async {
+  // The URL for job acceptance
+  static final String _jobAcceptanceURL = Constants.urlAcceptJob;
+
+  // This function performs the job acceptance action
+  static Future<void> acceptJob(JobList job, BuildContext context, JobDetailsBloc bloc) async {
     try {
-      Response response;
 
+      Response response;
       Dio dio = Dio();
       response = await dio.get(
-        '$_acceptJobUrl${job.batch}',
+        '$_jobAcceptanceURL${job.batch}',
         options: Options(
           method: 'GET',
           headers: {'Authorization': 'Bearer ${UserDetails.token}'},
           responseType: ResponseType.json,
         ),
       );
-
+      dio.clear();
       if (response.statusCode == 200) {
-        await _showSuccessDialog(context, response.data['message']);
+        await _showSuccessDialog(context, response.data['message'], bloc);
       }
     } on DioError catch (e) {
-      _handleDioError(e);
+      _showToast(e.response?.data['error'] ?? Constants.standardErrorMessage);
     } on Error {
-      _handleError();
+      _showToast(Constants.standardErrorMessage);
     }
   }
 
-  static Future<void> _showSuccessDialog(
-      BuildContext context, String message) async {
+  // This function shows a success dialog when a job is accepted
+  static Future<void> _showSuccessDialog(BuildContext context, String message, JobDetailsBloc bloc) async {
     await showDialog(
       barrierDismissible: false,
       context: context,
@@ -62,12 +73,8 @@ class JobService {
               ),
               disabledColor: disabledButtonColour,
               onPressed: () async {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePageWorker(),
-                  ),
-                );
+                bloc.eventSink.add(JobAcceptedSuccessEvent(
+                    shouldPop: false)); // Emit success event
               },
             ),
           ],
@@ -75,47 +82,18 @@ class JobService {
       },
     ).then(
           (onValue) {
-        Navigator.pop(context);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePageWorker(),
-          ),
-        );
+        bloc.eventSink.add(JobAcceptedSuccessEvent(shouldPop: true));
       },
       onError: (err) {
-        Navigator.pop(context);
+        bloc.eventSink.add(JobAcceptedFailureEvent(shouldPop: true));
       },
     );
   }
 
-  static void _handleDioError(DioError e) {
-    try {
+  // Function to show a Toast message
+  static void _showToast(String message) {
       Fluttertoast.showToast(
-        msg: e.response.data['error'],
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
-        timeInSecForIos: 1,
-        backgroundColor: colorErrorMessage,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: Constants.standardErrorMessage,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
-        timeInSecForIos: 1,
-        backgroundColor: colorErrorMessage,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-    }
-  }
-
-  static void _handleError() {
-    Fluttertoast.showToast(
-      msg: Constants.standardErrorMessage,
+      msg: message,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
       timeInSecForIos: 1,
@@ -123,5 +101,15 @@ class JobService {
       textColor: Colors.white,
       fontSize: 16.0,
     );
+  }
+
+  static launchURL(double lat, double long) async {
+    var url = Constants.BASE_MAP_URL + lat.toString() + ',' + long.toString();
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

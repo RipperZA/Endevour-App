@@ -1,11 +1,11 @@
-import 'package:endevour/services/job_service.dart';
 import 'package:endevour/model/JobList.dart';
 import 'package:endevour/utils/utils.dart';
 import 'package:endevour/widgets/utils_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../bloc/job_details_bloc.dart';
+import '../ui/page_home_worker.dart';
 
 class JobDetailsPage extends StatefulWidget {
   const JobDetailsPage({Key key, @required this.jobDetails, this.viewOnly = false})
@@ -19,6 +19,8 @@ class JobDetailsPage extends StatefulWidget {
 }
 
 class _JobDetailsPageState extends State<JobDetailsPage> {
+  JobDetailsBloc _jobDetailsBloc;
+
   Screen size;
   JobList job;
   bool _saving = false;
@@ -29,45 +31,69 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     job = widget.jobDetails;
     viewOnly = widget.viewOnly;
     super.initState();
+    _jobDetailsBloc = JobDetailsBloc();
   }
 
-  _launchURL(double lat, double long) async {
-    var url = Constants.BASE_MAP_URL + lat.toString() + ',' + long.toString();
-
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  @override
+  void dispose() {
+    _jobDetailsBloc.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     size = Screen(MediaQuery.of(context).size);
 
+    return buildScaffold(context);
+  }
+
+  Scaffold buildScaffold(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeColour,
-        title: Text("Job Details"),
-        brightness: Brightness.light,
-      ),
+      appBar: buildAppBar(),
       backgroundColor: backgroundColor,
       body: ModalProgressHUD(
-        child: stackWidget(),
+        child: buildMainWidgetStack(),
         inAsyncCall: _saving,
       ),
     );
   }
 
-  Widget stackWidget() {
+  AppBar buildAppBar() {
+    return AppBar(
+      backgroundColor: themeColour,
+      title: Text("Job Details"),
+      brightness: Brightness.light,
+    );
+  }
+
+  Stack buildMainWidgetStack() {
     return Stack(
       children: <Widget>[
-        myAnnotatedRegion(),
+        createAnnotatedRegion(),
+        buildStreamBuilder()
       ],
     );
   }
 
-  Widget myAnnotatedRegion() {
+  void acceptJob() async {
+    try {
+      setState(() {
+        _saving = true;
+      });
+
+      _jobDetailsBloc.eventSink.add(AcceptJobEvent(job: job, context: context, bloc: _jobDetailsBloc));
+
+      setState(() {
+        _saving = false;
+      });
+    } catch (e) {
+      setState(() {
+        _saving = false;
+      });
+    }
+  }
+
+  Widget createAnnotatedRegion() {
     return AnnotatedRegion(
       value: themeStylingDark,
       child: Container(
@@ -81,40 +107,46 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     );
   }
 
+  Widget buildStreamBuilder() {
+    return StreamBuilder<JobDetailsState>(
+      stream: _jobDetailsBloc.stateStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data is JobAcceptedSuccessState) {
+            final shouldPop = (snapshot.data as JobAcceptedSuccessState).shouldPop;
+            // Handle the success event, navigate or perform other actions
+            if (shouldPop) {
+              Navigator.pop(context);
+            }
+          } else if (snapshot.data is JobAcceptedFailureState) {
+            final shouldPop = (snapshot.data as JobAcceptedFailureState).shouldPop;
+
+            if (shouldPop) {
+              Navigator.pop(context);
+            }
+          }
+        }
+
+        // Navigate to HomePageWorker in both success and failure cases
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePageWorker(),
+          ),
+        );
+
+        // No specific UI update needed, return null
+        return null;
+      },
+    );
+  }
+
   Widget upperPart() {
     return Stack(
       children: <Widget>[
         Column(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                elevation: 5,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        jobDetailsCard(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            likeWidget(),
-                            Flexible(child: nameWidget()),
-                            followersWidget(),
-                          ],
-                        ),
-                        divider(),
-                        actionButtons(),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            jobDetailsPadding(),
             jobInformationWidget(job, size),
             redDaysIndicator(),
             workDayList(),
@@ -125,25 +157,43 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     );
   }
 
-  void acceptJob() async {
-    try {
-      setState(() {
-        _saving = true;
-      });
-
-      await JobService.acceptJob(job, context);
-
-      setState(() {
-        _saving = false;
-      });
-    } catch (e) {
-      setState(() {
-        _saving = false;
-      });
-    }
+  Padding jobDetailsPadding() {
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        elevation: 5,
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                jobDetailsCard(),
+                detailsRow(),
+                divider(),
+                actionButtons(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
-  Container buttonWidgetAccept() {
+  Row detailsRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        likeWidget(),
+        Flexible(child: nameWidget()),
+        followersWidget(),
+      ],
+    );
+  }
+
+  Widget buttonWidgetAccept() {
     return Container(
       padding: EdgeInsets.symmetric(
           vertical: size.getWidthPx(4), horizontal: size.getWidthPx(12)),
@@ -223,7 +273,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     );
   }
 
-  Container buttonWidgetNavigate() {
+  Widget buttonWidgetNavigate() {
     return Container(
       padding: EdgeInsets.symmetric(
           vertical: size.getWidthPx(4), horizontal: size.getWidthPx(12)),
@@ -244,8 +294,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         ),
         disabledColor: disabledButtonColour,
         onPressed: () {
-          _launchURL(
-              job.work.first.site.latitude, job.work.first.site.longitude);
+          _jobDetailsBloc.eventSink.add(LaunchUrlEvent(latitude: job.work.first.site.latitude, longitude: job.work.first.site.longitude));
         },
       ),
     );
