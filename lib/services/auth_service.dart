@@ -56,36 +56,14 @@ class AuthService {
       return false;
     } on DioError catch (e) {
       try {
-        Fluttertoast.showToast(
-            msg: e.response.data['msg'],
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorErrorMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showToast(e.response.data['msg'], colorErrorMessage);
       } catch (e) {
-        Fluttertoast.showToast(
-            msg: Constants.standardErrorMessage,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorErrorMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showToast(Constants.standardErrorMessage, colorErrorMessage);
         return false;
       }
       return false;
     } on Error {
-      Fluttertoast.showToast(
-          msg: Constants.standardErrorMessage,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
-
+      showToast(Constants.standardErrorMessage, colorErrorMessage);
       return false;
     }
   }
@@ -131,36 +109,14 @@ class AuthService {
       return false;
     } on DioError catch (e) {
       try {
-        Fluttertoast.showToast(
-            msg: e.response.data['msg'],
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorErrorMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showToast(e.response.data['msg'], colorErrorMessage);
       } catch (e) {
-        Fluttertoast.showToast(
-            msg: Constants.standardErrorMessage,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorErrorMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showToast(Constants.standardErrorMessage, colorErrorMessage);
         return false;
       }
       return false;
     } on Error {
-      Fluttertoast.showToast(
-          msg: Constants.standardErrorMessage,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
-
+      showToast(Constants.standardErrorMessage, colorErrorMessage);
       return false;
     }
   }
@@ -223,14 +179,7 @@ class AuthService {
 
       return false;
     } on DioError catch (e) {
-      Fluttertoast.showToast(
-          msg: e.response.data['msg'],
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      showToast(e.response.data['msg'], colorErrorMessage);
 
       return false;
     }
@@ -252,14 +201,8 @@ class AuthService {
               ));
 
       if (response.statusCode == 200) {
-        Fluttertoast.showToast(
-            msg: response.data['msg'],
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorSuccessMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showToast(response.data['msg'], colorSuccessMessage);
+
         UserDetails.verified = response.data['verified'];
 
         var email = await LocalStorage.sharedInstance.readValue(Constants.storageEmail);
@@ -271,14 +214,7 @@ class AuthService {
 
       return false;
     } on DioError catch (e) {
-      Fluttertoast.showToast(
-          msg: e.response.data['msg'],
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      showToast(e.response.data['msg'], colorErrorMessage);
 
       return false;
     }
@@ -300,14 +236,7 @@ class AuthService {
 
       try {
         if (response.data['ping'] == true) {
-          Fluttertoast.showToast(
-              msg: response.data['msg'],
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.TOP,
-              timeInSecForIos: 1,
-              backgroundColor: colorSuccessMessage,
-              textColor: Colors.white,
-              fontSize: 16.0);
+          showToast(response.data['msg'], colorSuccessMessage);
 
           if (UserDetails.userRoles.contains('worker'))
             Navigator.pushReplacement(context,
@@ -321,27 +250,10 @@ class AuthService {
 
         return false;
       } catch (e) {
-//          Fluttertoast.showToast(
-//              msg: "Session Expired. Please Login Again",
-//              toastLength: Toast.LENGTH_LONG,
-//              gravity: ToastGravity.TOP,
-//              timeInSecForIos: 1,
-//              backgroundColor: colorErrorMessage,
-//              textColor: Colors.white,
-//              fontSize: 16.0);
         return false;
       }
           return false;
     } on DioError {
-//      Fluttertoast.showToast(
-//          msg: "Session Expired. Please Login Again",
-//          toastLength: Toast.LENGTH_LONG,
-//          gravity: ToastGravity.TOP,
-//          timeInSecForIos: 1,
-//          backgroundColor: colorErrorMessage,
-//          textColor: Colors.white,
-//          fontSize: 16.0);
-
       return false;
     }
   }
@@ -360,14 +272,7 @@ class AuthService {
 
       if (response.statusCode == 200)
       {
-        await Fluttertoast.showToast(
-            msg: response.data['msg'],
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorSuccessMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        await showToast(response.data['msg'], colorSuccessMessage);
 
         UserDetails.userPermissions = [].cast<String>();
         UserDetails.userRoles = [].cast<String>();
@@ -391,36 +296,26 @@ class AuthService {
       return false;
     } on DioError catch (e) {
       try {
-        Fluttertoast.showToast(
-            msg: e.response.data['msg'],
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorErrorMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showToast(e.response.data['msg'], colorErrorMessage);
         return false;
       } catch (e) {
-        Fluttertoast.showToast(
-            msg: Constants.standardErrorMessage,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIos: 1,
-            backgroundColor: colorErrorMessage,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showToast(Constants.standardErrorMessage, colorErrorMessage);
         return false;
       }
     } on Error {
-      Fluttertoast.showToast(
-          msg: Constants.standardErrorMessage,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.TOP,
-          timeInSecForIos: 1,
-          backgroundColor: colorErrorMessage,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      showToast(Constants.standardErrorMessage, colorErrorMessage);
       return false;
     }
+  }
+
+  Future<dynamic> showToast(String message, Color colorMessage) async {
+    await Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIos: 1,
+        backgroundColor: colorMessage,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }
