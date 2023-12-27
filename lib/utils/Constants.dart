@@ -1,5 +1,23 @@
 import 'dart:ui';
+import 'package:flutter/services.dart';
+import 'package:endevour/utils/utils.dart';
+
 import '../config.dart';
+
+SystemUiOverlayStyle getThemeStyling(Brightness statusBarBrightness, Brightness systemNavigationBarIconBrightness, Brightness statusBarIconBrightness) {
+  return SystemUiOverlayStyle(
+    statusBarColor: backgroundColor,
+    statusBarBrightness: statusBarBrightness,
+    statusBarIconBrightness: statusBarIconBrightness,
+    systemNavigationBarIconBrightness: systemNavigationBarIconBrightness,
+    systemNavigationBarColor: backgroundColor,
+    systemNavigationBarDividerColor: statusBarBrightness == Brightness.dark ? textSecondary54 : null,
+  );
+}
+
+final themeStylingDark = getThemeStyling(Brightness.dark, Brightness.dark, Brightness.dark);
+final themeStylingLight = getThemeStyling(Brightness.light, Brightness.light, Brightness.dark);
+final themeStylingVariant = getThemeStyling(Brightness.light, Brightness.light, Brightness.dark);
 
 class Constants {
   //URLs
@@ -78,4 +96,6 @@ class Constants {
 
   static bool isNullEmptyFalseOrZero(Object o) =>
       false == o || 0 == o || "" == o;
+
+  static const String BASE_MAP_URL = 'https://www.google.com/maps/search/?api=1&query=';
 }

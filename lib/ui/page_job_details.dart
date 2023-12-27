@@ -8,8 +8,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JobDetailsPage extends StatefulWidget {
-  const JobDetailsPage(
-      {Key key, @required this.jobDetails, this.viewOnly = false})
+  const JobDetailsPage({Key key, @required this.jobDetails, this.viewOnly = false})
       : super(key: key);
 
   final JobList jobDetails;
@@ -32,11 +31,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     super.initState();
   }
 
-  _launchURL(lat, long) async {
-    var url = 'https://www.google.com/maps/search/?api=1&query=' +
-        lat.toString() +
-        ',' +
-        long.toString();
+  _launchURL(double lat, double long) async {
+    var url = Constants.BASE_MAP_URL + lat.toString() + ',' + long.toString();
 
     if (await canLaunch(url)) {
       await launch(url);
@@ -47,9 +43,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    size = Screen(MediaQuery
-        .of(context)
-        .size);
+    size = Screen(MediaQuery.of(context).size);
 
     return Scaffold(
       appBar: AppBar(
@@ -59,284 +53,79 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
       ),
       backgroundColor: backgroundColor,
       body: ModalProgressHUD(
-        child: Stack(
-          children: <Widget>[
-            AnnotatedRegion(
-              value: SystemUiOverlayStyle(
-                statusBarColor: backgroundColor,
-                statusBarBrightness: Brightness.dark,
-                statusBarIconBrightness: Brightness.dark,
-                systemNavigationBarIconBrightness: Brightness.dark,
-                systemNavigationBarColor: backgroundColor,
-                systemNavigationBarDividerColor: textSecondary54,
-              ),
-              child: Container(
-                child: SingleChildScrollView(
-                  physics: ClampingScrollPhysics(),
-                  child: Column(
-                    children: <Widget>[upperPart()],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: stackWidget(),
         inAsyncCall: _saving,
       ),
     );
   }
 
+  Widget stackWidget() {
+    return Stack(
+      children: <Widget>[
+        myAnnotatedRegion(),
+      ],
+    );
+  }
+
+  Widget myAnnotatedRegion() {
+    return AnnotatedRegion(
+      value: themeStylingDark,
+      child: Container(
+        child: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Column(
+            children: <Widget>[upperPart()],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget upperPart() {
-    return Stack(children: <Widget>[
-      Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              elevation: 5,
-              child: Align(
-                alignment: Alignment.center,
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      jobDetailsAvatar(size),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          likeWidget(),
-                          Flexible(child: nameWidget()),
-                          followersWidget(),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: size.getWidthPx(8),
-                            left: size.getWidthPx(20),
-                            right: size.getWidthPx(20)),
-                        child: Container(
-                            height: size.getWidthPx(4), color: colorCurve),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          buttonWidgetAccept(),
-                          buttonWidgetNavigate(),
-                        ],
-                      ),
-                    ],
+    return Stack(
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                elevation: 5,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        jobDetailsCard(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            likeWidget(),
+                            Flexible(child: nameWidget()),
+                            followersWidget(),
+                          ],
+                        ),
+                        divider(),
+                        actionButtons(),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          jobInformationWidget(job, size),
-          this.viewOnly == true
-              ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CircleAvatar(
-                radius: 10,
-                child: Text(''),
-                backgroundColor: colorLightRed,
-                foregroundColor: backgroundColor,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.8,
-                child: Text(
-                  "Red Indicates which days were cancelled",
-                  style: TextStyle(fontSize: 16.0),
-                ),
-              ),
-            ],
-          )
-              : Container(),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              child: ListView.separated(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: job.work.length,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: 10,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    return Card(
-                      elevation: 5,
-                      color: job.work[index].cancelledAt != null
-                          ? colorLightRed
-                          : null,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: new ListTile(
-                        leading: CircleAvatar(
-                          child: Text((index + 1).toString()),
-                          backgroundColor: themeColour,
-                          foregroundColor: backgroundColor,
-                        ),
-                        title: new Text(
-                          'Day ' + (index + 1).toString(),
-                          style: TextStyle(
-                              fontSize: 18,
-                              decoration: TextDecoration.underline),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            RichText(
-                              text: TextSpan(
-                                text: '',
-                                style: DefaultTextStyle
-                                    .of(context)
-                                    .style,
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'Total Hours:',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(
-                                      text:
-                                      ' ${job.work[index].hours.toStringAsFixed(
-                                          2)}'),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: '',
-                                style: DefaultTextStyle
-                                    .of(context)
-                                    .style,
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'Total Lunch Duration (Minutes):',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(
-                                      text:
-                                      ' ${job.work[index].lunchDuration
-                                          .toStringAsFixed(0)}'),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: '',
-                                style: DefaultTextStyle
-                                    .of(context)
-                                    .style,
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'Total Pay:',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(
-                                      text:
-                                      ' R ${job.work[index].payTotalDay
-                                          .toStringAsFixed(2)}'),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: '',
-                                style: DefaultTextStyle
-                                    .of(context)
-                                    .style,
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'Initial Pay Day ' +
-                                          (index + 1).toString() +
-                                          ':',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(
-                                      text:
-                                      ' R ${job.work[index].payPartialDay}'),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: '',
-                                style: DefaultTextStyle
-                                    .of(context)
-                                    .style,
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'Work Done Pay Day ' +
-                                          (index + 1).toString() +
-                                          ':',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(
-                                      text:
-                                      ' R ${job.work[index].payDifferenceDay}'),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: '',
-                                style: DefaultTextStyle
-                                    .of(context)
-                                    .style,
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'Start:',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(
-                                      text: ' ${job.work[index].startDate}'),
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: '',
-                                style: DefaultTextStyle
-                                    .of(context)
-                                    .style,
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'End:',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(text: ' ${job.work[index].endDate}'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      margin: const EdgeInsets.all(0.0),
-                    );
-                  }),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          )
-        ],
-      )
-    ]);
+            jobInformationWidget(job, size),
+            redDaysIndicator(),
+            workDayList(),
+            SizedBox(height: 10),
+          ],
+        )
+      ],
+    );
   }
 
-  acceptJob() async {
+  void acceptJob() async {
     try {
       setState(() {
         _saving = true;
@@ -520,6 +309,256 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 color: textSecondary54,
                 fontWeight: FontWeight.w500))
       ],
+    );
+  }
+
+  Widget jobDetailsCard() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      elevation: 5,
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              jobDetailsAvatar(size),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  likeWidget(),
+                  Flexible(child: nameWidget()),
+                  followersWidget(),
+                ],
+              ),
+              divider(),
+              actionButtons(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget actionButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        buttonWidgetAccept(),
+        buttonWidgetNavigate(),
+      ],
+    );
+  }
+
+  Widget redDaysIndicator() {
+    return this.viewOnly == true
+        ? Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CircleAvatar(
+          radius: 10,
+          child: Text(''),
+          backgroundColor: colorLightRed,
+          foregroundColor: backgroundColor,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          width: MediaQuery.of(context).size.width * 0.8,
+          child: Text(
+            "Red Indicates which days were cancelled",
+            style: TextStyle(fontSize: 16.0),
+          ),
+        ),
+      ],
+    )
+        : Container();
+  }
+
+  Widget workDayList() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        child: ListView.separated(
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: job.work.length,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                height: 10,
+              );
+            },
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 5,
+                color: job.work[index].cancelledAt != null
+                    ? colorLightRed
+                    : null,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: new ListTile(
+                  leading: CircleAvatar(
+                    child: Text((index + 1).toString()),
+                    backgroundColor: themeColour,
+                    foregroundColor: backgroundColor,
+                  ),
+                  title: new Text(
+                    'Day ' + (index + 1).toString(),
+                    style: TextStyle(
+                        fontSize: 18,
+                        decoration: TextDecoration.underline),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      RichText(
+                        text: TextSpan(
+                          text: '',
+                          style: DefaultTextStyle
+                              .of(context)
+                              .style,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Total Hours:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text:
+                                ' ${job.work[index].hours.toStringAsFixed(
+                                    2)}'),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: '',
+                          style: DefaultTextStyle
+                              .of(context)
+                              .style,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Total Lunch Duration (Minutes):',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text:
+                                ' ${job.work[index].lunchDuration
+                                    .toStringAsFixed(0)}'),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: '',
+                          style: DefaultTextStyle
+                              .of(context)
+                              .style,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Total Pay:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text:
+                                ' R ${job.work[index].payTotalDay
+                                    .toStringAsFixed(2)}'),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: '',
+                          style: DefaultTextStyle
+                              .of(context)
+                              .style,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Initial Pay Day ' +
+                                    (index + 1).toString() +
+                                    ':',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text:
+                                ' R ${job.work[index].payPartialDay}'),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: '',
+                          style: DefaultTextStyle
+                              .of(context)
+                              .style,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Work Done Pay Day ' +
+                                    (index + 1).toString() +
+                                    ':',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text:
+                                ' R ${job.work[index].payDifferenceDay}'),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: '',
+                          style: DefaultTextStyle
+                              .of(context)
+                              .style,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Start:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: ' ${job.work[index].startDate}'),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: '',
+                          style: DefaultTextStyle
+                              .of(context)
+                              .style,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'End:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(text: ' ${job.work[index].endDate}'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                margin: const EdgeInsets.all(0.0),
+              );
+            }),
+      ),
+    );
+  }
+
+  Widget divider() {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: size.getWidthPx(8),
+          left: size.getWidthPx(20),
+          right: size.getWidthPx(20)),
+      child: Container(
+        height: size.getWidthPx(4),
+        color: colorCurve,
+      ),
     );
   }
 }

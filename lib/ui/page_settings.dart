@@ -35,12 +35,7 @@ class _SettingPageState extends State<SettingPage> {
       ),
 
       body: AnnotatedRegion(
-        value: SystemUiOverlayStyle(
-            statusBarColor: backgroundColor,
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.light,
-            systemNavigationBarIconBrightness: Brightness.light,
-            systemNavigationBarColor: backgroundColor),
+        value: themeStylingLight,
         child: Container(
           color: backgroundColor,
           child: SingleChildScrollView(

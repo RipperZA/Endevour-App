@@ -168,12 +168,7 @@ class _LoginPageState extends State<LoginPage> {
         body: ModalProgressHUD(
           child: Stack(children: <Widget>[
             AnnotatedRegion(
-              value: SystemUiOverlayStyle(
-                  statusBarColor: backgroundColor,
-                  statusBarBrightness: Brightness.light,
-                  statusBarIconBrightness: Brightness.dark,
-                  systemNavigationBarIconBrightness: Brightness.light,
-                  systemNavigationBarColor: backgroundColor),
+              value: themeStylingVariant,
               child: Container(
                 color: Colors.white,
                 child: SafeArea(
